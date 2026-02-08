@@ -1,0 +1,1142 @@
+// ========== RENDERING FUNCTIONS ==========
+async function renderAll(animateUnitIds = []) {
+    if (window.gameState.isUpdating) return;
+    window.gameState.isUpdating = true;
+    
+    if (window.renderGrid) await window.renderGrid();
+    if (window.renderUnits) await window.renderUnits(animateUnitIds);
+    if (window.renderDamagePopups) await window.renderDamagePopups();
+    
+    if (window.updateUI) window.updateUI();
+    if (window.updatePhaseIndicator) window.updatePhaseIndicator();
+    if (window.updateEnemiesCounter) window.updateEnemiesCounter();
+    if (window.updateUnitList) window.updateUnitList();
+    
+    window.gameState.isUpdating = false;
+}
+
+async function renderGrid() {
+    await delay(10);
+    
+    document.querySelectorAll('.tile').forEach(tile => {
+        const x = parseInt(tile.dataset.x);
+        const y = parseInt(tile.dataset.y);
+        const terrain = window.gameState.terrain[y] ? window.gameState.terrain[y][x] : 'normal';
+        
+        tile.className = 'tile';
+        if (terrain !== 'normal') {
+            tile.classList.add(terrain);
+        }
+    });
+    
+    if (window.gameState.selectedUnit) {
+        const unit = window.gameState.selectedUnit;
+        
+        if (window.gameState.phase === 'heal') {
+            if (window.domElements?.rangeIndicator) {
+                window.domElements.rangeIndicator.style.display = 'block';
+                window.domElements.rangeIndicator.textContent = `Heal Range: ${unit.range}`;
+            }
+            
+            for (let x = 0; x < GRID_SIZE; x++) {
+                for (let y = 0; y < GRID_SIZE; y++) {
+                    const target = getUnitAt(x, y);
+                    if (target && target.type === unit.type && isInRange(x, y, unit, unit.range)) {
+                        const tile = getTile(x, y);
+                        if (tile) tile.classList.add('healable');
+                    }
+                }
+            }
+        }
+        
+        if (window.gameState.phase === 'move') {
+            for (let x = 0; x < GRID_SIZE; x++) {
+                for (let y = 0; y < GRID_SIZE; y++) {
+                    if (isInMovementRange(x, y, unit)) {
+                        const tile = getTile(x, y);
+                        if (tile) tile.classList.add('movable');
+                    }
+                }
+            }
+        }
+        
+        // ====== UNIT LIST DISPLAY ======
+function updateUnitList() {
+    const display = document.getElementById('unitListDisplay');
+    if (!display) return;
+    
+    // Get player units and sort by XP (descending)
+    const playerUnits = window.gameState.units
+        .filter(u => u.type === 'player' && u.hp > 0)
+        .sort((a, b) => {
+            // Sort by total XP (level * 100 + current XP)
+            const totalXpA = (a.level * 100) + a.xp;
+            const totalXpB = (b.level * 100) + b.xp;
+            return totalXpB - totalXpA; // Descending
+        });
+    
+    if (playerUnits.length === 0) {
+        display.innerHTML = `
+            <div style="color: #8892b0; text-align: center; padding: 20px;">
+                <img src="ui/skull.png" style="width: 30px; height: 30px; margin-bottom: 10px;">
+                <div style="font-size: 0.9em;">No surviving units</div>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '';
+    
+    playerUnits.forEach(unit => {
+        const isSelected = window.gameState.selectedUnit && 
+                          window.gameState.selectedUnit.id === unit.id;
+        const isFleeing = unit.fleeing;
+        const isLowHp = unit.hp < unit.maxHp * 0.3;
+        
+        let classes = 'unit-list-item';
+        if (isSelected) classes += ' selected';
+        if (isFleeing) classes += ' fleeing';
+        if (isLowHp) classes += ' low-hp';
+        
+        // Get class icon
+        const classIcon = getClassIconForList(unit.classType);
+        
+        // Calculate hits and kills (we need to track these)
+        // For now, we'll use placeholders
+        const hits = 0; // You'll need to track this in unit stats
+        const kills = 0; // You'll need to track this in unit stats
+        const totalXp = (unit.level * 100) + unit.xp;
+        
+        html += `
+            <div class="${classes}" data-unit-id="${unit.id}" onclick="window.selectUnitById(${unit.id})">
+                <div class="unit-list-icon">${classIcon}</div>
+                <div class="unit-list-info">
+                    <div class="unit-list-name">${unit.name}</div>
+                    <div class="unit-list-stats">
+                        <span class="unit-list-stat unit-list-hp ${isLowHp ? 'low' : ''}">
+                            ❤ ${unit.hp}/${unit.maxHp}
+                        </span>
+                        <span class="unit-list-stat unit-list-level">
+                            Lvl ${unit.level}
+                        </span>
+                        <span class="unit-list-stat">
+                            ⚔ ${hits}
+                        </span>
+                        <span class="unit-list-stat">
+                            💀 ${kills}
+                        </span>
+                        <span class="unit-list-xp">
+                            ${totalXp} XP
+                        </span>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    display.innerHTML = html;
+}
+
+function getClassIconForList(classType) {
+    switch(classType) {
+        case 'knight': 
+            return '<img src="ui/knight.png" style="width: 24px; height: 24px;">';
+        case 'archer': 
+            return '<img src="ui/bow.png" style="width: 24px; height: 24px;">';
+        case 'mage': 
+            return '<img src="ui/potion.png" style="width: 24px; height: 24px;">';
+        case 'berserker': 
+            return '<img src="ui/axe.png" style="width: 24px; height: 24px;">';
+        default: 
+            return '<img src="ui/shield.png" style="width: 24px; height: 24px;">';
+    }
+}
+
+function selectUnitById(unitId) {
+    const unit = window.gameState.units.find(u => u.id === unitId);
+    if (unit && window.selectUnit) {
+        window.selectUnit(unit);
+    }
+}
+
+// Also add this to the global exports at the bottom of ui.js:
+window.updateUnitList = updateUnitList;
+window.selectUnitById = selectUnitById;
+        
+        
+        const selectedTile = getTile(unit.x, unit.y);
+        if (selectedTile) selectedTile.classList.add('selected');
+
+        // === NEW: SHOW ATTACK RANGE FOR SELECTED RANGED UNIT ===
+        // Clear previous attack range highlights
+        document.querySelectorAll('.tile.in-attack-range').forEach(t => t.classList.remove('in-attack-range'));
+
+        // Show attack range for selected unit (if it can attack)
+        if (window.gameState.selectedUnit && window.gameState.selectedUnit.canAttack) {
+            const u = window.gameState.selectedUnit;
+            for (let tx = 0; tx < GRID_SIZE; tx++) {
+                for (let ty = 0; ty < GRID_SIZE; ty++) {
+                    const dist = Math.abs(tx - u.x) + Math.abs(ty - u.y);
+                    if (dist <= u.range && dist > 0) {
+                        const tile = getTile(tx, ty);
+                        if (tile) tile.classList.add('in-attack-range');
+                    }
+                }
+            }
+        }
+    }
+}
+
+async function renderUnits(animateUnitIds) {
+    await delay(10);
+    
+    // Track which units have been placed
+    const placedUnitIds = new Set();
+    
+    for (const unit of window.gameState.units) {
+        await delay(5);
+        const tile = getTile(unit.x, unit.y);
+        if (!tile) continue;
+        
+        // Check if there's already a unit element at this position
+        let unitEl = tile.querySelector(`.unit[data-unit-id="${unit.id}"]`);
+        
+        // If unit exists somewhere else, move it
+        if (!unitEl) {
+            // Look for this unit anywhere on the grid
+            unitEl = document.querySelector(`.unit[data-unit-id="${unit.id}"]`);
+            
+            if (unitEl) {
+                // Unit exists in wrong position - move it
+                unitEl.remove();
+                unitEl = null;
+            }
+        }
+        
+        // Create new unit element if needed
+        if (!unitEl) {
+            unitEl = document.createElement('div');
+            let classes = ['unit', unit.type, unit.classType];
+            if (unit.isBoss) classes.push('boss');
+            unitEl.className = classes.join(' ');
+            unitEl.dataset.unitId = unit.id;
+            
+            if (unit.fleeing) {
+                unitEl.classList.add('fleeing');
+            }
+            if (unit === window.gameState.aiActiveUnit) {
+                unitEl.classList.add('ai-active');
+            }
+            
+            const icon = document.createElement('div');
+            icon.className = 'unit-icon';
+            unitEl.appendChild(icon);
+            
+            // Action bar
+            const actionBar = document.createElement('div');
+            actionBar.className = 'action-bar';
+            const actionFill = document.createElement('div');
+            actionFill.className = 'action-fill';
+            actionFill.style.width = `${unit.actionPercent}%`;
+            actionBar.appendChild(actionFill);
+            unitEl.appendChild(actionBar);
+            
+            // HP bar
+            const hpBar = document.createElement('div');
+            hpBar.className = 'hp-bar';
+            const hpFill = document.createElement('div');
+            hpFill.className = 'hp-fill';
+            hpFill.style.width = `${unit.hpPercent}%`;
+            if (unit.hp < unit.maxHp * 0.3) hpFill.classList.add('damaged');
+            hpBar.appendChild(hpFill);
+            unitEl.appendChild(hpBar);
+            
+            // Energy bar
+            const energyBar = document.createElement('div');
+            energyBar.className = 'energy-bar';
+            const energyFill = document.createElement('div');
+            energyFill.className = 'energy-fill';
+            
+            if (unit.injuries.length > 0 || unit.morale < 100) {
+                energyFill.style.width = `${unit.moralePercent}%`;
+                energyFill.style.background = unit.fleeing ? 
+                    'linear-gradient(90deg, #95a5a6, #7f8c8d)' : 
+                    'linear-gradient(90deg, #ff9f43, #feca57)';
+            } else {
+                energyFill.style.width = `${unit.hpPercent}%`;
+            }
+            energyBar.appendChild(energyFill);
+            unitEl.appendChild(energyBar);
+            
+            tile.appendChild(unitEl);
+        } else {
+            // Update existing unit position and appearance
+            let classes = ['unit', unit.type, unit.classType];
+            if (unit.isBoss) classes.push('boss');
+            unitEl.className = classes.join(' ');
+            if (unit.fleeing) {
+                unitEl.classList.add('fleeing');
+            } else {
+                unitEl.classList.remove('fleeing');
+            }
+            if (unit === window.gameState.aiActiveUnit) {
+                unitEl.classList.add('ai-active');
+            } else {
+                unitEl.classList.remove('ai-active');
+            }
+            
+            // Update bars
+            const actionFill = unitEl.querySelector('.action-fill');
+            if (actionFill) actionFill.style.width = `${unit.actionPercent}%`;
+            
+            const hpFill = unitEl.querySelector('.hp-fill');
+            if (hpFill) {
+                hpFill.style.width = `${unit.hpPercent}%`;
+                hpFill.className = 'hp-fill';
+                if (unit.hp < unit.maxHp * 0.3) hpFill.classList.add('damaged');
+            }
+            
+            const energyFill = unitEl.querySelector('.energy-fill');
+            if (energyFill) {
+                if (unit.injuries.length > 0 || unit.morale < 100) {
+                    energyFill.style.width = `${unit.moralePercent}%`;
+                    energyFill.style.background = unit.fleeing ? 
+                        'linear-gradient(90deg, #95a5a6, #7f8c8d)' : 
+                        'linear-gradient(90deg, #ff9f43, #feca57)';
+                } else {
+                    energyFill.style.width = `${unit.hpPercent}%`;
+                }
+            }
+        }
+        
+        placedUnitIds.add(unit.id);
+    }
+    
+    // Remove any units that no longer exist in gameState
+    document.querySelectorAll('.unit').forEach(unitEl => {
+        const unitId = parseInt(unitEl.dataset.unitId);
+        if (!placedUnitIds.has(unitId)) {
+            unitEl.remove();
+        }
+    });
+}
+
+async function renderDamagePopups() {
+    await delay(10);
+}
+
+function showCombatResult(x, y, amount, type = 'damage', isCritical = false) {
+    const indicator = document.createElement('div');
+    indicator.className = 'combat-indicator';
+    
+    if (type === 'miss') {
+        indicator.textContent = 'MISS';
+        indicator.classList.add('miss-indicator');
+    } else if (isCritical) {
+        indicator.textContent = `CRIT! ${amount}`;
+        indicator.classList.add('damage-critical');
+    } else if (type === 'heal') {
+        indicator.textContent = `+${amount}`;
+        const size = Math.abs(amount) <= 15 ? 'small' : Math.abs(amount) <= 30 ? 'medium' : 'strong';
+        indicator.classList.add(`heal-${size}`);
+    } else {
+        indicator.textContent = `-${amount}`;
+        const size = Math.abs(amount) <= 15 ? 'small' : Math.abs(amount) <= 30 ? 'medium' : 'heavy';
+        indicator.classList.add(`damage-${size}`);
+    }
+    
+    const tile = getTile(x, y);
+    if (tile) {
+        tile.appendChild(indicator);
+        setTimeout(() => {
+            if (indicator.parentNode === tile) {
+                tile.removeChild(indicator);
+            }
+        }, 1200);
+    }
+}
+
+// ========== UI UPDATES ==========
+function updateSelectedUnitDisplay() {
+    const display = document.getElementById('selectedUnitDisplay');
+    if (!display) return;
+    
+    display.innerHTML = ''; // Clear display
+    
+    if (!window.gameState.selectedUnit) {
+        const placeholder = document.createElement('div');
+        placeholder.style.cssText = 'color: #8892b0; text-align: center; padding: 40px 20px;';
+        
+        const icon = document.createElement('div');
+        icon.style.cssText = 'font-size: 2em; margin-bottom: 10px;';
+        icon.textContent = '⚔';
+        
+        const text1 = document.createElement('div');
+        text1.style.cssText = 'margin-bottom: 10px; font-size: 1.1em;';
+        text1.textContent = 'Click a unit on the battlefield';
+        
+        const text2 = document.createElement('div');
+        text2.style.cssText = 'font-size: 0.9em; color: #4ecdc4;';
+        text2.textContent = 'Unit details will appear here when selected';
+        
+        placeholder.appendChild(icon);
+        placeholder.appendChild(text1);
+        placeholder.appendChild(text2);
+        display.appendChild(placeholder);
+        return;
+    }
+    
+    // If we get here, build the full unit display
+    buildFullUnitDisplay(display, window.gameState.selectedUnit);
+}
+
+function buildFullUnitDisplay(container, unit) {
+    // Create main container
+    const detailsContainer = document.createElement('div');
+    detailsContainer.className = 'unit-details-container';
+    
+    // === LEFT COLUMN ===
+    const leftColumn = document.createElement('div');
+    leftColumn.className = 'unit-column left';
+    
+    // Unit header
+    const header = document.createElement('div');
+    header.className = 'unit-header-compact';
+    
+    const nameType = document.createElement('div');
+    nameType.className = 'unit-name-type';
+    
+    const nameCompact = document.createElement('div');
+    nameCompact.className = 'unit-name-compact';
+    
+    // Add icon
+    const icon = document.createElement('span');
+    icon.innerHTML = getClassIcon(unit.classType);
+    nameCompact.appendChild(icon);
+    
+    // Add name
+    const nameSpan = document.createElement('span');
+    nameSpan.textContent = ' ' + unit.name;
+    nameCompact.appendChild(nameSpan);
+    
+    // Add class badge
+    const classBadge = document.createElement('span');
+    classBadge.className = 'unit-class-badge';
+    classBadge.textContent = unit.classType;
+    nameCompact.appendChild(classBadge);
+    
+    nameType.appendChild(nameCompact);
+    
+    // Subtitle - Just show Level, make brighter
+    const subtitle = document.createElement('div');
+    subtitle.className = 'unit-subtitle';
+    subtitle.textContent = `Level ${unit.level}`;
+    subtitle.style.color = '#64ffda'; // Brighter cyan color
+    subtitle.style.fontWeight = '500'; // Slightly bolder
+    nameType.appendChild(subtitle);
+    
+    header.appendChild(nameType);
+    leftColumn.appendChild(header);
+    
+    // === STATS GRID ===
+    const statsGrid = document.createElement('div');
+    statsGrid.className = 'compact-stats-grid';
+    
+    // Health
+    const healthStat = createStatBox('Health', `${unit.hp}/${unit.maxHp}`, 
+        unit.hpPercent, '#2ecc71', unit.hpPercent < 50 ? '#e74c3c' : '#2ecc71');
+    statsGrid.appendChild(healthStat);
+    
+    // Morale
+    const moraleStat = createStatBox('Morale', `${unit.morale}%`, 
+        unit.moralePercent, '#ff9f43', unit.morale < 50 ? '#e74c3c' : '#ff9f43');
+    statsGrid.appendChild(moraleStat);
+    
+    // Attack or Heal Power
+    if (unit.classType === 'mage') {
+        statsGrid.appendChild(createSimpleStat('Heal Power', unit.healPower || 10, '#2ecc71'));
+    } else {
+        statsGrid.appendChild(createSimpleStat('Attack', unit.attack || 0, '#ff6b6b'));
+    }
+    
+    // Defense
+    statsGrid.appendChild(createSimpleStat('Defense', unit.defense || 0));
+    
+    // Accuracy
+    statsGrid.appendChild(createSimpleStat('Accuracy', `${unit.accuracy}%`));
+    
+    // Range
+    statsGrid.appendChild(createSimpleStat('Range', unit.range));
+    
+    // Actions
+    const actionsStat = createStatBox('Actions', `${unit.remainingActions}/${unit.maxActions}`, 
+        unit.actionPercent, '#f1c40f');
+    statsGrid.appendChild(actionsStat);
+    
+    // Movement
+    statsGrid.appendChild(createSimpleStat('Movement', 
+        `${Math.min(unit.movement - unit.movesUsed, unit.remainingActions)}/${unit.movement}`));
+    
+    // Show "Heals" for mages, "Attacks" for everyone else
+    if (unit.classType === 'mage') {
+        // Mages heal instead of attack
+        statsGrid.appendChild(createSimpleStat('Heals', 
+            `${Math.min(unit.maxAttacks - unit.attacksUsed, unit.remainingActions)}/${unit.maxAttacks}`,
+            '#2ecc71')); // Green color for healing
+    } else {
+        // Regular units attack
+        statsGrid.appendChild(createSimpleStat('Attacks', 
+            `${Math.min(unit.maxAttacks - unit.attacksUsed, unit.remainingActions)}/${unit.maxAttacks}`,
+            '#ff6b6b')); // Red color for attacking
+    }
+    
+    // XP Progress
+    const currentTotalXp = getCumulativeXpForLevel(unit.level) + unit.xp;
+    const nextLevelTotalXp = getCumulativeXpForLevel(unit.level + 1);
+    const xpPercent = (unit.xp / unit.xpToNext) * 100;
+
+    const xpStat = createStatBox('XP', `${currentTotalXp}/${nextLevelTotalXp}`, 
+        xpPercent, '#9b59b6');
+    statsGrid.appendChild(xpStat);
+    
+    leftColumn.appendChild(statsGrid);
+    detailsContainer.appendChild(leftColumn);
+    
+    // === RIGHT COLUMN ===
+    const rightColumn = document.createElement('div');
+    rightColumn.className = 'unit-column right';
+    
+    // Equipment Section
+    const equipmentSection = document.createElement('div');
+    equipmentSection.className = 'equipment-section';
+    
+    const equipTitle = document.createElement('div');
+    equipTitle.style.cssText = 'font-size: 0.9em; color: #64ffda; margin-bottom: 8px;';
+    equipTitle.textContent = 'Equipment';
+    equipmentSection.appendChild(equipTitle);
+    
+    if (unit.equipment.weapon) {
+        // Determine the correct icon based on weapon type
+        let weaponIcon = '<img src="ui/sword2.png" style="width: 16px; height: 16px; vertical-align: middle;">';
+        
+        const weaponName = unit.equipment.weapon.name.toLowerCase();
+        if (weaponName.includes('bow')) {
+            weaponIcon = '<img src="ui/bow.png" style="width: 16px; height: 16px; vertical-align: middle;">';
+        } else if (weaponName.includes('axe')) {
+            weaponIcon = '<img src="ui/axe.png" style="width: 16px; height: 16px; vertical-align: middle;">';
+        } else if (weaponName.includes('mace')) {
+            weaponIcon = '<img src="ui/potion.png" style="width: 16px; height: 16px; vertical-align: middle;">';
+        } else if (weaponName.includes('greatsword')) {
+            weaponIcon = '<img src="ui/sword.png" style="width: 16px; height: 16px; vertical-align: middle;">';
+        }
+        
+        const weaponItem = createEquipmentItem(
+            weaponIcon,
+            unit.equipment.weapon.name, 
+            `+${unit.equipment.weapon.damage} dmg`
+        );
+        equipmentSection.appendChild(weaponItem);
+    } else {
+        const noWeapon = document.createElement('div');
+        noWeapon.style.cssText = 'color: #8892b0; font-size: 0.85em; padding: 4px 0;';
+        noWeapon.textContent = 'No weapon';
+        equipmentSection.appendChild(noWeapon);
+    }
+    
+    if (unit.equipment.armor) {
+        const armorItem = createEquipmentItem(
+            '<img src="ui/shield.png" style="width: 16px; height: 16px; vertical-align: middle;">',
+            unit.equipment.armor.name, 
+            `+${unit.equipment.armor.defense} def`
+        );
+        equipmentSection.appendChild(armorItem);
+    } else {
+        const noArmor = document.createElement('div');
+        noArmor.style.cssText = 'color: #8892b0; font-size: 0.85em; padding: 4px 0;';
+        noArmor.textContent = 'No armor';
+        equipmentSection.appendChild(noArmor);
+    }
+    
+    rightColumn.appendChild(equipmentSection);
+    
+    // ====== ADD THIS SECTION AFTER EQUIPMENT SECTION ======
+    // Status Indicators (Injuries & Morale)
+    if (unit.injuries.length > 0 || unit.morale < 100 || unit.fleeing) {
+        const statusSection = document.createElement('div');
+        statusSection.className = 'status-indicators';
+        
+        // Add fleeing status
+        if (unit.fleeing) {
+            const fleeBadge = document.createElement('span');
+            fleeBadge.className = 'status-badge fleeing';
+            fleeBadge.innerHTML = '<img src="ui/running.png" style="width: 12px; height: 12px;"> Fleeing';
+            statusSection.appendChild(fleeBadge);
+        }
+        
+        // Add morale status
+        if (unit.morale < 30) {
+            const moraleBadge = document.createElement('span');
+            moraleBadge.className = 'status-badge morale-low';
+            moraleBadge.innerHTML = '<img src="ui/sad.png" style="width: 12px; height: 12px;"> Low Morale';
+            statusSection.appendChild(moraleBadge);
+        } else if (unit.morale > 80) {
+            const moraleBadge = document.createElement('span');
+            moraleBadge.className = 'status-badge morale-high';
+            moraleBadge.innerHTML = '<img src="ui/happy.png" style="width: 12px; height: 12px;"> High Morale';
+            statusSection.appendChild(moraleBadge);
+        }
+        
+        // Add injuries
+        unit.injuries.forEach(injury => {
+            const injuryBadge = document.createElement('span');
+            injuryBadge.className = 'status-badge injury';
+            
+            // Choose icon based on injury type
+            let icon = 'ui/wound.png';
+            if (injury.name.includes('Arm')) icon = 'ui/i-arm.png';
+            if (injury.name.includes('Leg')) icon = 'ui/i-leg.png';
+            if (injury.name.includes('Concussion')) icon = 'ui/i-head.png';
+            
+            injuryBadge.innerHTML = `<img src="${icon}" style="width: 12px; height: 12px;"> ${injury.name} (${injury.turnsRemaining}t)`;
+            statusSection.appendChild(injuryBadge);
+        });
+        
+        // Add to right column (or wherever you want it)
+        rightColumn.appendChild(statusSection);
+    }
+
+    // ====== TERRAIN EFFECTS SECTION (DYNAMIC) ======
+    const terrain = window.gameState.terrain[unit.y][unit.x];
+    const terrainEffect = TERRAIN_EFFECTS[terrain] || TERRAIN_EFFECTS.normal;
+    
+    // Always create terrain section
+    const terrainSection = document.createElement('div');
+    terrainSection.className = 'status-indicators';
+    terrainSection.style.cssText = 'margin-top: 12px; padding: 10px; background: rgba(30, 73, 118, 0.4); border-radius: 6px; border: 1px solid rgba(100, 255, 218, 0.2);';
+    
+    const terrainHeader = document.createElement('div');
+    terrainHeader.style.cssText = 'display: flex; align-items: center; gap: 8px; margin-bottom: 8px;';
+    
+    const terrainIcon = document.createElement('img');
+    terrainIcon.src = terrainEffect.icon;
+    terrainIcon.style.cssText = 'width: 24px; height: 24px;';
+    
+    const terrainName = document.createElement('div');
+    terrainName.style.cssText = 'font-weight: bold; font-size: 1em; color: #64ffda;';
+    terrainName.textContent = terrainEffect.name.toUpperCase();
+    
+    const effectsList = document.createElement('div');
+    effectsList.style.cssText = 'font-size: 0.85em; color: #e6f1ff; line-height: 1.4;';
+    
+    let effectsHTML = '';
+    
+    // Defensive effects
+    if (terrainEffect.accuracyAgainst !== 0 || terrainEffect.damageReduction !== 0) {
+        effectsHTML += '<div style="margin-bottom: 4px;"><strong>When attacked here:</strong></div>';
+        
+        if (terrainEffect.accuracyAgainst !== 0) {
+            const sign = terrainEffect.accuracyAgainst > 0 ? '+' : '';
+            effectsHTML += `<div>• ${sign}${terrainEffect.accuracyAgainst}% enemy accuracy</div>`;
+        }
+        
+        if (terrainEffect.damageReduction !== 0) {
+            if (terrainEffect.damageReduction > 0) {
+                effectsHTML += `<div>• ${terrainEffect.damageReduction}% damage reduction</div>`;
+            } else {
+                effectsHTML += `<div>• ${Math.abs(terrainEffect.damageReduction)}% damage increase</div>`;
+            }
+        }
+    }
+    
+    // Offensive effects
+    if (terrainEffect.offensiveAccuracy !== 0) {
+        if (effectsHTML) effectsHTML += '<div style="margin-top: 6px;">';
+        effectsHTML += '<div style="margin-bottom: 4px;"><strong>When attacking from here:</strong></div>';
+        const sign = terrainEffect.offensiveAccuracy > 0 ? '+' : '';
+        effectsHTML += `<div>• ${sign}${terrainEffect.offensiveAccuracy}% your accuracy</div>`;
+    }
+    
+    // Movement effects
+    if (terrainEffect.movementPenalty !== 0) {
+        if (effectsHTML) effectsHTML += '<div style="margin-top: 6px;">';
+        if (terrainEffect.movementPenalty >= 999) {
+            effectsHTML += '<div><strong>Movement:</strong> Impassable</div>';
+        } else if (typeof terrainEffect.movementPenalty === 'object') {
+            // Class-specific penalties (swamp)
+            const penalties = [];
+            if (terrainEffect.movementPenalty.knight) penalties.push(`Knight: ${terrainEffect.movementPenalty.knight}`);
+            if (terrainEffect.movementPenalty.mage) penalties.push(`Mage: ${terrainEffect.movementPenalty.mage}`);
+            if (terrainEffect.movementPenalty.archer) penalties.push(`Archer: ${terrainEffect.movementPenalty.archer}`);
+            if (terrainEffect.movementPenalty.berserker) penalties.push(`Berserker: ${terrainEffect.movementPenalty.berserker}`);
+            effectsHTML += `<div><strong>Movement:</strong> ${penalties.join(', ')}</div>`;
+        } else {
+            effectsHTML += `<div><strong>Movement:</strong> ${terrainEffect.movementPenalty > 0 ? '-' : '+'}${Math.abs(terrainEffect.movementPenalty)}</div>`;
+        }
+    }
+    
+    // If no effects at all (shouldn't happen with our system)
+    if (!effectsHTML) {
+        effectsHTML = '<div>• No terrain effects</div>';
+    }
+    
+    effectsList.innerHTML = effectsHTML;
+    
+    terrainHeader.appendChild(terrainIcon);
+    terrainHeader.appendChild(terrainName);
+    terrainSection.appendChild(terrainHeader);
+    terrainSection.appendChild(effectsList);
+    rightColumn.appendChild(terrainSection);
+    // ====== END TERRAIN SECTION ======
+    
+    // Turn Info
+    const turnInfo = document.createElement('div');
+    turnInfo.style.cssText = 'margin-top: 15px; padding: 8px; background: rgba(30, 73, 118, 0.2); border-radius: 4px; font-size: 0.8em; color: #8892b0;';
+    
+    const turnLine = document.createElement('div');
+    turnLine.textContent = `Turn: ${window.gameState.turnCount}`;
+    
+    const phaseLine = document.createElement('div');
+    phaseLine.textContent = `Phase: ${window.gameState.phase}`;
+    
+    const posLine = document.createElement('div');
+    posLine.textContent = `Position: (${unit.x}, ${unit.y})`;
+    
+    turnInfo.appendChild(turnLine);
+    turnInfo.appendChild(phaseLine);
+    turnInfo.appendChild(posLine);
+    rightColumn.appendChild(turnInfo);
+    
+    detailsContainer.appendChild(rightColumn);
+    container.appendChild(detailsContainer);
+}
+
+// Helper functions for UI
+function getClassIcon(classType) {
+    switch(classType) {
+        case 'knight': 
+            return '<img src="ui/knight.png" style="width: 20px; height: 20px; vertical-align: middle;">';
+        case 'archer': 
+            return '<img src="ui/bow.png" style="width: 20px; height: 20px; vertical-align: middle;">';
+        case 'mage': 
+            return '<img src="ui/potion.png" style="width: 20px; height: 20px; vertical-align: middle;">';
+        case 'berserker': 
+            return '<img src="ui/axe.png" style="width: 20px; height: 20px; vertical-align: middle;">';
+        default: 
+            return '<img src="ui/shield.png" style="width: 20px; height: 20px; vertical-align: middle;">';
+    }
+}
+
+function createStatBox(label, value, percent, color, barColor = null) {
+    const stat = document.createElement('div');
+    stat.className = 'compact-stat';
+    
+    const header = document.createElement('div');
+    header.className = 'stat-header';
+    
+    const name = document.createElement('span');
+    name.className = 'stat-name';
+    name.textContent = label;
+    
+    const val = document.createElement('span');
+    val.className = 'stat-value';
+    val.textContent = value;
+    val.style.color = barColor || color;
+    
+    header.appendChild(name);
+    header.appendChild(val);
+    stat.appendChild(header);
+    
+    if (percent !== undefined) {
+        const bar = document.createElement('div');
+        bar.className = 'compact-progress-bar';
+        
+        const fill = document.createElement('div');
+        fill.className = 'compact-progress-fill';
+        fill.style.width = `${percent}%`;
+        fill.style.background = barColor || color;
+        
+        bar.appendChild(fill);
+        stat.appendChild(bar);
+    }
+    
+    return stat;
+}
+
+function createSimpleStat(label, value, color = '#64ffda') {
+    const stat = document.createElement('div');
+    stat.className = 'compact-stat';
+    
+    const header = document.createElement('div');
+    header.className = 'stat-header';
+    
+    const name = document.createElement('span');
+    name.className = 'stat-name';
+    name.textContent = label;
+    
+    const val = document.createElement('span');
+    val.className = 'stat-value';
+    val.textContent = value;
+    val.style.color = color;
+    
+    header.appendChild(name);
+    header.appendChild(val);
+    stat.appendChild(header);
+    
+    return stat;
+}
+
+function createEquipmentItem(icon, name, stats) {
+    const item = document.createElement('div');
+    item.className = 'equipment-item';
+    
+    const iconDiv = document.createElement('div');
+    iconDiv.className = 'equipment-icon';
+    iconDiv.innerHTML = icon;
+    
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'equipment-name';
+    nameDiv.textContent = name;
+    
+    const statsDiv = document.createElement('div');
+    statsDiv.className = 'equipment-stats';
+    statsDiv.textContent = stats;
+    
+    item.appendChild(iconDiv);
+    item.appendChild(nameDiv);
+    item.appendChild(statsDiv);
+    
+    return item;
+}
+
+function updateSelectedUnitStats() {
+    // Update the selected unit display when stats change
+    if (window.gameState.selectedUnit) {
+        updateSelectedUnitDisplay();
+    }
+}
+
+function updatePhaseIndicator() {
+    if (!phaseIndicator) return;
+    
+    if (!window.gameState.selectedUnit) {
+        phaseIndicator.innerHTML = '<img src="ui/target.png" style="width: 16px; height: 16px; vertical-align: middle;"> Select a unit (Press A to attack, E to end turn)';
+    } else if (window.gameState.selectedUnit.type !== window.gameState.currentPlayer) {
+        phaseIndicator.innerHTML = '<img src="ui/robot.png" style="width: 16px; height: 16px; vertical-align: middle;"> Cannot control enemy units';
+    } else if (window.gameState.selectedUnit.fleeing) {
+        phaseIndicator.innerHTML = '<img src="ui/running.png" style="width: 16px; height: 16px; vertical-align: middle;"> Unit is fleeing!';
+    } else {
+        const unit = window.gameState.selectedUnit;
+        let actions = [];
+        if (unit.canMove) actions.push("Move");
+        if (unit.canAttack) actions.push("Attack");
+        if (unit.canHeal) actions.push("Heal");
+        
+        phaseIndicator.innerHTML = `<img src="ui/sword.png" style="width: 16px; height: 16px; vertical-align: middle;"> ${unit.name} - Available: ${actions.join(", ")}`;
+    }
+}
+
+function updateUI() {
+    const unit = window.gameState.selectedUnit;
+    
+    if (window.domElements?.attackBtn) {
+        window.domElements.attackBtn.disabled = !unit || !unit.canAttack;
+    }
+    if (window.domElements?.healBtn) {
+        window.domElements.healBtn.disabled = !unit || !unit.canHeal;
+    }
+    if (window.domElements?.cancelBtn) {
+        window.domElements.cancelBtn.disabled = !window.gameState.selectedUnit;
+    }
+}
+
+function updateEnemiesCounter() {
+    const activeEnemies = window.gameState.units.filter(u =>
+        u.type === 'enemy' && u.hp > 0 && !u.fleeing
+    );
+    if (window.domElements?.enemiesLeftEl) {
+        window.domElements.enemiesLeftEl.textContent = activeEnemies.length;
+    }
+}
+
+// ========== SELECTION FUNCTIONS ==========
+function selectUnit(unit) {
+    window.gameState.selectedUnit = unit;
+    if (window.logMessage) window.logMessage(`Selected ${unit.name}`, 'system');
+    if (window.soundSystem) window.soundSystem.playSelect();
+    
+    // Just update the display
+    updateSelectedUnitDisplay();
+    updatePhaseIndicator();
+    updateUI();
+    
+    // Highlight selected unit
+    const tile = getTile(unit.x, unit.y);
+    if (tile) tile.classList.add('selected');
+    
+    // Show movement range if it's your unit and can act
+    if (unit.type === window.gameState.currentPlayer && unit.canAct && !unit.fleeing) {
+        for (let tx = 0; tx < GRID_SIZE; tx++) {
+            for (let ty = 0; ty < GRID_SIZE; ty++) {
+                // Use isInMovementRange which checks paths properly
+                if (isInMovementRange(tx, ty, unit)) {
+                    const t = getTile(tx, ty);
+                    if (t) t.classList.add('movable');
+                }
+            }
+        }
+    }
+    
+    updateSelectedUnitDisplay();
+    updatePhaseIndicator();
+}
+
+function cancelSelection() {
+    // If nothing is selected, do nothing
+    if (!window.gameState.selectedUnit && window.gameState.phase === 'select') {
+        return;
+    }
+    
+    // Only log if we're actually cancelling something
+    const hadSelection = !!window.gameState.selectedUnit;
+    const previousPhase = window.gameState.phase;
+    
+    window.gameState.selectedUnit = null;
+    window.gameState.phase = 'select';
+    if (window.domElements?.rangeIndicator) window.domElements.rangeIndicator.style.display = 'none';
+    document.querySelectorAll('.tile.in-attack-range').forEach(t => t.classList.remove('in-attack-range'));
+    
+    if (hadSelection || previousPhase !== 'select') {
+        if (window.logMessage) window.logMessage("Selection cancelled.", 'system');
+    }
+    
+    if (window.renderAll) window.renderAll([]);
+}
+
+// ========== BATTLE LOG ==========
+function logMessage(message, type = 'system') {
+    if (!window.domElements?.battleLogEl) return;
+    
+    const entry = document.createElement('div');
+    
+    // Auto-detect critical/important messages
+    let finalType = type;
+    if (message.includes('CRITICAL!') || message.includes('LEVEL UP!') || 
+        message.includes('BOSS') || message.includes('heroic') ||
+        message.includes('FINAL')) {
+        finalType = 'critical';
+    } else if (message.includes('LEVEL UP') || message.includes('level up')) {
+        finalType = 'levelup';
+    }
+    
+    entry.className = `log-entry ${finalType}`;
+    entry.innerHTML = `[T${window.gameState.turnCount}] ${message}`;
+    window.domElements.battleLogEl.prepend(entry);
+    
+    // Auto-scroll to show latest message
+    window.domElements.battleLogEl.scrollTop = 0;
+    
+    if (window.domElements.battleLogEl.children.length > 20) { // Increased from 15
+        window.domElements.battleLogEl.removeChild(window.domElements.battleLogEl.lastChild);
+    }
+}
+
+// ========== INTRO SPLASH ==========
+function showIntroSplash() {
+    document.getElementById('introOverlay').style.display = 'flex';
+    if (window.disableGame) window.disableGame();
+}
+
+function hideIntroSplash() {
+    document.getElementById('introOverlay').style.display = 'none';
+    if (window.enableGame) window.enableGame();
+}
+
+// ========== UNIT CLEANUP ==========
+function cleanupUnits() {
+    // Progress flee turns and remove fled/dead
+    for (let i = window.gameState.units.length - 1; i >= 0; i--) {
+        const unit = window.gameState.units[i];
+        if (unit.fleeing) {
+            unit.fleeTurns++;
+            if (unit.fleeTurns >= 3) {
+                if (window.logMessage) window.logMessage(`${unit.name} has fled the battlefield!`, 'system');
+                window.gameState.units.splice(i, 1);
+                if (unit.type === 'player') {
+                    window.gameState.battleStats.fleedUnits.push(unit);
+                }
+                continue;
+            }
+        }
+        // Remove any dead stragglers
+        if (unit.hp <= 0) {
+            window.gameState.units.splice(i, 1);
+        }
+    }
+    if (window.checkVictory) window.checkVictory();
+}
+
+// ========== GAME STATE TOGGLES ==========
+function disableGame() {
+    if (window.domElements?.endTurnBtn) window.domElements.endTurnBtn.disabled = true;
+    if (window.domElements?.attackBtn) window.domElements.attackBtn.disabled = true;
+    if (window.domElements?.healBtn) window.domElements.healBtn.disabled = true;
+    if (window.domElements?.cancelBtn) window.domElements.cancelBtn.disabled = true;
+    window.gameState.aiProcessing = false;
+}
+
+function enableGame() {
+    if (window.domElements?.endTurnBtn) window.domElements.endTurnBtn.disabled = false;
+    if (window.domElements?.attackBtn) window.domElements.attackBtn.disabled = false;
+    if (window.domElements?.healBtn) window.domElements.healBtn.disabled = false;
+    if (window.domElements?.cancelBtn) window.domElements.cancelBtn.disabled = false;
+    // gameState.aiProcessing remains as is - don't enable AI here
+}
+
+// ========== VICTORY/DEFEAT STATS ==========
+function showBattleStats(victory) {
+    if (!window.domElements?.statsTitle || !window.domElements?.statsContent) return;
+    
+    window.domElements.statsTitle.textContent = victory ? " VICTORY! " : " DEFEAT! ";
+    
+    const playerUnits = window.gameState.units.filter(u => u.type === 'player');
+    const enemyUnits = window.gameState.units.filter(u => u.type === 'enemy');
+    const totalXP = playerUnits.reduce((sum, unit) => sum + unit.xp, 0);
+    const averageLevel = playerUnits.length > 0 ? 
+        (playerUnits.reduce((sum, unit) => sum + unit.level, 0) / playerUnits.length).toFixed(1) : 0;
+    
+    let statsHTML = `
+        <div class="stats-grid">
+            <div class="stats-column">
+                <h3>Battle Statistics</h3>
+                <div class="stat-row">
+                    <span class="stat-label">Total Rounds:</span>
+                    <span class="stat-value-large">${window.gameState.battleStats.totalRounds}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Enemies Defeated:</span>
+                    <span class="stat-value-large">${window.gameState.battleStats.playerKills}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Damage Dealt:</span>
+                    <span class="stat-value-large">${window.gameState.battleStats.damageDealt}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Damage Taken:</span>
+                    <span class="stat-value-large">${window.gameState.battleStats.damageTaken}</span>
+                </div>
+            </div>
+            <div class="stats-column">
+                <h3>Unit Statistics</h3>
+                <div class="stat-row">
+                    <span class="stat-label">Surviving Units:</span>
+                    <span class="stat-value-large">${playerUnits.length}/${UNITS_PER_TEAM}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Fleed Units:</span>
+                    <span class="stat-value-large">${window.gameState.battleStats.fleedUnits.length}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Total XP Earned:</span>
+                    <span class="stat-value-large">${totalXP}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Average Level:</span>
+                    <span class="stat-value-large">${averageLevel}</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    if (playerUnits.length > 0) {
+        statsHTML += `
+            <div class="surviving-units">
+                <h3>🏆 Surviving Heroes</h3>
+                <div class="unit-list">
+        `;
+        
+        for (const unit of playerUnits) {
+            const icon = {
+                'knight': '⚔️',
+                'archer': '🏹',
+                'mage': '🔮',
+                'berserker': '💢'
+            }[unit.classType] || '⚔️';
+            
+            statsHTML += `
+                <div class="unit-badge player">
+                    ${icon} ${unit.name} (Lvl ${unit.level}) 
+                    <span style="color: #ff6b6b;">❤️ ${unit.hp}/${unit.maxHp}</span>
+                </div>
+            `;
+        }
+        
+        statsHTML += `
+                </div>
+            </div>
+        `;
+    }
+    
+    if (window.gameState.battleStats.fleedUnits.length > 0) {
+        statsHTML += `
+            <div class="surviving-units">
+                <h3>🏃 Fleed Units</h3>
+                <div class="unit-list">
+        `;
+        
+        for (const unit of window.gameState.battleStats.fleedUnits) {
+            const icon = {
+                'knight': '⚔️',
+                'archer': '🏹',
+                'mage': '🔮',
+                'berserker': '💢'
+            }[unit.classType] || '⚔️';
+            
+            statsHTML += `
+                <div class="unit-badge enemy">
+                    ${icon} ${unit.name} (Fled)
+                </div>
+            `;
+        }
+        
+        statsHTML += `
+                </div>
+            </div>
+        `;
+    }
+    
+    window.domElements.statsContent.innerHTML = statsHTML;
+    window.domElements.statsOverlay.style.display = 'flex';
+    
+    disableGame();
+}
+
+function restartGame() {
+    location.reload();
+}
+
+// Make functions globally available
+window.renderAll = renderAll;
+window.renderGrid = renderGrid;
+window.renderUnits = renderUnits;
+window.renderDamagePopups = renderDamagePopups;
+window.showCombatResult = showCombatResult;
+window.updateSelectedUnitDisplay = updateSelectedUnitDisplay;
+window.buildFullUnitDisplay = buildFullUnitDisplay;
+window.updateSelectedUnitStats = updateSelectedUnitStats;
+window.updatePhaseIndicator = updatePhaseIndicator;
+window.updateUI = updateUI;
+window.updateEnemiesCounter = updateEnemiesCounter;
+window.selectUnit = selectUnit;
+window.cancelSelection = cancelSelection;
+window.logMessage = logMessage;
+window.showIntroSplash = showIntroSplash;
+window.hideIntroSplash = hideIntroSplash;
+window.cleanupUnits = cleanupUnits;
+window.disableGame = disableGame;
+window.enableGame = enableGame;
+window.showBattleStats = showBattleStats;
+window.restartGame = restartGame;
+window.getClassIcon = getClassIcon;
+window.createStatBox = createStatBox;
+window.createSimpleStat = createSimpleStat;
+window.createEquipmentItem = createEquipmentItem;

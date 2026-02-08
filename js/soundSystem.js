@@ -1,0 +1,103 @@
+// ========== SIMPLE SOUND SYSTEM ==========
+class SoundSystem {
+    constructor() {
+        this.audioContext = null;
+        this.initialized = false;
+    }
+    
+    init() {
+        if (this.initialized) return;
+        
+        try {
+            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            this.initialized = true;
+        } catch (e) {
+            console.log("Could not initialize audio context:", e);
+        }
+    }
+    
+    playBeep(frequency, duration, type = 'sine', volume = 0.3) {
+        if (!window.gameState?.soundEnabled || !this.initialized) return;
+        
+        try {
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+            
+            oscillator.frequency.value = frequency;
+            oscillator.type = type;
+            
+            const now = this.audioContext.currentTime;
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(volume, now + 0.01);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + duration);
+            
+            oscillator.start(now);
+            oscillator.stop(now + duration);
+        } catch (e) {
+            console.log("Sound play failed:", e);
+        }
+    }
+    
+    playAttack() { this.playBeep(800, 0.1, 'square', 0.2); }
+    playRanged() { this.playBeep(1200, 0.15, 'sine', 0.2); }
+    playHit() { this.playBeep(400, 0.2, 'square', 0.3); }
+    playMiss() { this.playBeep(1500, 0.08, 'sine', 0.1); }
+    playHeal() { this.playBeep(600, 0.3, 'sine', 0.2); }
+    playSelect() { this.playBeep(600, 0.05, 'sine', 0.1); }
+    playFlee() { this.playBeep(300, 0.4, 'sawtooth', 0.2); }
+    
+    playLevelUp() {
+        if (!window.gameState?.soundEnabled || !this.initialized) return;
+        
+        try {
+            const now = this.audioContext.currentTime;
+            const oscillator1 = this.audioContext.createOscillator();
+            const oscillator2 = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+            
+            oscillator1.connect(gainNode);
+            oscillator2.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+            
+            // Two-tone fanfare: G5 to C6
+            oscillator1.frequency.value = 784;  // G5
+            oscillator2.frequency.value = 1046; // C6
+            oscillator1.type = 'sine';
+            oscillator2.type = 'sine';
+            
+            // Volume envelope
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(0.3, now + 0.1);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 1.5);
+            oscillator1.start(now);
+            oscillator2.start(now + 0.1); // Staggered start
+            oscillator1.stop(now + 1.5);
+            oscillator2.stop(now + 1.5);
+            
+        } catch (e) {
+            console.log("Level up sound failed:", e);
+        }
+    }
+    
+    toggle() {
+        if (!window.gameState) return;
+        
+        window.gameState.soundEnabled = !window.gameState.soundEnabled;
+        if (soundToggleEl) {
+            soundToggleEl.innerHTML = window.gameState.soundEnabled ? 
+                '<img src="ui/sound.png" style="width: 16px; height: 16px; vertical-align: middle;"> Sound: ON' : 
+                '<img src="ui/sound.png" style="width: 16px; height: 16px; vertical-align: middle;"> Sound: OFF';
+        }
+        
+        if (window.gameState.soundEnabled && !this.initialized) {
+            this.init();
+        }
+    }
+}
+
+// Create global instance
+const soundSystem = new SoundSystem();
+window.soundSystem = soundSystem;

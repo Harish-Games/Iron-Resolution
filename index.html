@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Iron Resolution v0.64</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <h1>
+        <img src="ui/sword.png" alt="⚔" class="title-icon">
+        IRON RESOLUTION v0.64
+        <img src="ui/sword.png" alt="⚔" class="title-icon">
+    </h1>
+    
+    <div class="subtitle">Weapons & Armor | Injuries & Morale | Battle Brothers Clone</div>
+    
+    <!-- ====== WELCOME INTRO SPLASH ====== -->
+    <div id="introOverlay" class="intro-overlay">
+        <div class="intro-modal">
+            <div class="intro-title">
+                <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                IRON RESOLUTION v0.613
+                <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+            </div>
+            
+<!-- SECTION 1: THE SITUATION -->
+        <div class="intro-section">
+            <h3 class="section-header">THE SITUATION</h3>
+            <div class="section-content">
+                The city watch has noticed bandits coming out of the nearby forest and has raised the alarm! 
+                You are in command of the local garrison. The enemy forces are gathering on the right side 
+                of the battlefield, while your village lies on the left. Defend your home and drive back 
+                the invaders.
+            </div>
+        </div>
+        
+        <!-- SECTION 2: YOUR FORCES -->
+        <div class="intro-section">
+            <h3 class="section-header">YOUR FORCES</h3>
+            <div class="section-content">
+                <div class="force-item">
+                    <img src="ui/knight.png" class="force-icon">
+                    <div class="force-desc">
+                        <strong>KNIGHTS:</strong> Heavy armor, strong defense, disciplined morale
+                    </div>
+                </div>
+                <div class="force-item">
+                    <img src="ui/bow.png" class="force-icon">
+                    <div class="force-desc">
+                        <strong>ARCHERS:</strong> Long range attacks, high accuracy, mobile
+                    </div>
+                </div>
+                <div class="force-item">
+                    <img src="ui/potion.png" class="force-icon">
+                    <div class="force-desc">
+                        <strong>MAGES:</strong> Healing support, magical abilities, fragile
+                    </div>
+                </div>
+                <div class="force-item">
+                    <img src="ui/axe.png" class="force-icon">
+                    <div class="force-desc">
+                        <strong>BERSERKERS:</strong> Devastating damage, aggressive, unstable morale
+                    </div>
+                </div>
+                <div class="section-note">
+                    Each unit type has unique strengths, weaknesses, and tactical roles. 
+                    Choose your formations wisely.
+                </div>
+            </div>
+        </div>
+        
+        <!-- SECTION 3: BATTLEFIELD MECHANICS -->
+        <div class="intro-section">
+            <h3 class="section-header">BATTLEFIELD MECHANICS</h3>
+            <div class="section-content">
+                <strong>TERRAIN MATTERS:</strong> Forests provide cover, mountains give high ground, 
+                villages offer defense. Water is impassable. Terrain effects are shown in the 
+                Selected Unit panel during gameplay.<br><br>
+                
+                <strong>MORALE SYSTEM:</strong> Units can become shaken or flee if morale drops too low. 
+                Keep your forces confident by staying together and winning fights.<br><br>
+                
+                <strong>INJURIES & PERMANENCE:</strong> Wounded soldiers suffer penalties. 
+                Fallen comrades cannot be revived—every loss is permanent.
+            </div>
+        </div>
+        
+        <!-- SECTION 4: VICTORY CONDITIONS -->
+        <div class="intro-section">
+            <h3 class="section-header">VICTORY CONDITIONS</h3>
+            <div class="section-content">
+                <strong>PRIMARY GOAL:</strong> Eliminate all enemy units on the battlefield.<br><br>
+                
+                <strong>SECONDARY OBJECTIVES:</strong> Protect your village structures. 
+                Keep your core force alive. Advance to the next region.<br><br>
+                
+                <strong>ADVANCEMENT:</strong> Complete each level to unlock new challenges, 
+                earn gold for recruits, and develop your veteran soldiers.
+            </div>
+        </div>
+        
+        <!-- SECTION 5: QUICK START -->
+        <div class="intro-section">
+            <h3 class="section-header">QUICK START</h3>
+            <div class="section-content">
+                <div class="quick-step">1. <strong>SELECT:</strong> Click any of your units</div>
+                <div class="quick-step">2. <strong>MOVE:</strong> Click an empty tile within movement range</div>
+                <div class="quick-step">3. <strong>ATTACK:</strong> Click an enemy unit within attack range</div>
+                <div class="quick-step">4. <strong>SPECIAL:</strong> Mages heal allies; Berserkers attack multiple times</div>
+                <div class="quick-step">5. <strong>END TURN:</strong> Press 'E' or click the End Turn button</div>
+                
+                <div class="controls-note">
+                    <strong>CONTROLS:</strong> A = Attack | H = Heal | ESC = Cancel | SPACE = Continue
+                </div>
+            </div>
+        </div>
+        
+        <!-- FINAL NOTE -->
+        <div class="final-note">
+            All detailed unit stats, terrain effects, and combat information are available 
+            in the <strong>Selected Unit panel</strong> during gameplay.
+        </div>            
+            <!-- ACTION BUTTON -->
+            <button id="introContinueBtn" class="intro-continue-btn">
+                <img src="ui/sword1.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+                BEGIN YOUR COMMAND
+            </button>
+            
+            <div class="intro-tip">Press Space or click to continue</div>
+        </div>
+    </div>
+    
+    <!-- NEW: Battle statistics overlay -->
+    <div id="statsOverlay" class="stats-overlay">
+        <div class="stats-modal">
+            <div class="stats-header" id="statsTitle">Battle Results</div>
+            <div id="statsContent">
+                <!-- Filled by JavaScript -->
+            </div>
+            <button id="restartButton" class="restart-button primary">NEW BATTLE</button>
+        </div>
+    </div>
+    
+    <!-- LEVEL COMPLETE POPUP -->
+    <div id="victoryOverlay" class="victory-overlay" style="display: none;">
+        <div class="victory-modal">
+            <div class="victory-title">LEVEL COMPLETE!</div>
+            <div id="victoryLevelName" style="font-size: 1.6em; color: #64ffda; margin-bottom: 10px;"></div>
+            <div id="victoryLevelDifficulty" style="font-size: 1.2em; color: #8892b0; margin-bottom: 20px;"></div>
+            <div class="victory-rewards" id="victoryRewards" style="margin-bottom: 25px;"></div>
+            
+            <!-- Detailed Stats Section -->
+            <div id="victoryStats" style="text-align: left; margin: 25px 0; max-height: 300px; overflow-y: auto;">
+                <!-- Stats will be populated by JavaScript -->
+            </div>
+            
+            <button id="continueBtn" class="continue-btn primary">CONTINUE</button>
+        </div>
+    </div>
+    
+    <!-- RECRUIT SCREEN - HIRE NEW BROTHER -->
+    <div id="recruitOverlay" class="recruit-overlay">
+        <div class="recruit-modal">
+            <div class="recruit-title">NEW RECRUIT AVAILABLE</div>
+            <div class="recruit-info" id="recruitClass">Knight</div>
+            <div class="recruit-info">Level 1 • Basic Equipment</div>
+            <div class="recruit-cost" id="recruitCost">Cost: 80 Gold</div>
+            <div class="recruit-info">Current Gold: <span id="currentGold">0</span></div>
+            <div class="recruit-buttons">
+                <button id="hireBtn" class="hire-btn">HIRE</button>
+            </div>
+        </div>
+    </div>
+   
+    <div class="game-container">
+        <div class="left-panel">
+            <div class="controls">
+                <button id="endTurn" class="primary">
+                    <img src="ui/end.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+                    END TURN (E)
+                </button>
+
+                <button id="attackBtn" disabled>
+                    <img src="ui/sword1.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+                    ATTACK (A)
+                </button>
+
+                <button id="healBtn" class="heal-btn" disabled>
+                    <img src="ui/heart.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+                    HEAL (H)
+                </button>
+
+                <button id="cancelBtn" class="cancel-btn" disabled>
+                    <img src="ui/cancel.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+                    CANCEL (ESC)
+                </button>
+                
+                <div class="stats-display">
+                    <div class="stat-box">
+                        <div class="stat-label">Turn</div>
+                        <div class="stat-value" id="turnCount">1</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Enemies</div>
+                        <div class="stat-value" id="enemiesLeft">8</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid-container">
+                <div id="phaseIndicator" class="phase-indicator">Select a unit</div>
+                <div id="rangeIndicator" class="range-indicator" style="display: none;">Range: 0</div>
+                <div id="soundToggle" class="sound-toggle">
+                    <img src="ui/sound.png" style="width: 16px; height: 16px; vertical-align: middle;"> Sound: ON
+                </div>
+                <div id="grid" class="grid"></div>
+            </div>
+        </div>
+        
+        <div class="right-panel">
+    <!-- NEW: Unit Summary Panel -->
+    <div class="unit-summary">
+        <h3><img src="ui/team.png" style="width: 22px; height: 22px; vertical-align: bottom; margin-right: 2px;">YOUR FORCES</h3>
+        <div id="unitListDisplay">
+            <!-- Unit list will be populated by JavaScript -->
+            <div style="color: #8892b0; text-align: center; padding: 20px;">
+                <img src="ui/shield.png" style="width: 30px; height: 30px; margin-bottom: 10px;">
+                <div style="font-size: 0.9em;">Your units will appear here</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ENHANCED: Selected Unit panel with all unit details -->
+    <div class="unit-details">
+        <h3><img src="ui/target.png" style="width: 22px; height: 22px; vertical-align: bottom; margin-right: 2px;">SELECTED UNIT</h3>
+        <div id="selectedUnitDisplay">
+            <div style="color: #8892b0; text-align: center; padding: 40px 20px;">
+                <img src="ui/sword.png" style="width: 40px; height: 40px; margin-bottom: 10px;">
+                <div style="margin-bottom: 10px; font-size: 1.1em;">Click a unit on the battlefield</div>
+                <div style="font-size: 0.9em; color: #4ecdc4;">
+                    Unit details will appear here when selected
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Battle Log panel -->
+    <div class="log-container">
+        <h3><img src="ui/scroll.png" style="width: 24px; height: 24px; vertical-align: middle;">BATTLE LOG</h3>
+        <div id="battleLog"></div>
+    </div>
+</div>
+
+    <!-- Script includes (IN ORDER) -->
+    <script src="js/utils.js"></script>
+    <script src="js/gameState.js"></script>
+    <script src="js/soundSystem.js"></script>
+    <script src="js/unit.js"></script>
+    <script src="js/terrain.js"></script>
+    <script src="js/combat.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/levelSystem.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
