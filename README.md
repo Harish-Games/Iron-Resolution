@@ -157,39 +157,3 @@ v0.3 - 21st Jan 2026 (First version released on itch.io)
     Recruitment system: Hire recruits after each victory.
     Persistent company with carry-over between levels.
     Improved AI and balance.
-
-Pipeline
-
-v0.7 (next)
-
-    AI no longer bounces (as much) if there is no way around. (done)
-    Removed Berzerking code as the new movement code makes it redundant, and it was causing Berzerkers to get stuck if Berzerking next to a river or water. (done)
-    You can no longer move or attack with the AI units. (done)
-    Removed the 'skip' option in the recruitment screen as it was crashing the game - I never thought people would not want to recruit! (done)
-    Added XP to Selected Unit screen. (done)
-    Reduced the XP increase as you were too overpowered for level 3 - with more levels to come, you would be far too overpowered - and yes, this makes the game harder again! (done)
-    Added XP and HP rules to the instructions. (done)
-    Mage stats in the SU changed to Heals from Attacks. (done)
-    Added a Unit Roster Panel so you can see your entire troupe at a glance - sorted by total XP so you can see you best units. (done)
-    Change the graphic to the earlier actual creature images.
-    Balanced XP as units were powering up too quickly. (done)
-    Made the screen smaller so it is better viewable on a laptop (you sill have to scroll for the new stats). (done)
-    Add swamp terrain.
-    Continue the story.
-        4 Swamp approach
-        5 Forest skirmish
-        6 River assault boss
-        then... 
-
-Future
-
-    Camp shop: Buy weapons, armor, and healing 
-    2-player hotseat mode 
-    Add random map generation with themes (e.g., "Bandit Camp," "Ancient Ruins").
-    Add more unit types.  The 16x16 grid doesn't give space for more at the moment, so this can be added when the map is extended.
-    Load / Save - once more levels are added.
-    Mobile compatibility
-    Improve different sounds for weapons hitting, moving, etc.
-    Pop up graphic for kills and level up.
-    Background music?
-    What would you like to see..?
