@@ -158,13 +158,6 @@ v0.3 - 21st Jan 2026 (First version released on itch.io)
     Persistent company with carry-over between levels.
     Improved AI and balance.
 
-Known Bugs
-
-    If you win level 3, you are taken back to level 3.  This will be removed in the next release as the game will have 6 levels!
-    Select 'skip' in the recruitment screen crashes the game - I never thought that people wouldn't want to recruit!
-    AI bounces if there is no way around. 
-    Berzerker still gets stuck if berzerking next to a river or water.
-
 Pipeline
 
 v0.7 (next)
