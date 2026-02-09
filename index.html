@@ -2,30 +2,33 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Iron Resolution v0.64</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
+
+    <title>Iron Resolution v0.75</title>
+       
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="css/styles.css">
+    </head>
 <body>
-    <!-- Header -->
-    <h1>
-        <img src="ui/sword.png" alt="⚔" class="title-icon">
-        IRON RESOLUTION v0.64
-        <img src="ui/sword.png" alt="⚔" class="title-icon">
-    </h1>
-    
+
+	<h1>
+		<img src="../ui/sword.png" alt="⚔" class="title-icon">
+		IRON RESOLUTION v0.75
+		<img src="../ui/sword.png" alt="⚔" class="title-icon">
+	</h1>
+	
     <div class="subtitle">Weapons & Armor | Injuries & Morale | Battle Brothers Clone</div>
     
-    <!-- ====== WELCOME INTRO SPLASH ====== -->
-    <div id="introOverlay" class="intro-overlay">
-        <div class="intro-modal">
-            <div class="intro-title">
-                <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
-                IRON RESOLUTION v0.613
-                <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
-            </div>
-            
-<!-- SECTION 1: THE SITUATION -->
+          <!-- WELCOME INTRO SPLASH -->
+	<div id="introOverlay" class="intro-overlay">
+    <div class="intro-modal">
+        <!-- GAME HEADER (Matches main game) -->
+        <div class="intro-title">
+            <img src="../ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+            IRON RESOLUTION v0.75
+            <img src="../ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+        </div>
+        
+        <!-- SECTION 1: THE SITUATION -->
         <div class="intro-section">
             <h3 class="section-header">THE SITUATION</h3>
             <div class="section-content">
@@ -41,25 +44,25 @@
             <h3 class="section-header">YOUR FORCES</h3>
             <div class="section-content">
                 <div class="force-item">
-                    <img src="ui/knight.png" class="force-icon">
+                    <img src="../ui/knight.png" class="force-icon">
                     <div class="force-desc">
                         <strong>KNIGHTS:</strong> Heavy armor, strong defense, disciplined morale
                     </div>
                 </div>
                 <div class="force-item">
-                    <img src="ui/bow.png" class="force-icon">
+                    <img src="../ui/bow.png" class="force-icon">
                     <div class="force-desc">
                         <strong>ARCHERS:</strong> Long range attacks, high accuracy, mobile
                     </div>
                 </div>
                 <div class="force-item">
-                    <img src="ui/potion.png" class="force-icon">
+                    <img src="../ui/potion.png" class="force-icon">
                     <div class="force-desc">
                         <strong>MAGES:</strong> Healing support, magical abilities, fragile
                     </div>
                 </div>
                 <div class="force-item">
-                    <img src="ui/axe.png" class="force-icon">
+                    <img src="../ui/axe.png" class="force-icon">
                     <div class="force-desc">
                         <strong>BERSERKERS:</strong> Devastating damage, aggressive, unstable morale
                     </div>
@@ -121,16 +124,17 @@
         <div class="final-note">
             All detailed unit stats, terrain effects, and combat information are available 
             in the <strong>Selected Unit panel</strong> during gameplay.
-        </div>            
-            <!-- ACTION BUTTON -->
-            <button id="introContinueBtn" class="intro-continue-btn">
-                <img src="ui/sword1.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
-                BEGIN YOUR COMMAND
-            </button>
-            
-            <div class="intro-tip">Press Space or click to continue</div>
         </div>
+        
+        <!-- ACTION BUTTON -->
+<button id="introContinueBtn" class="intro-continue-btn" onclick="hideIntroSplash()">            <img src="../ui/sword1.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+            BEGIN YOUR COMMAND
+        </button>
+        
+        <div class="intro-tip">Press Space or click to continue</div>
     </div>
+</div>
+
     
     <!-- NEW: Battle statistics overlay -->
     <div id="statsOverlay" class="stats-overlay">
@@ -143,23 +147,24 @@
         </div>
     </div>
     
-    <!-- LEVEL COMPLETE POPUP -->
-    <div id="victoryOverlay" class="victory-overlay" style="display: none;">
-        <div class="victory-modal">
-            <div class="victory-title">LEVEL COMPLETE!</div>
-            <div id="victoryLevelName" style="font-size: 1.6em; color: #64ffda; margin-bottom: 10px;"></div>
-            <div id="victoryLevelDifficulty" style="font-size: 1.2em; color: #8892b0; margin-bottom: 20px;"></div>
-            <div class="victory-rewards" id="victoryRewards" style="margin-bottom: 25px;"></div>
-            
-            <!-- Detailed Stats Section -->
-            <div id="victoryStats" style="text-align: left; margin: 25px 0; max-height: 300px; overflow-y: auto;">
-                <!-- Stats will be populated by JavaScript -->
-            </div>
-            
-            <button id="continueBtn" class="continue-btn primary">CONTINUE</button>
+        <!-- LEVEL COMPLETE POPUP -->
+<div id="victoryOverlay" class="victory-overlay" style="display: none;">
+    <div class="victory-modal">
+        <div class="victory-title">LEVEL COMPLETE!</div>
+        <div id="victoryLevelName" style="font-size: 1.6em; color: #64ffda; margin-bottom: 10px;"></div>
+        <div id="victoryLevelDifficulty" style="font-size: 1.2em; color: #8892b0; margin-bottom: 20px;"></div>
+        <div class="victory-rewards" id="victoryRewards" style="margin-bottom: 25px;"></div>
+        
+        <!-- Detailed Stats Section -->
+        <div id="victoryStats" style="text-align: left; margin: 25px 0; max-height: 300px; overflow-y: auto;">
+            <!-- Stats will be populated by JavaScript -->
         </div>
-    </div>
-    
+        
+        <button id="continueBtn" class="continue-btn primary">CONTINUE</button>
+</div>
+</div>
+
+
     <!-- RECRUIT SCREEN - HIRE NEW BROTHER -->
     <div id="recruitOverlay" class="recruit-overlay">
         <div class="recruit-modal">
@@ -177,92 +182,90 @@
     <div class="game-container">
         <div class="left-panel">
             <div class="controls">
-                <button id="endTurn" class="primary">
-                    <img src="ui/end.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
-                    END TURN (E)
-                </button>
+<button id="endTurn" class="primary">
+    <img src="../ui/end.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+    END TURN (E)
+</button>
 
-                <button id="attackBtn" disabled>
-                    <img src="ui/sword1.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
-                    ATTACK (A)
-                </button>
+<button id="attackBtn" disabled>
+    <img src="../ui/sword1.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+    ATTACK (A)
+</button>
 
-                <button id="healBtn" class="heal-btn" disabled>
-                    <img src="ui/heart.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
-                    HEAL (H)
-                </button>
+<button id="healBtn" class="heal-btn" disabled>
+    <img src="../ui/heart.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+    HEAL (H)
+</button>
 
-                <button id="cancelBtn" class="cancel-btn" disabled>
-                    <img src="ui/cancel.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
-                    CANCEL (ESC)
-                </button>
-                
-                <div class="stats-display">
-                    <div class="stat-box">
-                        <div class="stat-label">Turn</div>
-                        <div class="stat-value" id="turnCount">1</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Enemies</div>
-                        <div class="stat-value" id="enemiesLeft">8</div>
-                    </div>
-                </div>
-            </div>
+<button id="cancelBtn" class="cancel-btn" disabled>
+    <img src="../ui/cancel.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+    CANCEL (ESC)
+</button>
+
+    <div class="stats-display">
+        <div class="stat-box">
+            <div class="stat-label">Turn</div>
+            <div class="stat-value" id="turnCount">1</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">Enemies</div>
+            <div class="stat-value" id="enemiesLeft">8</div>
+        </div>
+    </div>
+</div>
             
             <div class="grid-container">
                 <div id="phaseIndicator" class="phase-indicator">Select a unit</div>
                 <div id="rangeIndicator" class="range-indicator" style="display: none;">Range: 0</div>
-                <div id="soundToggle" class="sound-toggle">
-                    <img src="ui/sound.png" style="width: 16px; height: 16px; vertical-align: middle;"> Sound: ON
-                </div>
+<div id="soundToggle" class="sound-toggle">
+    <img src="../ui/sound.png" style="width: 16px; height: 16px; vertical-align: middle;"> Sound: ON
+</div>
                 <div id="grid" class="grid"></div>
             </div>
         </div>
         
         <div class="right-panel">
-    <!-- NEW: Unit Summary Panel -->
-    <div class="unit-summary">
-        <h3><img src="ui/team.png" style="width: 22px; height: 22px; vertical-align: bottom; margin-right: 2px;">YOUR FORCES</h3>
-        <div id="unitListDisplay">
-            <!-- Unit list will be populated by JavaScript -->
-            <div style="color: #8892b0; text-align: center; padding: 20px;">
-                <img src="ui/shield.png" style="width: 30px; height: 30px; margin-bottom: 10px;">
-                <div style="font-size: 0.9em;">Your units will appear here</div>
+    <!-- Top Row: SU + Roster (scrollable horizontally) -->
+    <div class="top-row-container">
+        <!-- Selected Unit Panel -->
+        <div class="su-container">
+            <div class="panel-header">
+                <img src="../ui/target.png" style="width: 22px; height: 22px; vertical-align: bottom; margin-right: 2px;">
+                SELECTED UNIT
             </div>
+            <div id="selectedUnitDisplay"></div>
+        </div>
+        
+        <!-- Unit Roster Panel -->
+        <div class="roster-container">
+            <div class="panel-header">
+                <img src="../ui/team.png" style="width: 22px; height: 22px; vertical-align: bottom; margin-right: 2px;">
+                UNIT ROSTER
+            </div>
+            <div id="unitRosterList"></div>
         </div>
     </div>
     
-    <!-- ENHANCED: Selected Unit panel with all unit details -->
-    <div class="unit-details">
-        <h3><img src="ui/target.png" style="width: 22px; height: 22px; vertical-align: bottom; margin-right: 2px;">SELECTED UNIT</h3>
-        <div id="selectedUnitDisplay">
-            <div style="color: #8892b0; text-align: center; padding: 40px 20px;">
-                <img src="ui/sword.png" style="width: 40px; height: 40px; margin-bottom: 10px;">
-                <div style="margin-bottom: 10px; font-size: 1.1em;">Click a unit on the battlefield</div>
-                <div style="font-size: 0.9em; color: #4ecdc4;">
-                    Unit details will appear here when selected
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Battle Log panel -->
+    <!-- Bottom Row: Battle Log (always full width) -->
     <div class="log-container">
-        <h3><img src="ui/scroll.png" style="width: 24px; height: 24px; vertical-align: middle;">BATTLE LOG</h3>
+        <div class="panel-header">
+            <img src="../ui/scroll.png" style="width: 24px; height: 24px; vertical-align: middle;">
+            BATTLE LOG
+        </div>
         <div id="battleLog"></div>
     </div>
 </div>
-
-    <!-- Script includes (IN ORDER) -->
-    <script src="js/utils.js"></script>
-    <script src="js/gameState.js"></script>
-    <script src="js/soundSystem.js"></script>
-    <script src="js/unit.js"></script>
-    <script src="js/terrain.js"></script>
-    <script src="js/combat.js"></script>
-    <script src="js/ai.js"></script>
-    <script src="js/levelSystem.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/main.js"></script>
+        
+<!-- Script includes (IN ORDER) -->
+<script src="js/utils.js"></script>
+<script src="js/gameState.js"></script>
+<script src="js/unit.js"></script>
+<script src="js/terrain.js"></script>  
+<script src="js/combat.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/soundSystem.js"></script>
+<script src="js/levelSystem.js"></script>
+<script src="js/main.js"></script>     
 </body>
 </html>

@@ -1,8 +1,10 @@
-// ========== GAME CONFIG ==========
-const GRID_SIZE = 16;
-const UNITS_PER_TEAM = 6;
+// Iron Resolution UTILS.js
 
-// ========== RANDOM NAME GENERATOR ==========
+       // ========== GAME CONFIG ==========
+        let GRID_SIZE = 16;
+        const UNITS_PER_TEAM = 6;
+        
+        // ========== RANDOM NAME GENERATOR ==========
 const RANDOM_NAMES = {
     player: {
         firstNames: ["Aldric", "Bartholomew", "Cedric", "Darius", "Eldric", "Finnian", "Gawain", "Hadrian", "Ignatius", "Jorah", 
@@ -52,191 +54,139 @@ function generateRandomName(type, className = "", isBoss = false) {
     return options[Math.floor(Math.random() * options.length)];
 }
 
+
 // Seed generator for consistent names per session
 let nameSeed = Date.now();
 function seededRandom() {
     const x = Math.sin(nameSeed++) * 10000;
     return x - Math.floor(x);
 }
-
-// ========== WEAPONS & ARMOR SYSTEM (Phase 1) ==========
-const WEAPONS = {
-    sword: { name: "Iron Sword", damage: 3, accuracy: 5, type: "melee" },
-    greatsword: { name: "Greatsword", damage: 5, accuracy: -5, type: "melee" },
-    axe: { name: "Battle Axe", damage: 4, armorPen: 2, type: "melee" },
-    mace: { name: "War Mace", damage: 3, stunChance: 10, type: "melee" },
-    bow: { name: "Short Bow", damage: 2, range: 1, type: "ranged" },
-    longbow: { name: "Longbow", damage: 3, range: 2, accuracy: 5, type: "ranged" }
-};
-
-const ARMOR = {
-    leather: { name: "Leather Armor", defense: 2, dodge: 5 },
-    chainmail: { name: "Chainmail", defense: 4, dodge: -5 },
-    plate: { name: "Plate Armor", defense: 6, dodge: -10, movement: -1 }
-};
-
-// ========== NUMBER OF AI UNITS PER LEVEL change for testing ========== 
+     
+        // ========== WEAPONS & ARMOR SYSTEM (Phase 1) ==========
+        const WEAPONS = {
+            sword: { name: "Iron Sword", damage: 3, accuracy: 5, type: "melee" },
+            greatsword: { name: "Greatsword", damage: 5, accuracy: -5, type: "melee" },
+            axe: { name: "Battle Axe", damage: 4, armorPen: 2, type: "melee" },
+            mace: { name: "War Mace", damage: 3, stunChance: 10, type: "melee" },
+            bow: { name: "Short Bow", damage: 2, range: 1, type: "ranged" },
+            longbow: { name: "Longbow", damage: 3, range: 2, accuracy: 5, type: "ranged" }
+        };
+        
+        const ARMOR = {
+            leather: { name: "Leather Armor", defense: 2, dodge: 5 },
+            chainmail: { name: "Chainmail", defense: 4, dodge: -5 },
+            plate: { name: "Plate Armor", defense: 6, dodge: -10, movement: -1 }
+        };
+        
+        // ========== NUMBER OF AI UNITS PER LEVEL change for testing ========== 
 const LEVELS = [
     { name: "Training Grounds", difficulty: "Easy", enemyBonus: 0, extraEnemies: 0, boss: false },
+    { name: "Darkwood Approach", difficulty: "Medium", enemyBonus: 0, extraEnemies: -3, boss: false },
     { name: "Forest Outpost", difficulty: "Medium", enemyBonus: 2, extraEnemies: 1, boss: false, hasRiver: true },
+    { name: "Mountain Pass", difficulty: "Hard", enemyBonus: 3, extraEnemies: -1, boss: false },
     { name: "Mountain Fortress", difficulty: "Hard", enemyBonus: 4, extraEnemies: 5, boss: true }
 ];
-
-// ========== INJURIES & MORALE SYSTEM (Phase 2) ==========
-const INJURIES = {
-    minor_wound: { name: "Minor Wound", effect: { hp: -5 }, duration: 1 },
-    broken_arm: { name: "Broken Arm", effect: { attack: -3 }, duration: 3 },
-    leg_injury: { name: "Leg Injury", effect: { movement: -1 }, duration: 2 },
-    concussion: { name: "Concussion", effect: { accuracy: -10 }, duration: 2 }
-};
-
-// ========== TERRAIN SYSTEM - SINGLE SOURCE OF TRUTH ==========
-const TERRAIN_EFFECTS = {
-    normal: {
-        name: "Open Terrain",
-        icon: 'images/grass.png',
-        accuracyAgainst: 0,
-        damageReduction: 0,
-        offensiveAccuracy: 0,
-        movementPenalty: 0
-    },
-    forest: {
-        name: "Forest",
-        icon: 'images/forest.png',
-        accuracyAgainst: -25,
-        damageReduction: 15,
-        offensiveAccuracy: -25,
-        movementPenalty: 0
-    },
-    mountain: {
-        name: "Mountain",
-        icon: 'images/mountain.png',
-        accuracyAgainst: -15,
-        damageReduction: 10,
-        offensiveAccuracy: 15,
-        movementPenalty: -1
-    },
-    swamp: {
-        name: "Swamp",
-        icon: 'images/swamp.png',
-        accuracyAgainst: -10,
-        damageReduction: -15, // Negative means damage INCREASE
-        offensiveAccuracy: -40,
-        movementPenalty: { knight: -1, mage: -1, archer: -2, berserker: -2 }
-    },
-    'village-player': {
-        name: "Your Village",
-        icon: 'images/village-player.png',
-        accuracyAgainst: -20,
-        damageReduction: 15,
-        offensiveAccuracy: -15,
-        movementPenalty: 0
-    },
-    'village-enemy': {
-        name: "Enemy Camp",
-        icon: 'images/village-enemy.png',
-        accuracyAgainst: -15,
-        damageReduction: 10,
-        offensiveAccuracy: 0,
-        movementPenalty: 0
-    },
-    water: {
-        name: "Water",
-        icon: 'images/water.png',
-        accuracyAgainst: 0,
-        damageReduction: 0,
-        offensiveAccuracy: 0,
-        movementPenalty: 999 // Impassable
-    },
-    river: {
-        name: "River",
-        icon: 'images/river.png',
-        accuracyAgainst: 0,
-        damageReduction: 0,
-        offensiveAccuracy: 0,
-        movementPenalty: 999 // Also impassable
-    }
-};
-
-// ========== HELPER FUNCTIONS ==========
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function getTile(x, y) {
-    return document.querySelector(`.tile[data-x="${x}"][data-y="${y}"]`);
-}
-
-function getUnitAt(x, y) {
-    return window.gameState?.units?.find(u => u.x === x && u.y === y) || null;
-}
-
-function isInRange(x, y, unit, range) {
-    const distance = Math.abs(x - unit.x) + Math.abs(y - unit.y);
-    return distance <= range;
-}
-
-function findShortestPath(startX, startY, targetX, targetY, maxMoves) {
-    const queue = [{x: startX, y: startY, path: [], moves: 0}];
-    const visited = new Set();
-    visited.add(`${startX},${startY}`);
-    
-    const directions = [
-        {dx: 1, dy: 0},  // right
-        {dx: -1, dy: 0}, // left
-        {dx: 0, dy: 1},  // down
-        {dx: 0, dy: -1}  // up
-    ];
-    
-    while (queue.length > 0) {
-        const current = queue.shift();
         
-        // Found target!
-        if (current.x === targetX && current.y === targetY) {
-            return [...current.path, {x: current.x, y: current.y}];
+        // ========== INJURIES & MORALE SYSTEM (Phase 2) ==========
+        const INJURIES = {
+            minor_wound: { name: "Minor Wound", effect: { hp: -5 }, duration: 1 },
+            broken_arm: { name: "Broken Arm", effect: { attack: -3 }, duration: 3 },
+            leg_injury: { name: "Leg Injury", effect: { movement: -1 }, duration: 2 },
+            concussion: { name: "Concussion", effect: { accuracy: -10 }, duration: 2 }
+        };
+              
+        // ========== TERRAIN SYSTEM - SINGLE SOURCE OF TRUTH ==========
+        const TERRAIN_EFFECTS = {
+            normal: {
+                name: "Open Terrain",
+                icon: 'images/grass.png',
+                accuracyAgainst: 0,
+                damageReduction: 0,
+                offensiveAccuracy: 0,
+                movementPenalty: 0
+            },
+            forest: {
+                name: "Forest",
+                icon: 'images/forest.png',
+                accuracyAgainst: -25,
+                damageReduction: 15,
+                offensiveAccuracy: -25,
+                movementPenalty: 0
+            },
+            mountain: {
+                name: "Mountain",
+                icon: 'images/mountain.png',
+                accuracyAgainst: -15,
+                damageReduction: 10,
+                offensiveAccuracy: 15,
+                movementPenalty: -1
+            },
+            swamp: {
+                name: "Swamp",
+                icon: 'images/swamp.png',
+                accuracyAgainst: -10,
+                damageReduction: -15, // Negative means damage INCREASE
+                offensiveAccuracy: -40,
+                movementPenalty: { knight: -1, mage: -1, archer: -2, berserker: -2 }
+            },
+            'village-player': {
+                name: "Your Village",
+                icon: 'images/village-player.png',
+                accuracyAgainst: -20,
+                damageReduction: 15,
+                offensiveAccuracy: -15,
+                movementPenalty: 0
+            },
+            'village-enemy': {
+				name: "Enemy Camp",
+				icon: 'images/village-enemy.png',
+				accuracyAgainst: -15,
+				damageReduction: 10,
+				offensiveAccuracy: 0,
+				movementPenalty: 0
+			},
+            water: {
+                name: "Water",
+                icon: 'images/water.png',
+                accuracyAgainst: 0,
+                damageReduction: 0,
+                offensiveAccuracy: 0,
+                movementPenalty: 999 // Impassable
+            },
+            river: {
+                name: "River",
+                icon: 'images/river.png',
+                accuracyAgainst: 0,
+                damageReduction: 0,
+                offensiveAccuracy: 0,
+                movementPenalty: 999 // Also impassable
+            },
+            
+        };
+ 
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
         }
         
-        // Try all directions
-        for (const dir of directions) {
-            const newX = current.x + dir.dx;
-            const newY = current.y + dir.dy;
-            
-            // Check bounds
-            if (newX < 0 || newX >= GRID_SIZE || newY < 0 || newY >= GRID_SIZE) {
-                continue;
-            }
-            
-            // Check if visited
-            const key = `${newX},${newY}`;
-            if (visited.has(key)) {
-                continue;
-            }
-            
-            // Check if passable
-            const isTarget = (newX === targetX && newY === targetY);
-            if (window.gameState?.terrain[newY][newX] === 'water') {
-                continue;
-            }
-            
-            if (!isTarget && getUnitAt(newX, newY)) {
-                continue;
-            }
-            
-            // Check movement range
-            const newMoves = current.moves + 1;
-            if (newMoves <= maxMoves) {
-                visited.add(key);
-                queue.push({
-                    x: newX,
-                    y: newY,
-                    path: [...current.path, {x: current.x, y: current.y}],
-                    moves: newMoves
-                });
-            }
+        function getTile(x, y) {
+            return document.querySelector(`.tile[data-x="${x}"][data-y="${y}"]`);
         }
-    }
+        
+        function getUnitAt(x, y) {
+            return gameState.units.find(u => u.x === x && u.y === y);
+        }
+        
+       function isInMovementRange(x, y, unit) {
+    const movesLeft = unit.movement - unit.movesUsed;
     
-    return null;
+    // Quick checks
+    if (x === unit.x && y === unit.y) return false;
+    if (gameState.terrain[y][x] === 'water') return false;
+    if (getUnitAt(x, y)) return false;
+    if (movesLeft <= 0) return false;
+    
+    // Use BFS to find if there's ANY path within movement range
+    return hasPathWithinRange(unit.x, unit.y, x, y, movesLeft);
 }
 
 function hasPathWithinRange(startX, startY, targetX, targetY, maxMoves) {
@@ -278,7 +228,7 @@ function hasPathWithinRange(startX, startY, targetX, targetY, maxMoves) {
             
             // Check if passable (not water/river, not occupied unless it's target)
             const isTarget = (newX === targetX && newY === targetY);
-            if (window.gameState?.terrain[newY][newX] === 'water' || window.gameState?.terrain[newY][newX] === 'river') {
+            if (gameState.terrain[newY][newX] === 'water' || gameState.terrain[newY][newX] === 'river') {
                 continue;
             }
             
@@ -298,48 +248,208 @@ function hasPathWithinRange(startX, startY, targetX, targetY, maxMoves) {
     // No path found within movement range
     return false;
 }
-
-function isInMovementRange(x, y, unit) {
-    const movesLeft = unit.movement - unit.movesUsed;
+        
+        function isInRange(x, y, unit, range) {
+            const distance = Math.abs(x - unit.x) + Math.abs(y - unit.y);
+            return distance <= range;
+        }
+        
+       function updateSelectedUnitStats() {
+    // Update the selected unit display when stats change
+    if (gameState.selectedUnit) {
+        updateSelectedUnitDisplay();
+    }
+}
+        
+        function updatePhaseIndicator() {
+    if (!gameState.selectedUnit) {
+        phaseIndicator.innerHTML = '<img src="ui/target.png" style="width: 16px; height: 16px; vertical-align: middle;"> Select a unit (Press A to attack, E to end turn)';
+    } else if (gameState.selectedUnit.type !== gameState.currentPlayer) {
+        phaseIndicator.innerHTML = '<img src="ui/robot.png" style="width: 16px; height: 16px; vertical-align: middle;"> Cannot control enemy units';
+    } else if (gameState.selectedUnit.fleeing) {
+        phaseIndicator.innerHTML = '<img src="ui/running.png" style="width: 16px; height: 16px; vertical-align: middle;"> Unit is fleeing!';
+    } else {
+        const unit = gameState.selectedUnit;
+        let actions = [];
+        if (unit.canMove) actions.push("Move");
+        if (unit.canAttack) actions.push("Attack");
+        if (unit.canHeal) actions.push("Heal");
+        
+        phaseIndicator.innerHTML = `<img src="ui/sword.png" style="width: 16px; height: 16px; vertical-align: middle;"> ${unit.name} - Available: ${actions.join(", ")}`;
+    }
+}
+        
+        function updateUI() {
+           const unit = gameState.selectedUnit;
     
-    // Quick checks
-    if (x === unit.x && y === unit.y) return false;
-    if (window.gameState?.terrain[y][x] === 'water') return false;
-    if (getUnitAt(x, y)) return false;
-    if (movesLeft <= 0) return false;
+    attackBtn.disabled = !unit || !unit.canAttack;
+    healBtn.disabled = !unit || !unit.canHeal;
+    cancelBtn.disabled = !gameState.selectedUnit;
+            
+        }
+        
+        function updateUnitStats() {
+    // Update the selected unit display when stats change
+    if (gameState.selectedUnit) {
+        updateSelectedUnitDisplay();
+    }
+}
+        
+        function updateEnemiesCounter() {
+    const activeEnemies = gameState.units.filter(u =>
+        u.type === 'enemy' && u.hp > 0 && !u.fleeing
+    );
+    if (enemiesLeftEl) {
+        enemiesLeftEl.textContent = activeEnemies.length;
+    }
+}
+  
+   function updateUnitRoster() {
+    const rosterList = document.getElementById('unitRosterList');
+    if (!rosterList) return;
     
-    // Use BFS to find if there's ANY path within movement range
-    return hasPathWithinRange(unit.x, unit.y, x, y, movesLeft);
+    // Get all player units and calculate total XP
+    const playerUnits = gameState.units
+        .filter(u => u.type === 'player')
+        .map(unit => {
+            // Calculate total cumulative XP
+            const totalXp = getCumulativeXpForLevel(unit.level) + unit.xp;
+            return {
+                unit: unit,
+                totalXp: totalXp
+            };
+        });
+    
+    // Sort by total XP (highest first = MVP at top)
+    playerUnits.sort((a, b) => b.totalXp - a.totalXp);
+    
+    // Clear existing roster
+    rosterList.innerHTML = '';
+    
+    // Add each unit to roster (now sorted)
+    playerUnits.forEach(({ unit, totalXp }) => {
+        const unitElement = createRosterUnitElement(unit, totalXp);
+        rosterList.appendChild(unitElement);
+    });
 }
 
-// Helper: Find nearest player to a position
-function getNearestPlayer(x, y) {
-    const players = window.gameState?.units?.filter(u => u.type === 'player' && u.hp > 0 && !u.fleeing) || [];
-    if (players.length === 0) return null;
+function createRosterUnitElement(unit, totalXp = 0) {
+    const div = document.createElement('div');
+    div.className = 'roster-unit';
+    div.dataset.unitId = unit.id;
     
-    let nearestPlayer = null;
-    let minDistance = Infinity;
-    
-    for (const player of players) {
-        const distance = Math.abs(x - player.x) + Math.abs(y - player.y);
-        if (distance < minDistance) {
-            minDistance = distance;
-            nearestPlayer = player;
+    // Add click handler to select this unit
+    div.addEventListener('click', () => {
+        const clickedUnit = gameState.units.find(u => u.id === unit.id);
+        if (clickedUnit) {
+            selectUnit(clickedUnit);
         }
+    });
+    
+    // Determine status
+    let status = '';
+    let statusClass = '';
+    if (unit.hp <= 0) {
+        status = 'DEAD';
+        statusClass = 'dead';
+    } else if (unit.hp < unit.maxHp * 0.3) {
+        status = 'CRITICAL';
+        statusClass = 'critical';
+    } else if (unit.hp < unit.maxHp * 0.6) {
+        status = 'INJURED';
+        statusClass = 'injured';
+    } else if (unit.fleeing) {
+        status = 'FLEEING';
+        statusClass = 'fleeing';
     }
     
-    return nearestPlayer;
+    // Get class icon
+    const classIcon = getClassIconForRoster(unit.classType);
+    
+    // Build HTML - NOW WITH HITS/KILLS
+    // Build HTML - SHOW HEALS FOR MAGES, HITS FOR OTHERS
+let combatStats = '';
+if (unit.classType === 'mage') {
+    combatStats = `
+        <span class="roster-heals-badge">${unit.healsPerformed}H</span>
+        <span class="roster-kills-badge">${unit.kills}K</span>
+    `;
+} else {
+    combatStats = `
+        <span class="roster-hits-badge">${unit.hitsLanded}H</span>
+        <span class="roster-kills-badge">${unit.kills}K</span>
+    `;
 }
 
-// XP helper functions
+div.innerHTML = `
+    <div class="roster-unit-icon">${classIcon}</div>
+    <div class="roster-unit-info">
+        <div class="roster-unit-name">${unit.name}</div>
+        <div class="roster-unit-stats">
+            <span class="roster-unit-level">L${unit.level}</span>
+            ${combatStats}
+            <span class="roster-unit-xp">${totalXp}</span>
+            <span class="roster-unit-hp">${unit.hp}/${unit.maxHp}</span>
+        </div>
+    </div>
+    ${status ? `<div class="roster-unit-status ${statusClass}">${status}</div>` : ''}
+`;
+    
+    // Highlight if this is the selected unit
+    if (gameState.selectedUnit && gameState.selectedUnit.id === unit.id) {
+        div.classList.add('selected');
+    }
+    
+    // Add MVP star for highest XP unit
+    if (isMvpUnit(unit.id)) {
+        div.classList.add('mvp');
+    }
+    
+    return div;
+}
+
+// Keep the original getClassIconForRoster function
+function getClassIconForRoster(classType) {
+    // Simple text icons for now
+    switch(classType) {
+        case 'knight': return 'K';
+        case 'archer': return 'A';
+        case 'mage': return 'M';
+        case 'berserker': return 'B';
+        default: return '?';
+    }
+}
+
+// Helper: Check if unit has highest XP
+function isMvpUnit(unitId) {
+    const playerUnits = gameState.units.filter(u => u.type === 'player');
+    if (playerUnits.length === 0) return false;
+    
+    // Find unit with highest total XP
+    let maxXp = -1;
+    let mvpUnitId = null;
+    
+    playerUnits.forEach(unit => {
+        const totalXp = getCumulativeXpForLevel(unit.level) + unit.xp;
+        if (totalXp > maxXp) {
+            maxXp = totalXp;
+            mvpUnitId = unit.id;
+        }
+    });
+    
+    return unitId === mvpUnitId;
+}
+
+
+
+// Helper: Get cumulative XP for a level
 function getCumulativeXpForLevel(level) {
-    // XP needed to reach each level from level 1
     const xpTable = {
         1: 0,
         2: 100,
-        3: 250,    // 100 + 150
-        4: 475,    // 100 + 150 + 225
-        5: 812,    // etc.
+        3: 250,
+        4: 475,
+        5: 812,
         6: 1317,
         7: 2074,
         8: 3209,
@@ -347,12 +457,4 @@ function getCumulativeXpForLevel(level) {
     };
     return xpTable[level] || 0;
 }
-
-function getTotalXpNeededForNextLevel(currentLevel) {
-    return getCumulativeXpForLevel(currentLevel + 1);
-}
-
-function getCurrentTotalXp(unit) {
-    // Current total XP = cumulative XP for current level + current XP progress
-    return getCumulativeXpForLevel(unit.level) + unit.xp;
-}
+  

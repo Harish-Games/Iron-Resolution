@@ -1,199 +1,95 @@
-// ========== RENDERING FUNCTIONS ==========
-async function renderAll(animateUnitIds = []) {
-    if (window.gameState.isUpdating) return;
-    window.gameState.isUpdating = true;
-    
-    if (window.renderGrid) await window.renderGrid();
-    if (window.renderUnits) await window.renderUnits(animateUnitIds);
-    if (window.renderDamagePopups) await window.renderDamagePopups();
-    
-    if (window.updateUI) window.updateUI();
-    if (window.updatePhaseIndicator) window.updatePhaseIndicator();
-    if (window.updateEnemiesCounter) window.updateEnemiesCounter();
-    if (window.updateUnitList) window.updateUnitList();
-    
-    window.gameState.isUpdating = false;
-}
+// Iron Resolution UI.js
 
-async function renderGrid() {
-    await delay(10);
+        // ========== INCREMENTAL RENDERING ==========
+        async function renderAll(animateUnitIds = []) {
+    if (gameState.isUpdating) return;
+    gameState.isUpdating = true;
     
-    document.querySelectorAll('.tile').forEach(tile => {
-        const x = parseInt(tile.dataset.x);
-        const y = parseInt(tile.dataset.y);
-        const terrain = window.gameState.terrain[y] ? window.gameState.terrain[y][x] : 'normal';
-        
-        tile.className = 'tile';
-        if (terrain !== 'normal') {
-            tile.classList.add(terrain);
-        }
-    });
+    await renderGrid();
+    await renderUnits(animateUnitIds);
+    await renderDamagePopups();
     
-    if (window.gameState.selectedUnit) {
-        const unit = window.gameState.selectedUnit;
+    updateUI();
+    updatePhaseIndicator();
+    updateEnemiesCounter();
+    updateUnitRoster(); 
+    
+    gameState.isUpdating = false;
+}
         
-        if (window.gameState.phase === 'heal') {
-            if (window.domElements?.rangeIndicator) {
-                window.domElements.rangeIndicator.style.display = 'block';
-                window.domElements.rangeIndicator.textContent = `Heal Range: ${unit.range}`;
-            }
+        async function renderGrid() {
+            await delay(10);
             
-            for (let x = 0; x < GRID_SIZE; x++) {
-                for (let y = 0; y < GRID_SIZE; y++) {
-                    const target = getUnitAt(x, y);
-                    if (target && target.type === unit.type && isInRange(x, y, unit, unit.range)) {
-                        const tile = getTile(x, y);
-                        if (tile) tile.classList.add('healable');
+            document.querySelectorAll('.tile').forEach(tile => {
+                const x = parseInt(tile.dataset.x);
+                const y = parseInt(tile.dataset.y);
+                const terrain = gameState.terrain[y] ? gameState.terrain[y][x] : 'normal';
+                
+                tile.className = 'tile';
+                if (terrain !== 'normal') {
+                    tile.classList.add(terrain);
+                }
+            });
+            
+            if (gameState.selectedUnit) {
+                const unit = gameState.selectedUnit;
+                
+                if (gameState.phase === 'heal') {
+                    rangeIndicator.style.display = 'block';
+                    rangeIndicator.textContent = `Heal Range: ${unit.range}`;
+                    
+                    for (let x = 0; x < GRID_SIZE; x++) {
+                        for (let y = 0; y < GRID_SIZE; y++) {
+                            const target = getUnitAt(x, y);
+                            if (target && target.type === unit.type && isInRange(x, y, unit, unit.range)) {
+                                const tile = getTile(x, y);
+                                if (tile) tile.classList.add('healable');
+                            }
+                        }
                     }
                 }
-            }
-        }
-        
-        if (window.gameState.phase === 'move') {
-            for (let x = 0; x < GRID_SIZE; x++) {
-                for (let y = 0; y < GRID_SIZE; y++) {
-                    if (isInMovementRange(x, y, unit)) {
-                        const tile = getTile(x, y);
-                        if (tile) tile.classList.add('movable');
-                    }
-                }
-            }
-        }
-        
-        // ====== UNIT LIST DISPLAY ======
-function updateUnitList() {
-    const display = document.getElementById('unitListDisplay');
-    if (!display) return;
-    
-    // Get player units and sort by XP (descending)
-    const playerUnits = window.gameState.units
-        .filter(u => u.type === 'player' && u.hp > 0)
-        .sort((a, b) => {
-            // Sort by total XP (level * 100 + current XP)
-            const totalXpA = (a.level * 100) + a.xp;
-            const totalXpB = (b.level * 100) + b.xp;
-            return totalXpB - totalXpA; // Descending
-        });
-    
-    if (playerUnits.length === 0) {
-        display.innerHTML = `
-            <div style="color: #8892b0; text-align: center; padding: 20px;">
-                <img src="ui/skull.png" style="width: 30px; height: 30px; margin-bottom: 10px;">
-                <div style="font-size: 0.9em;">No surviving units</div>
-            </div>
-        `;
-        return;
-    }
-    
-    let html = '';
-    
-    playerUnits.forEach(unit => {
-        const isSelected = window.gameState.selectedUnit && 
-                          window.gameState.selectedUnit.id === unit.id;
-        const isFleeing = unit.fleeing;
-        const isLowHp = unit.hp < unit.maxHp * 0.3;
-        
-        let classes = 'unit-list-item';
-        if (isSelected) classes += ' selected';
-        if (isFleeing) classes += ' fleeing';
-        if (isLowHp) classes += ' low-hp';
-        
-        // Get class icon
-        const classIcon = getClassIconForList(unit.classType);
-        
-        // Calculate hits and kills (we need to track these)
-        // For now, we'll use placeholders
-        const hits = 0; // You'll need to track this in unit stats
-        const kills = 0; // You'll need to track this in unit stats
-        const totalXp = (unit.level * 100) + unit.xp;
-        
-        html += `
-            <div class="${classes}" data-unit-id="${unit.id}" onclick="window.selectUnitById(${unit.id})">
-                <div class="unit-list-icon">${classIcon}</div>
-                <div class="unit-list-info">
-                    <div class="unit-list-name">${unit.name}</div>
-                    <div class="unit-list-stats">
-                        <span class="unit-list-stat unit-list-hp ${isLowHp ? 'low' : ''}">
-                            ❤ ${unit.hp}/${unit.maxHp}
-                        </span>
-                        <span class="unit-list-stat unit-list-level">
-                            Lvl ${unit.level}
-                        </span>
-                        <span class="unit-list-stat">
-                            ⚔ ${hits}
-                        </span>
-                        <span class="unit-list-stat">
-                            💀 ${kills}
-                        </span>
-                        <span class="unit-list-xp">
-                            ${totalXp} XP
-                        </span>
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-    
-    display.innerHTML = html;
-}
-
-function getClassIconForList(classType) {
-    switch(classType) {
-        case 'knight': 
-            return '<img src="ui/knight.png" style="width: 24px; height: 24px;">';
-        case 'archer': 
-            return '<img src="ui/bow.png" style="width: 24px; height: 24px;">';
-        case 'mage': 
-            return '<img src="ui/potion.png" style="width: 24px; height: 24px;">';
-        case 'berserker': 
-            return '<img src="ui/axe.png" style="width: 24px; height: 24px;">';
-        default: 
-            return '<img src="ui/shield.png" style="width: 24px; height: 24px;">';
-    }
-}
-
-function selectUnitById(unitId) {
-    const unit = window.gameState.units.find(u => u.id === unitId);
-    if (unit && window.selectUnit) {
-        window.selectUnit(unit);
-    }
-}
-
-// Also add this to the global exports at the bottom of ui.js:
-window.updateUnitList = updateUnitList;
-window.selectUnitById = selectUnitById;
-        
-        
-        const selectedTile = getTile(unit.x, unit.y);
-        if (selectedTile) selectedTile.classList.add('selected');
-
-        // === NEW: SHOW ATTACK RANGE FOR SELECTED RANGED UNIT ===
-        // Clear previous attack range highlights
-        document.querySelectorAll('.tile.in-attack-range').forEach(t => t.classList.remove('in-attack-range'));
-
-        // Show attack range for selected unit (if it can attack)
-        if (window.gameState.selectedUnit && window.gameState.selectedUnit.canAttack) {
-            const u = window.gameState.selectedUnit;
-            for (let tx = 0; tx < GRID_SIZE; tx++) {
-                for (let ty = 0; ty < GRID_SIZE; ty++) {
-                    const dist = Math.abs(tx - u.x) + Math.abs(ty - u.y);
-                    if (dist <= u.range && dist > 0) {
-                        const tile = getTile(tx, ty);
-                        if (tile) tile.classList.add('in-attack-range');
-                    }
-                }
+                
+              if (gameState.phase === 'move') {
+    for (let x = 0; x < GRID_SIZE; x++) {
+        for (let y = 0; y < GRID_SIZE; y++) {
+            if (isInMovementRange(x, y, unit)) {
+                const tile = getTile(x, y);
+                if (tile) tile.classList.add('movable');
             }
         }
     }
 }
+                
+                const selectedTile = getTile(unit.x, unit.y);
+                if (selectedTile) selectedTile.classList.add('selected');
 
-async function renderUnits(animateUnitIds) {
+                // === NEW: SHOW ATTACK RANGE FOR SELECTED RANGED UNIT ===
+                // Clear previous attack range highlights
+                document.querySelectorAll('.tile.in-attack-range').forEach(t => t.classList.remove('in-attack-range'));
+
+                // Show attack range for selected unit (if it can attack)
+                if (gameState.selectedUnit && gameState.selectedUnit.canAttack) {
+                    const u = gameState.selectedUnit;
+                    for (let tx = 0; tx < GRID_SIZE; tx++) {
+                        for (let ty = 0; ty < GRID_SIZE; ty++) {
+                            const dist = Math.abs(tx - u.x) + Math.abs(ty - u.y);
+                            if (dist <= u.range && dist > 0) {
+                                const tile = getTile(tx, ty);
+                                if (tile) tile.classList.add('in-attack-range');
+                            }
+                        }
+                    }
+                }
+            }
+        }
+            
+  async function renderUnits() {
     await delay(10);
     
     // Track which units have been placed
     const placedUnitIds = new Set();
     
-    for (const unit of window.gameState.units) {
+    for (const unit of gameState.units) {
         await delay(5);
         const tile = getTile(unit.x, unit.y);
         if (!tile) continue;
@@ -216,15 +112,15 @@ async function renderUnits(animateUnitIds) {
         // Create new unit element if needed
         if (!unitEl) {
             unitEl = document.createElement('div');
-            let classes = ['unit', unit.type, unit.classType];
-            if (unit.isBoss) classes.push('boss');
-            unitEl.className = classes.join(' ');
+let classes = ['unit', unit.type, unit.classType];
+if (unit.isBoss) classes.push('boss');
+unitEl.className = classes.join(' ');
             unitEl.dataset.unitId = unit.id;
             
             if (unit.fleeing) {
                 unitEl.classList.add('fleeing');
             }
-            if (unit === window.gameState.aiActiveUnit) {
+            if (unit === gameState.aiActiveUnit) {
                 unitEl.classList.add('ai-active');
             }
             
@@ -271,15 +167,15 @@ async function renderUnits(animateUnitIds) {
             tile.appendChild(unitEl);
         } else {
             // Update existing unit position and appearance
-            let classes = ['unit', unit.type, unit.classType];
-            if (unit.isBoss) classes.push('boss');
-            unitEl.className = classes.join(' ');
+let classes = ['unit', unit.type, unit.classType];
+if (unit.isBoss) classes.push('boss');
+unitEl.className = classes.join(' ');
             if (unit.fleeing) {
                 unitEl.classList.add('fleeing');
             } else {
                 unitEl.classList.remove('fleeing');
             }
-            if (unit === window.gameState.aiActiveUnit) {
+            if (unit === gameState.aiActiveUnit) {
                 unitEl.classList.add('ai-active');
             } else {
                 unitEl.classList.remove('ai-active');
@@ -320,12 +216,12 @@ async function renderUnits(animateUnitIds) {
         }
     });
 }
-
-async function renderDamagePopups() {
-    await delay(10);
+  
+        async function renderDamagePopups() {
+        await delay(10);
 }
-
-function showCombatResult(x, y, amount, type = 'damage', isCritical = false) {
+        
+        function showCombatResult(x, y, amount, type = 'damage', isCritical = false) {
     const indicator = document.createElement('div');
     indicator.className = 'combat-indicator';
     
@@ -355,15 +251,11 @@ function showCombatResult(x, y, amount, type = 'damage', isCritical = false) {
         }, 1200);
     }
 }
-
-// ========== UI UPDATES ==========
-function updateSelectedUnitDisplay() {
+       function updateSelectedUnitDisplay() {
     const display = document.getElementById('selectedUnitDisplay');
-    if (!display) return;
-    
     display.innerHTML = ''; // Clear display
     
-    if (!window.gameState.selectedUnit) {
+    if (!gameState.selectedUnit) {
         const placeholder = document.createElement('div');
         placeholder.style.cssText = 'color: #8892b0; text-align: center; padding: 40px 20px;';
         
@@ -387,7 +279,7 @@ function updateSelectedUnitDisplay() {
     }
     
     // If we get here, build the full unit display
-    buildFullUnitDisplay(display, window.gameState.selectedUnit);
+    buildFullUnitDisplay(display, gameState.selectedUnit);
 }
 
 function buildFullUnitDisplay(container, unit) {
@@ -428,15 +320,41 @@ function buildFullUnitDisplay(container, unit) {
     nameType.appendChild(nameCompact);
     
     // Subtitle - Just show Level, make brighter
-    const subtitle = document.createElement('div');
-    subtitle.className = 'unit-subtitle';
-    subtitle.textContent = `Level ${unit.level}`;
-    subtitle.style.color = '#64ffda'; // Brighter cyan color
-    subtitle.style.fontWeight = '500'; // Slightly bolder
-    nameType.appendChild(subtitle);
+const subtitle = document.createElement('div');
+subtitle.className = 'unit-subtitle';
+subtitle.textContent = `Level ${unit.level}`;
+subtitle.style.color = '#64ffda'; // Brighter cyan color
+subtitle.style.fontWeight = '500'; // Slightly bolder
+nameType.appendChild(subtitle);
     
     header.appendChild(nameType);
     leftColumn.appendChild(header);
+    
+    // === ADD THIS HELPER FUNCTION SOMEWHERE ===
+function getCumulativeXpForLevel(level) {
+    // XP needed to reach each level from level 1
+    const xpTable = {
+        1: 0,
+        2: 100,
+        3: 250,    // 100 + 150
+        4: 475,    // 100 + 150 + 225
+        5: 812,    // etc.
+        6: 1317,
+        7: 2074,
+        8: 3209,
+        9: 4911
+    };
+    return xpTable[level] || 0;
+}
+
+function getTotalXpNeededForNextLevel(currentLevel) {
+    return getCumulativeXpForLevel(currentLevel + 1);
+}
+
+function getCurrentTotalXp(unit) {
+    // Current total XP = cumulative XP for current level + current XP progress
+    return getCumulativeXpForLevel(unit.level) + unit.xp;
+}
     
     // === STATS GRID ===
     const statsGrid = document.createElement('div');
@@ -452,13 +370,12 @@ function buildFullUnitDisplay(container, unit) {
         unit.moralePercent, '#ff9f43', unit.morale < 50 ? '#e74c3c' : '#ff9f43');
     statsGrid.appendChild(moraleStat);
     
-    // Attack or Heal Power
-    if (unit.classType === 'mage') {
-        statsGrid.appendChild(createSimpleStat('Heal Power', unit.healPower || 10, '#2ecc71'));
-    } else {
-        statsGrid.appendChild(createSimpleStat('Attack', unit.attack || 0, '#ff6b6b'));
-    }
-    
+    // Attack
+if (unit.classType === 'mage') {
+    statsGrid.appendChild(createSimpleStat('Heal Power', unit.healPower || 10, '#2ecc71'));
+} else {
+    statsGrid.appendChild(createSimpleStat('Attack', unit.attack || 0, '#ff6b6b'));
+}    
     // Defense
     statsGrid.appendChild(createSimpleStat('Defense', unit.defense || 0));
     
@@ -477,29 +394,29 @@ function buildFullUnitDisplay(container, unit) {
     statsGrid.appendChild(createSimpleStat('Movement', 
         `${Math.min(unit.movement - unit.movesUsed, unit.remainingActions)}/${unit.movement}`));
     
-    // Show "Heals" for mages, "Attacks" for everyone else
-    if (unit.classType === 'mage') {
-        // Mages heal instead of attack
-        statsGrid.appendChild(createSimpleStat('Heals', 
-            `${Math.min(unit.maxAttacks - unit.attacksUsed, unit.remainingActions)}/${unit.maxAttacks}`,
-            '#2ecc71')); // Green color for healing
-    } else {
-        // Regular units attack
-        statsGrid.appendChild(createSimpleStat('Attacks', 
-            `${Math.min(unit.maxAttacks - unit.attacksUsed, unit.remainingActions)}/${unit.maxAttacks}`,
-            '#ff6b6b')); // Red color for attacking
-    }
+   // Show "Heals" for mages, "Attacks" for everyone else
+if (unit.classType === 'mage') {
+    // Mages heal instead of attack
+    statsGrid.appendChild(createSimpleStat('Heals', 
+        `${Math.min(unit.maxAttacks - unit.attacksUsed, unit.remainingActions)}/${unit.maxAttacks}`,
+        '#2ecc71')); // Green color for healing
+} else {
+    // Regular units attack
+    statsGrid.appendChild(createSimpleStat('Attacks', 
+        `${Math.min(unit.maxAttacks - unit.attacksUsed, unit.remainingActions)}/${unit.maxAttacks}`,
+        '#ff6b6b')); // Red color for attacking
+}
     
     // XP Progress
-    const currentTotalXp = getCumulativeXpForLevel(unit.level) + unit.xp;
-    const nextLevelTotalXp = getCumulativeXpForLevel(unit.level + 1);
-    const xpPercent = (unit.xp / unit.xpToNext) * 100;
+const currentTotalXp = getCumulativeXpForLevel(unit.level) + unit.xp;
+const nextLevelTotalXp = getCumulativeXpForLevel(unit.level + 1);
+const xpPercent = (unit.xp / unit.xpToNext) * 100;
 
-    const xpStat = createStatBox('XP', `${currentTotalXp}/${nextLevelTotalXp}`, 
-        xpPercent, '#9b59b6');
-    statsGrid.appendChild(xpStat);
+const xpStat = createStatBox('XP', `${currentTotalXp}/${nextLevelTotalXp}`, 
+    xpPercent, '#9b59b6');
+statsGrid.appendChild(xpStat);
     
-    leftColumn.appendChild(statsGrid);
+       leftColumn.appendChild(statsGrid);
     detailsContainer.appendChild(leftColumn);
     
     // === RIGHT COLUMN ===
@@ -542,13 +459,12 @@ function buildFullUnitDisplay(container, unit) {
         noWeapon.textContent = 'No weapon';
         equipmentSection.appendChild(noWeapon);
     }
-    
     if (unit.equipment.armor) {
-        const armorItem = createEquipmentItem(
-            '<img src="ui/shield.png" style="width: 16px; height: 16px; vertical-align: middle;">',
-            unit.equipment.armor.name, 
-            `+${unit.equipment.armor.defense} def`
-        );
+const armorItem = createEquipmentItem(
+    '<img src="ui/shield.png" style="width: 16px; height: 16px; vertical-align: middle;">',
+    unit.equipment.armor.name, 
+    `+${unit.equipment.armor.defense} def`
+);
         equipmentSection.appendChild(armorItem);
     } else {
         const noArmor = document.createElement('div');
@@ -560,53 +476,53 @@ function buildFullUnitDisplay(container, unit) {
     rightColumn.appendChild(equipmentSection);
     
     // ====== ADD THIS SECTION AFTER EQUIPMENT SECTION ======
-    // Status Indicators (Injuries & Morale)
-    if (unit.injuries.length > 0 || unit.morale < 100 || unit.fleeing) {
-        const statusSection = document.createElement('div');
-        statusSection.className = 'status-indicators';
-        
-        // Add fleeing status
-        if (unit.fleeing) {
-            const fleeBadge = document.createElement('span');
-            fleeBadge.className = 'status-badge fleeing';
-            fleeBadge.innerHTML = '<img src="ui/running.png" style="width: 12px; height: 12px;"> Fleeing';
-            statusSection.appendChild(fleeBadge);
-        }
-        
-        // Add morale status
-        if (unit.morale < 30) {
-            const moraleBadge = document.createElement('span');
-            moraleBadge.className = 'status-badge morale-low';
-            moraleBadge.innerHTML = '<img src="ui/sad.png" style="width: 12px; height: 12px;"> Low Morale';
-            statusSection.appendChild(moraleBadge);
-        } else if (unit.morale > 80) {
-            const moraleBadge = document.createElement('span');
-            moraleBadge.className = 'status-badge morale-high';
-            moraleBadge.innerHTML = '<img src="ui/happy.png" style="width: 12px; height: 12px;"> High Morale';
-            statusSection.appendChild(moraleBadge);
-        }
-        
-        // Add injuries
-        unit.injuries.forEach(injury => {
-            const injuryBadge = document.createElement('span');
-            injuryBadge.className = 'status-badge injury';
-            
-            // Choose icon based on injury type
-            let icon = 'ui/wound.png';
-            if (injury.name.includes('Arm')) icon = 'ui/i-arm.png';
-            if (injury.name.includes('Leg')) icon = 'ui/i-leg.png';
-            if (injury.name.includes('Concussion')) icon = 'ui/i-head.png';
-            
-            injuryBadge.innerHTML = `<img src="${icon}" style="width: 12px; height: 12px;"> ${injury.name} (${injury.turnsRemaining}t)`;
-            statusSection.appendChild(injuryBadge);
-        });
-        
-        // Add to right column (or wherever you want it)
-        rightColumn.appendChild(statusSection);
+// Status Indicators (Injuries & Morale)
+if (unit.injuries.length > 0 || unit.morale < 100 || unit.fleeing) {
+    const statusSection = document.createElement('div');
+    statusSection.className = 'status-indicators';
+    
+    // Add fleeing status
+    if (unit.fleeing) {
+        const fleeBadge = document.createElement('span');
+        fleeBadge.className = 'status-badge fleeing';
+        fleeBadge.innerHTML = '<img src="ui/running.png" style="width: 12px; height: 12px;"> Fleeing';
+        statusSection.appendChild(fleeBadge);
     }
+    
+    // Add morale status
+    if (unit.morale < 30) {
+        const moraleBadge = document.createElement('span');
+        moraleBadge.className = 'status-badge morale-low';
+        moraleBadge.innerHTML = '<img src="ui/sad.png" style="width: 12px; height: 12px;"> Low Morale';
+        statusSection.appendChild(moraleBadge);
+    } else if (unit.morale > 80) {
+        const moraleBadge = document.createElement('span');
+        moraleBadge.className = 'status-badge morale-high';
+        moraleBadge.innerHTML = '<img src="ui/happy.png" style="width: 12px; height: 12px;"> High Morale';
+        statusSection.appendChild(moraleBadge);
+    }
+    
+    // Add injuries
+    unit.injuries.forEach(injury => {
+        const injuryBadge = document.createElement('span');
+        injuryBadge.className = 'status-badge injury';
+        
+        // Choose icon based on injury type
+        let icon = 'ui/wound.png';
+        if (injury.name.includes('Arm')) icon = 'ui/i-arm.png';
+        if (injury.name.includes('Leg')) icon = 'ui/i-leg.png';
+        if (injury.name.includes('Concussion')) icon = 'ui/i-head.png';
+        
+        injuryBadge.innerHTML = `<img src="${icon}" style="width: 12px; height: 12px;"> ${injury.name} (${injury.turnsRemaining}t)`;
+        statusSection.appendChild(injuryBadge);
+    });
+    
+    // Add to right column (or wherever you want it)
+    rightColumn.appendChild(statusSection);
+}
 
     // ====== TERRAIN EFFECTS SECTION (DYNAMIC) ======
-    const terrain = window.gameState.terrain[unit.y][unit.x];
+    const terrain = gameState.terrain[unit.y][unit.x];
     const terrainEffect = TERRAIN_EFFECTS[terrain] || TERRAIN_EFFECTS.normal;
     
     // Always create terrain section
@@ -693,10 +609,10 @@ function buildFullUnitDisplay(container, unit) {
     turnInfo.style.cssText = 'margin-top: 15px; padding: 8px; background: rgba(30, 73, 118, 0.2); border-radius: 4px; font-size: 0.8em; color: #8892b0;';
     
     const turnLine = document.createElement('div');
-    turnLine.textContent = `Turn: ${window.gameState.turnCount}`;
+    turnLine.textContent = `Turn: ${gameState.turnCount}`;
     
     const phaseLine = document.createElement('div');
-    phaseLine.textContent = `Phase: ${window.gameState.phase}`;
+    phaseLine.textContent = `Phase: ${gameState.phase}`;
     
     const posLine = document.createElement('div');
     posLine.textContent = `Position: (${unit.x}, ${unit.y})`;
@@ -710,7 +626,7 @@ function buildFullUnitDisplay(container, unit) {
     container.appendChild(detailsContainer);
 }
 
-// Helper functions for UI
+// Helper functions
 function getClassIcon(classType) {
     switch(classType) {
         case 'knight': 
@@ -807,115 +723,8 @@ function createEquipmentItem(icon, name, stats) {
     
     return item;
 }
-
-function updateSelectedUnitStats() {
-    // Update the selected unit display when stats change
-    if (window.gameState.selectedUnit) {
-        updateSelectedUnitDisplay();
-    }
-}
-
-function updatePhaseIndicator() {
-    if (!phaseIndicator) return;
-    
-    if (!window.gameState.selectedUnit) {
-        phaseIndicator.innerHTML = '<img src="ui/target.png" style="width: 16px; height: 16px; vertical-align: middle;"> Select a unit (Press A to attack, E to end turn)';
-    } else if (window.gameState.selectedUnit.type !== window.gameState.currentPlayer) {
-        phaseIndicator.innerHTML = '<img src="ui/robot.png" style="width: 16px; height: 16px; vertical-align: middle;"> Cannot control enemy units';
-    } else if (window.gameState.selectedUnit.fleeing) {
-        phaseIndicator.innerHTML = '<img src="ui/running.png" style="width: 16px; height: 16px; vertical-align: middle;"> Unit is fleeing!';
-    } else {
-        const unit = window.gameState.selectedUnit;
-        let actions = [];
-        if (unit.canMove) actions.push("Move");
-        if (unit.canAttack) actions.push("Attack");
-        if (unit.canHeal) actions.push("Heal");
         
-        phaseIndicator.innerHTML = `<img src="ui/sword.png" style="width: 16px; height: 16px; vertical-align: middle;"> ${unit.name} - Available: ${actions.join(", ")}`;
-    }
-}
-
-function updateUI() {
-    const unit = window.gameState.selectedUnit;
-    
-    if (window.domElements?.attackBtn) {
-        window.domElements.attackBtn.disabled = !unit || !unit.canAttack;
-    }
-    if (window.domElements?.healBtn) {
-        window.domElements.healBtn.disabled = !unit || !unit.canHeal;
-    }
-    if (window.domElements?.cancelBtn) {
-        window.domElements.cancelBtn.disabled = !window.gameState.selectedUnit;
-    }
-}
-
-function updateEnemiesCounter() {
-    const activeEnemies = window.gameState.units.filter(u =>
-        u.type === 'enemy' && u.hp > 0 && !u.fleeing
-    );
-    if (window.domElements?.enemiesLeftEl) {
-        window.domElements.enemiesLeftEl.textContent = activeEnemies.length;
-    }
-}
-
-// ========== SELECTION FUNCTIONS ==========
-function selectUnit(unit) {
-    window.gameState.selectedUnit = unit;
-    if (window.logMessage) window.logMessage(`Selected ${unit.name}`, 'system');
-    if (window.soundSystem) window.soundSystem.playSelect();
-    
-    // Just update the display
-    updateSelectedUnitDisplay();
-    updatePhaseIndicator();
-    updateUI();
-    
-    // Highlight selected unit
-    const tile = getTile(unit.x, unit.y);
-    if (tile) tile.classList.add('selected');
-    
-    // Show movement range if it's your unit and can act
-    if (unit.type === window.gameState.currentPlayer && unit.canAct && !unit.fleeing) {
-        for (let tx = 0; tx < GRID_SIZE; tx++) {
-            for (let ty = 0; ty < GRID_SIZE; ty++) {
-                // Use isInMovementRange which checks paths properly
-                if (isInMovementRange(tx, ty, unit)) {
-                    const t = getTile(tx, ty);
-                    if (t) t.classList.add('movable');
-                }
-            }
-        }
-    }
-    
-    updateSelectedUnitDisplay();
-    updatePhaseIndicator();
-}
-
-function cancelSelection() {
-    // If nothing is selected, do nothing
-    if (!window.gameState.selectedUnit && window.gameState.phase === 'select') {
-        return;
-    }
-    
-    // Only log if we're actually cancelling something
-    const hadSelection = !!window.gameState.selectedUnit;
-    const previousPhase = window.gameState.phase;
-    
-    window.gameState.selectedUnit = null;
-    window.gameState.phase = 'select';
-    if (window.domElements?.rangeIndicator) window.domElements.rangeIndicator.style.display = 'none';
-    document.querySelectorAll('.tile.in-attack-range').forEach(t => t.classList.remove('in-attack-range'));
-    
-    if (hadSelection || previousPhase !== 'select') {
-        if (window.logMessage) window.logMessage("Selection cancelled.", 'system');
-    }
-    
-    if (window.renderAll) window.renderAll([]);
-}
-
-// ========== BATTLE LOG ==========
-function logMessage(message, type = 'system') {
-    if (!window.domElements?.battleLogEl) return;
-    
+      function logMessage(message, type = 'system') {
     const entry = document.createElement('div');
     
     // Auto-detect critical/important messages
@@ -929,214 +738,307 @@ function logMessage(message, type = 'system') {
     }
     
     entry.className = `log-entry ${finalType}`;
-    entry.innerHTML = `[T${window.gameState.turnCount}] ${message}`;
-    window.domElements.battleLogEl.prepend(entry);
+    entry.innerHTML = `[T${gameState.turnCount}] ${message}`;
+    battleLogEl.prepend(entry);
     
     // Auto-scroll to show latest message
-    window.domElements.battleLogEl.scrollTop = 0;
+    battleLogEl.scrollTop = 0;
     
-    if (window.domElements.battleLogEl.children.length > 20) { // Increased from 15
-        window.domElements.battleLogEl.removeChild(window.domElements.battleLogEl.lastChild);
+    if (battleLogEl.children.length > 20) { // Increased from 15
+        battleLogEl.removeChild(battleLogEl.lastChild);
     }
 }
 
-// ========== INTRO SPLASH ==========
+ function checkVictory() {
+    // First, clean up any dead units
+let isCompletingLevel = false; // Add this at the top with your other gameState variables
+    gameState.units = gameState.units.filter(u => u.hp > 0);
+    
+    // Count enemies
+    const activeEnemies = gameState.units.filter(u => u.type === 'enemy');
+    const activePlayers = gameState.units.filter(u => u.type === 'player');
+    
+    
+    console.log(`🎯 Victory check - Level ${gameState.currentLevel}:`);
+    console.log(`🎯 Active enemies: ${activeEnemies.length}`);
+    console.log(`🎯 Active players: ${activePlayers.length}`);
+    console.log(`🎯 All enemies:`, activeEnemies.map(e => `${e.name} (${e.hp} HP)`));
+    console.log(`Victory check: ${activeEnemies.length} enemies left, ${activePlayers.length} players left`);
+    
+    if (activeEnemies.length === 0) {
+		
+		console.log(`🎯🎯🎯 LEVEL ${gameState.currentLevel} VICTORY - Calling completeLevel() 🎯🎯🎯`);
+		
+        console.log("ALL ENEMIES DEFEATED - VICTORY!");
+        updateEnemiesCounter();
+        
+        // Small delay then complete level
+        setTimeout(() => {
+            completeLevel();
+        }, 800);
+        return;
+    }
+    
+    if (activePlayers.length === 0) {
+			
+        console.log("ALL PLAYERS DEAD - DEFEAT!");
+        gameState.battleStats.totalRounds = gameState.turnCount;
+        setTimeout(() => {
+            showBattleStats(false);
+        }, 800);
+        return;
+    }
+    
+    // Update counter
+    updateEnemiesCounter();
+}
+     
+     // ========== SHOW/HIDE INTRO SPLASH ==========
 function showIntroSplash() {
     document.getElementById('introOverlay').style.display = 'flex';
-    if (window.disableGame) window.disableGame();
+    disableGame();
 }
 
 function hideIntroSplash() {
     document.getElementById('introOverlay').style.display = 'none';
-    if (window.enableGame) window.enableGame();
+    enableGame();
 }
-
-// ========== UNIT CLEANUP ==========
-function cleanupUnits() {
+    
+     function cleanupUnits() {
     // Progress flee turns and remove fled/dead
-    for (let i = window.gameState.units.length - 1; i >= 0; i--) {
-        const unit = window.gameState.units[i];
+    for (let i = gameState.units.length - 1; i >= 0; i--) {
+        const unit = gameState.units[i];
         if (unit.fleeing) {
             unit.fleeTurns++;
             if (unit.fleeTurns >= 3) {
-                if (window.logMessage) window.logMessage(`${unit.name} has fled the battlefield!`, 'system');
-                window.gameState.units.splice(i, 1);
+                logMessage(`${unit.name} has fled the battlefield!`, 'system');
+                gameState.units.splice(i, 1);
                 if (unit.type === 'player') {
-                    window.gameState.battleStats.fleedUnits.push(unit);
+                    gameState.battleStats.fleedUnits.push(unit);
                 }
                 continue;
             }
         }
         // Remove any dead stragglers
         if (unit.hp <= 0) {
-            window.gameState.units.splice(i, 1);
+            gameState.units.splice(i, 1);
         }
     }
-    if (window.checkVictory) window.checkVictory();
+checkVictory();
 }
-
-// ========== GAME STATE TOGGLES ==========
-function disableGame() {
-    if (window.domElements?.endTurnBtn) window.domElements.endTurnBtn.disabled = true;
-    if (window.domElements?.attackBtn) window.domElements.attackBtn.disabled = true;
-    if (window.domElements?.healBtn) window.domElements.healBtn.disabled = true;
-    if (window.domElements?.cancelBtn) window.domElements.cancelBtn.disabled = true;
-    window.gameState.aiProcessing = false;
-}
-
-function enableGame() {
-    if (window.domElements?.endTurnBtn) window.domElements.endTurnBtn.disabled = false;
-    if (window.domElements?.attackBtn) window.domElements.attackBtn.disabled = false;
-    if (window.domElements?.healBtn) window.domElements.healBtn.disabled = false;
-    if (window.domElements?.cancelBtn) window.domElements.cancelBtn.disabled = false;
-    // gameState.aiProcessing remains as is - don't enable AI here
-}
-
-// ========== VICTORY/DEFEAT STATS ==========
-function showBattleStats(victory) {
-    if (!window.domElements?.statsTitle || !window.domElements?.statsContent) return;
-    
-    window.domElements.statsTitle.textContent = victory ? " VICTORY! " : " DEFEAT! ";
-    
-    const playerUnits = window.gameState.units.filter(u => u.type === 'player');
-    const enemyUnits = window.gameState.units.filter(u => u.type === 'enemy');
-    const totalXP = playerUnits.reduce((sum, unit) => sum + unit.xp, 0);
-    const averageLevel = playerUnits.length > 0 ? 
-        (playerUnits.reduce((sum, unit) => sum + unit.level, 0) / playerUnits.length).toFixed(1) : 0;
-    
-    let statsHTML = `
-        <div class="stats-grid">
-            <div class="stats-column">
-                <h3>Battle Statistics</h3>
-                <div class="stat-row">
-                    <span class="stat-label">Total Rounds:</span>
-                    <span class="stat-value-large">${window.gameState.battleStats.totalRounds}</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Enemies Defeated:</span>
-                    <span class="stat-value-large">${window.gameState.battleStats.playerKills}</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Damage Dealt:</span>
-                    <span class="stat-value-large">${window.gameState.battleStats.damageDealt}</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Damage Taken:</span>
-                    <span class="stat-value-large">${window.gameState.battleStats.damageTaken}</span>
-                </div>
-            </div>
-            <div class="stats-column">
-                <h3>Unit Statistics</h3>
-                <div class="stat-row">
-                    <span class="stat-label">Surviving Units:</span>
-                    <span class="stat-value-large">${playerUnits.length}/${UNITS_PER_TEAM}</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Fleed Units:</span>
-                    <span class="stat-value-large">${window.gameState.battleStats.fleedUnits.length}</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Total XP Earned:</span>
-                    <span class="stat-value-large">${totalXP}</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Average Level:</span>
-                    <span class="stat-value-large">${averageLevel}</span>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    if (playerUnits.length > 0) {
-        statsHTML += `
-            <div class="surviving-units">
-                <h3>🏆 Surviving Heroes</h3>
-                <div class="unit-list">
-        `;
-        
-        for (const unit of playerUnits) {
-            const icon = {
-                'knight': '⚔️',
-                'archer': '🏹',
-                'mage': '🔮',
-                'berserker': '💢'
-            }[unit.classType] || '⚔️';
+       
+        function showBattleStats(victory) {
+            statsTitle.textContent = victory ? " VICTORY! " : " DEFEAT! ";
             
-            statsHTML += `
-                <div class="unit-badge player">
-                    ${icon} ${unit.name} (Lvl ${unit.level}) 
-                    <span style="color: #ff6b6b;">❤️ ${unit.hp}/${unit.maxHp}</span>
+            const playerUnits = gameState.units.filter(u => u.type === 'player');
+            const enemyUnits = gameState.units.filter(u => u.type === 'enemy');
+            const totalXP = playerUnits.reduce((sum, unit) => sum + unit.xp, 0);
+            const averageLevel = playerUnits.length > 0 ? 
+                (playerUnits.reduce((sum, unit) => sum + unit.level, 0) / playerUnits.length).toFixed(1) : 0;
+            
+            let statsHTML = `
+                <div class="stats-grid">
+                    <div class="stats-column">
+                        <h3>Battle Statistics</h3>
+                        <div class="stat-row">
+                            <span class="stat-label">Total Rounds:</span>
+                            <span class="stat-value-large">${gameState.battleStats.totalRounds}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Enemies Defeated:</span>
+                            <span class="stat-value-large">${gameState.battleStats.playerKills}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Damage Dealt:</span>
+                            <span class="stat-value-large">${gameState.battleStats.damageDealt}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Damage Taken:</span>
+                            <span class="stat-value-large">${gameState.battleStats.damageTaken}</span>
+                        </div>
+                    </div>
+                    <div class="stats-column">
+                        <h3>Unit Statistics</h3>
+                        <div class="stat-row">
+                            <span class="stat-label">Surviving Units:</span>
+                            <span class="stat-value-large">${playerUnits.length}/${UNITS_PER_TEAM}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Fleed Units:</span>
+                            <span class="stat-value-large">${gameState.battleStats.fleedUnits.length}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Total XP Earned:</span>
+                            <span class="stat-value-large">${totalXP}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Average Level:</span>
+                            <span class="stat-value-large">${averageLevel}</span>
+                        </div>
+                    </div>
                 </div>
             `;
-        }
-        
-        statsHTML += `
-                </div>
-            </div>
-        `;
-    }
-    
-    if (window.gameState.battleStats.fleedUnits.length > 0) {
-        statsHTML += `
-            <div class="surviving-units">
-                <h3>🏃 Fleed Units</h3>
-                <div class="unit-list">
-        `;
-        
-        for (const unit of window.gameState.battleStats.fleedUnits) {
-            const icon = {
-                'knight': '⚔️',
-                'archer': '🏹',
-                'mage': '🔮',
-                'berserker': '💢'
-            }[unit.classType] || '⚔️';
             
-            statsHTML += `
-                <div class="unit-badge enemy">
-                    ${icon} ${unit.name} (Fled)
-                </div>
-            `;
+            if (playerUnits.length > 0) {
+                statsHTML += `
+                    <div class="surviving-units">
+                        <h3>🏆 Surviving Heroes</h3>
+                        <div class="unit-list">
+                `;
+                
+                for (const unit of playerUnits) {
+                    const icon = {
+                        'knight': '⚔️',
+                        'archer': '🏹',
+                        'mage': '🔮',
+                        'berserker': '💢'
+                    }[unit.classType] || '⚔️';
+                    
+                    statsHTML += `
+                        <div class="unit-badge player">
+                            ${icon} ${unit.name} (Lvl ${unit.level}) 
+                            <span style="color: #ff6b6b;">❤️ ${unit.hp}/${unit.maxHp}</span>
+                        </div>
+                    `;
+                }
+                
+                statsHTML += `
+                        </div>
+                    </div>
+                `;
+            }
+            
+            if (gameState.battleStats.fleedUnits.length > 0) {
+                statsHTML += `
+                    <div class="surviving-units">
+                        <h3>🏃 Fleed Units</h3>
+                        <div class="unit-list">
+                `;
+                
+                for (const unit of gameState.battleStats.fleedUnits) {
+                    const icon = {
+                        'knight': '⚔️',
+                        'archer': '🏹',
+                        'mage': '🔮',
+                        'berserker': '💢'
+                    }[unit.classType] || '⚔️';
+                    
+                    statsHTML += `
+                        <div class="unit-badge enemy">
+                            ${icon} ${unit.name} (Fled)
+                        </div>
+                    `;
+                }
+                
+                statsHTML += `
+                        </div>
+                    </div>
+                `;
+            }
+            
+            statsContent.innerHTML = statsHTML;
+            statsOverlay.style.display = 'flex';
+            
+            disableGame();
         }
         
-        statsHTML += `
-                </div>
-            </div>
-        `;
-    }
-    
-    window.domElements.statsContent.innerHTML = statsHTML;
-    window.domElements.statsOverlay.style.display = 'flex';
-    
-    disableGame();
-}
+        function disableGame() {
+            endTurnBtn.disabled = true;
+            attackBtn.disabled = true;
+            healBtn.disabled = true;
+            cancelBtn.disabled = true;
+            gameState.aiProcessing = false;
+        }
+        
+        function enableGame() {
+            endTurnBtn.disabled = false;
+            attackBtn.disabled = false;
+            healBtn.disabled = false;
+            cancelBtn.disabled = false;
+            // gameState.aiProcessing remains as is - don't enable AI here
+        }
+        
+        function restartGame() {
+            location.reload();
+        }
+        
+        // ========== START GAME ==========
+        
+    function openRecruitScreen() {
+    console.log(`🛒 Opening recruit screen for level ${gameState.currentLevel}`);
+    document.getElementById('victoryOverlay').style.display = 'none';
 
-function restartGame() {
-    location.reload();
-}
+    // Calculate recruit cost
+    const recruitCost = 60 + (gameState.currentLevel * 20);
 
-// Make functions globally available
+    // Random class
+    const classes = ['Knight', 'Archer', 'Berserker', 'Mage'];
+    const randomClass = classes[Math.floor(Math.random() * classes.length)];
+
+    // Update recruit screen
+    document.getElementById('recruitClass').textContent = randomClass;
+    document.getElementById('recruitCost').textContent = `Cost: ${recruitCost} Gold`;
+    document.getElementById('currentGold').textContent = gameState.gold;
+
+    // Hire button state
+    const hireBtn = document.getElementById('hireBtn');
+    hireBtn.disabled = gameState.gold < recruitCost;
+
+    // Store the current level for reference
+    const currentLevel = gameState.currentLevel;
+    
+    hireBtn.onclick = () => {
+        console.log(`🎯 Hire clicked for level ${currentLevel}`);
+        
+        if (gameState.gold >= recruitCost) {
+            gameState.gold -= recruitCost;
+            const newUnit = new Unit('player', `${randomClass} Recruit`, 0, 0);
+            newUnit.level = 1;
+            newUnit.xp = 0;
+            gameState.persistentUnits.push(newUnit);
+            logMessage(`Hired ${newUnit.name}!`, 'system');
+        }
+        
+        document.getElementById('recruitOverlay').style.display = 'none';
+        
+        // Handle ALL level transitions consistently
+        setTimeout(() => {
+            console.log(`🔄 Processing post-recruit transition for level ${currentLevel}`);
+            
+            // Map each level to its specific transition
+            if (currentLevel === 1) {
+                showLevel1To2Transition();
+            } else if (currentLevel === 2) {
+                showLevel2To3Transition();
+            } else if (currentLevel === 3) {
+                showLevel3To4Transition();
+            } else if (currentLevel === 4) {
+                showLevel4To5Transition();
+            } else if (currentLevel === 5) {
+                showGameCompleteScreen();
+            } else {
+                // Fallback - shouldn't happen
+                console.error(`❌ Unknown level ${currentLevel}, defaulting to startNextLevel()`);
+                startNextLevel();
+            }
+        }, 500);
+    };
+
+    // Show recruit screen
+    document.getElementById('recruitOverlay').style.display = 'flex';
+}
+    
+// Make UI functions available globally
 window.renderAll = renderAll;
-window.renderGrid = renderGrid;
-window.renderUnits = renderUnits;
-window.renderDamagePopups = renderDamagePopups;
-window.showCombatResult = showCombatResult;
-window.updateSelectedUnitDisplay = updateSelectedUnitDisplay;
-window.buildFullUnitDisplay = buildFullUnitDisplay;
-window.updateSelectedUnitStats = updateSelectedUnitStats;
-window.updatePhaseIndicator = updatePhaseIndicator;
-window.updateUI = updateUI;
-window.updateEnemiesCounter = updateEnemiesCounter;
-window.selectUnit = selectUnit;
-window.cancelSelection = cancelSelection;
 window.logMessage = logMessage;
+window.updateSelectedUnitDisplay = updateSelectedUnitDisplay;
+window.updateUnitRoster = updateUnitRoster;
 window.showIntroSplash = showIntroSplash;
 window.hideIntroSplash = hideIntroSplash;
-window.cleanupUnits = cleanupUnits;
-window.disableGame = disableGame;
-window.enableGame = enableGame;
+window.openRecruitScreen = openRecruitScreen;
 window.showBattleStats = showBattleStats;
-window.restartGame = restartGame;
-window.getClassIcon = getClassIcon;
-window.createStatBox = createStatBox;
-window.createSimpleStat = createSimpleStat;
-window.createEquipmentItem = createEquipmentItem;
+// Add all the helper functions too...
+window.getTile = getTile;
+window.updateEnemiesCounter = updateEnemiesCounter;
+window.updateUI = updateUI;
+window.updatePhaseIndicator = updatePhaseIndicator;
