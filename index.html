@@ -203,15 +203,24 @@
 </button>
 
     <div class="stats-display">
-        <div class="stat-box">
-            <div class="stat-label">Turn</div>
-            <div class="stat-value" id="turnCount">1</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-label">Enemies</div>
-            <div class="stat-value" id="enemiesLeft">8</div>
-        </div>
+    <!-- Turn indicator as a stat box -->
+    <div id="phaseIndicator" class="stat-box turn-stat">
+        <div class="stat-label">Turn Phase</div>
+        <div class="stat-value turn-value" id="turnPhase">Player</div>
     </div>
+    
+    <!-- Existing turn counter -->
+    <div class="stat-box">
+        <div class="stat-label">Turn</div>
+        <div class="stat-value" id="turnCount">1</div>
+    </div>
+    
+    <!-- Enemies counter -->
+    <div class="stat-box">
+        <div class="stat-label">Enemies</div>
+        <div class="stat-value" id="enemiesLeft">8</div>
+    </div>
+</div>
 </div>
             
             <div class="grid-container">

@@ -261,21 +261,23 @@ function hasPathWithinRange(startX, startY, targetX, targetY, maxMoves) {
     }
 }
         
-        function updatePhaseIndicator() {
-    if (!gameState.selectedUnit) {
-        phaseIndicator.innerHTML = '<img src="../ui/target.png" style="width: 16px; height: 16px; vertical-align: middle;"> Select a unit (Press A to attack, E to end turn)';
-    } else if (gameState.selectedUnit.type !== gameState.currentPlayer) {
-        phaseIndicator.innerHTML = '<img src="../ui/robot.png" style="width: 16px; height: 16px; vertical-align: middle;"> Cannot control enemy units';
-    } else if (gameState.selectedUnit.fleeing) {
-        phaseIndicator.innerHTML = '<img src="../ui/running.png" style="width: 16px; height: 16px; vertical-align: middle;"> Unit is fleeing!';
+     function updatePhaseIndicator() {
+    const indicator = document.getElementById('phaseIndicator');
+    const turnValue = document.getElementById('turnPhase');
+    
+    if (!indicator || !turnValue) return;
+    
+    // Clear existing classes
+    indicator.className = 'stat-box turn-stat';
+    turnValue.className = 'stat-value turn-value';
+    
+    // Set based on current player
+    if (gameState.currentPlayer === 'player') {
+        indicator.classList.add('player-turn');
+        turnValue.textContent = 'Player';
     } else {
-        const unit = gameState.selectedUnit;
-        let actions = [];
-        if (unit.canMove) actions.push("Move");
-        if (unit.canAttack) actions.push("Attack");
-        if (unit.canHeal) actions.push("Heal");
-        
-        phaseIndicator.innerHTML = `<img src="../ui/sword.png" style="width: 16px; height: 16px; vertical-align: middle;"> ${unit.name} - Available: ${actions.join(", ")}`;
+        indicator.classList.add('enemy-turn');
+        turnValue.textContent = 'Enemy';
     }
 }
         

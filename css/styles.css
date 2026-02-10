@@ -37,6 +37,69 @@
     gap: 10px;
 }
 
+/* ====== TURN INDICATOR AS STAT BOX ====== */
+.turn-stat {
+    background: rgba(10, 25, 41, 0.8); /* Match existing stat-box background */
+    padding: 4px 10px;
+    border-radius: 5px;
+    text-align: center;
+    min-width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(30, 73, 118, 0.3); /* Subtle border */
+    transition: all 0.3s ease;
+}
+
+/* Player turn styling */
+.turn-stat.player-turn {
+    border-color: rgba(100, 255, 218, 0.4); /* Your cyan color */
+    background: rgba(100, 255, 218, 0.05);
+    box-shadow: 0 0 10px rgba(100, 255, 218, 0.1);
+}
+
+.turn-stat.player-turn .stat-label {
+    color: #64ffda; /* Your cyan */
+}
+
+.turn-stat.player-turn .turn-value {
+    color: #64ffda;
+    text-shadow: 0 0 5px rgba(100, 255, 218, 0.3);
+}
+
+/* Enemy turn styling */
+.turn-stat.enemy-turn {
+    border-color: rgba(255, 107, 107, 0.4); /* Your red color */
+    background: rgba(255, 107, 107, 0.05);
+    box-shadow: 0 0 10px rgba(255, 107, 107, 0.1);
+}
+
+.turn-stat.enemy-turn .stat-label {
+    color: #ff6b6b; /* Your red */
+}
+
+.turn-stat.enemy-turn .turn-value {
+    color: #ff6b6b;
+    text-shadow: 0 0 5px rgba(255, 107, 107, 0.3);
+}
+
+/* Turn value text styling */
+.turn-value {
+    font-weight: bold;
+    font-size: 1em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease;
+}
+
+/* Hover effect for the turn indicator */
+.turn-stat:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
 /* Top row container - scrolls horizontally when narrow */
 .top-row-container {
     display: flex;
