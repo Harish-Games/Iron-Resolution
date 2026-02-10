@@ -451,7 +451,7 @@
     
     /* Boss unit */
     .unit.enemy.boss .unit-icon { 
-        background-image: url("../units/enemy/enemy_boss1.png");
+        background-image: url("../units/enemy/enemy_boss_1.png");
     }
     
     /* BOSS VISUAL UPGRADE */

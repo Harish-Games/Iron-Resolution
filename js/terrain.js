@@ -47,6 +47,57 @@ if (gameState.currentLevel === 2) {
     return;
 }
     
+    
+// ====== LEVEL 3: FOREST OUTPOST (WITH RIVER BARRIER) ======
+if (gameState.currentLevel === 3) {
+    console.log("Generating Level 3: Forest Outpost with river barrier");
+    
+    GRID_SIZE = 16;
+    gameState.terrain = [];
+    
+    // Create river barrier level
+    for (let y = 0; y < GRID_SIZE; y++) {
+        gameState.terrain[y] = [];
+        for (let x = 0; x < GRID_SIZE; x++) {
+            // LEFT SIDE: Mixed terrain like Level 1 (player side)
+            if (x < 7) {
+                const rand = Math.random();
+                if (rand < 0.3) {
+                    gameState.terrain[y][x] = 'forest';
+                } else if (rand < 0.35) {
+                    gameState.terrain[y][x] = 'mountain';
+                } else {
+                    gameState.terrain[y][x] = 'normal';
+                }
+            }
+            // MIDDLE: Single column river (column 8) with 2 crossing points
+            else if (x === 8) {  // Just column 8, not 7-9
+                // Create 2 bridge crossings at rows 4-5 and 10-11
+                if ((y >= 4 && y <= 5) || (y >= 10 && y <= 11)) {
+                    gameState.terrain[y][x] = 'normal';  // Crossing point
+                } else {
+                    gameState.terrain[y][x] = 'river';   // Impassable river
+                }
+            }
+            // RIGHT SIDE: Mixed terrain (enemies defend here)
+            else {
+                // Random mix of forest/normal with a few mountains
+                const rand = Math.random();
+                if (rand < 0.4) {
+                    gameState.terrain[y][x] = 'forest';
+                } else if (rand < 0.45) {
+                    gameState.terrain[y][x] = 'mountain';
+                } else {
+                    gameState.terrain[y][x] = 'normal';
+                }
+            }
+        }
+    }
+    
+    return;
+}
+    
+    
     // ====== LEVEL 4: MOUNTAIN PASS (16x16 with lots of mountains) ======
 if (gameState.currentLevel === 4) {
     console.log("Generating Level 4: Mountain Pass");
@@ -153,9 +204,21 @@ if (gameState.currentLevel === 4) {
         
         console.log("Generated Level 5: Enemy Stronghold terrain");
  
-        return;
+if (typeof renderAll === 'function') {
+        // Use setTimeout to ensure DOM is ready
+        setTimeout(() => {
+            console.log("Rendering Level 5 terrain");
+            renderAll();
+            
+            // Also update UI if available
+            if (typeof updateUnitRoster === 'function') updateUnitRoster();
+            if (typeof updateEnemiesCounter === 'function') updateEnemiesCounter();
+        }, 100);
     }
-   
+    
+    return;
+}   
+
     // Create all normal terrain first
     for (let y = 0; y < GRID_SIZE; y++) {
         gameState.terrain[y] = [];
