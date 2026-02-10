@@ -263,11 +263,11 @@ function hasPathWithinRange(startX, startY, targetX, targetY, maxMoves) {
         
         function updatePhaseIndicator() {
     if (!gameState.selectedUnit) {
-        phaseIndicator.innerHTML = '<img src="ui/target.png" style="width: 16px; height: 16px; vertical-align: middle;"> Select a unit (Press A to attack, E to end turn)';
+        phaseIndicator.innerHTML = '<img src="../ui/target.png" style="width: 16px; height: 16px; vertical-align: middle;"> Select a unit (Press A to attack, E to end turn)';
     } else if (gameState.selectedUnit.type !== gameState.currentPlayer) {
-        phaseIndicator.innerHTML = '<img src="ui/robot.png" style="width: 16px; height: 16px; vertical-align: middle;"> Cannot control enemy units';
+        phaseIndicator.innerHTML = '<img src="../ui/robot.png" style="width: 16px; height: 16px; vertical-align: middle;"> Cannot control enemy units';
     } else if (gameState.selectedUnit.fleeing) {
-        phaseIndicator.innerHTML = '<img src="ui/running.png" style="width: 16px; height: 16px; vertical-align: middle;"> Unit is fleeing!';
+        phaseIndicator.innerHTML = '<img src="../ui/running.png" style="width: 16px; height: 16px; vertical-align: middle;"> Unit is fleeing!';
     } else {
         const unit = gameState.selectedUnit;
         let actions = [];
@@ -275,7 +275,7 @@ function hasPathWithinRange(startX, startY, targetX, targetY, maxMoves) {
         if (unit.canAttack) actions.push("Attack");
         if (unit.canHeal) actions.push("Heal");
         
-        phaseIndicator.innerHTML = `<img src="ui/sword.png" style="width: 16px; height: 16px; vertical-align: middle;"> ${unit.name} - Available: ${actions.join(", ")}`;
+        phaseIndicator.innerHTML = `<img src="../ui/sword.png" style="width: 16px; height: 16px; vertical-align: middle;"> ${unit.name} - Available: ${actions.join(", ")}`;
     }
 }
         

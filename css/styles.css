@@ -268,7 +268,7 @@
     .tile {
         width: 40px;
         height: 40px;
-        background: #1e4976 url('../images/grass.png') center/cover;
+        background: #1e4976 url("../images/grass.png") center/cover;
         position: relative;
         cursor: pointer;
         border-radius: 4px;
@@ -311,28 +311,28 @@
     }
     
     .tile.forest { 
-        background: #2d7d46 url('../images/forest.png') center/cover;
+        background: #2d7d46 url("../images/forest.png") center/cover;
     }
     
     .tile.mountain { 
-        background: #8b7355 url('../images/mountain.png') center/cover;
+        background: #8b7355 url("../images/mountain.png") center/cover;
     }
     
     .tile.water { 
-        background: #1e88e5 url('../images/water.png') center/cover;
+        background: #1e88e5 url("../images/water.png") center/cover;
     }
      
     .tile.river { 
-        background: #1e88e5 url('../images/river.png') center/cover;
+        background: #1e88e5 url("../images/river.png") center/cover;
     }
     
     .tile.village-player { 
-    background: #c19a6b url('../images/village-player.png') center/cover;
+    background: #c19a6b url("../images/village-player.png") center/cover;
     border: 1px solid #8b7355;
 }
 
 .tile.village-enemy { 
-    background: #8b7355 url('../images/village-enemy.png') center/cover;
+    background: #8b7355 url("../images/village-enemy.png") center/cover;
     border: 1px solid #8b7355;
 }
     
@@ -423,35 +423,35 @@
     
     /* Player units */
     .unit.player.knight .unit-icon { 
-        background-image: url('../units//player/player_knight.png');
+        background-image: url("../units/player/player_knight.png");
     }
     .unit.player.archer .unit-icon { 
-        background-image: url('../units//player/player_archer.png');
+        background-image: url("../units/player/player_archer.png");
     }
     .unit.player.mage .unit-icon { 
-        background-image: url('../units//player/player_mage.png');
+        background-image: url("../units/player/player_mage.png");
     }
     .unit.player.berserker .unit-icon { 
-        background-image: url('../units//player/player_berserker.png');
+        background-image: url("../units/player/player_berserker.png");
     }
     
     /* Enemy units */
     .unit.enemy.knight .unit-icon { 
-        background-image: url('../units//enemy/enemy_knight.png');
+        background-image: url("../units/enemy/enemy_knight.png");
     }
     .unit.enemy.archer .unit-icon { 
-        background-image: url('../units//enemy/enemy_archer.png');
+        background-image: url("../units/enemy/enemy_archer.png");
     }
     .unit.enemy.mage .unit-icon { 
-        background-image: url('../units//enemy/enemy_mage.png');
+        background-image: url("../units/enemy/enemy_mage.png");
     }
     .unit.enemy.berserker .unit-icon { 
-        background-image: url('../units//enemy/enemy_berserker.png');
+        background-image: url("../units/enemy/enemy_berserker.png");
     }
     
     /* Boss unit */
     .unit.enemy.boss .unit-icon { 
-        background-image: url('../units//enemy/enemy_boss_1.png');
+        background-image: url("../units/enemy/enemy_boss1.png");
     }
     
     /* BOSS VISUAL UPGRADE */

@@ -434,17 +434,17 @@ statsGrid.appendChild(xpStat);
     
     if (unit.equipment.weapon) {
         // Determine the correct icon based on weapon type
-        let weaponIcon = '<img src="ui/sword2.png" style="width: 16px; height: 16px; vertical-align: middle;">';
+        let weaponIcon = '<img src="../ui/sword2.png" style="width: 16px; height: 16px; vertical-align: middle;">';
         
         const weaponName = unit.equipment.weapon.name.toLowerCase();
         if (weaponName.includes('bow')) {
-            weaponIcon = '<img src="ui/bow.png" style="width: 16px; height: 16px; vertical-align: middle;">';
+            weaponIcon = '<img src="../ui/bow.png" style="width: 16px; height: 16px; vertical-align: middle;">';
         } else if (weaponName.includes('axe')) {
-            weaponIcon = '<img src="ui/axe.png" style="width: 16px; height: 16px; vertical-align: middle;">';
+            weaponIcon = '<img src="../ui/axe.png" style="width: 16px; height: 16px; vertical-align: middle;">';
         } else if (weaponName.includes('mace')) {
-            weaponIcon = '<img src="ui/potion.png" style="width: 16px; height: 16px; vertical-align: middle;">';
+            weaponIcon = '<img src="../ui/potion.png" style="width: 16px; height: 16px; vertical-align: middle;">';
         } else if (weaponName.includes('greatsword')) {
-            weaponIcon = '<img src="ui/sword.png" style="width: 16px; height: 16px; vertical-align: middle;">';
+            weaponIcon = '<img src="../ui/sword.png" style="width: 16px; height: 16px; vertical-align: middle;">';
         }
         
         const weaponItem = createEquipmentItem(
@@ -461,7 +461,7 @@ statsGrid.appendChild(xpStat);
     }
     if (unit.equipment.armor) {
 const armorItem = createEquipmentItem(
-    '<img src="ui/shield.png" style="width: 16px; height: 16px; vertical-align: middle;">',
+    '<img src="../ui/shield.png" style="width: 16px; height: 16px; vertical-align: middle;">',
     unit.equipment.armor.name, 
     `+${unit.equipment.armor.defense} def`
 );
@@ -485,7 +485,7 @@ if (unit.injuries.length > 0 || unit.morale < 100 || unit.fleeing) {
     if (unit.fleeing) {
         const fleeBadge = document.createElement('span');
         fleeBadge.className = 'status-badge fleeing';
-        fleeBadge.innerHTML = '<img src="ui/running.png" style="width: 12px; height: 12px;"> Fleeing';
+        fleeBadge.innerHTML = '<img src="../ui/running.png" style="width: 12px; height: 12px;"> Fleeing';
         statusSection.appendChild(fleeBadge);
     }
     
@@ -493,12 +493,12 @@ if (unit.injuries.length > 0 || unit.morale < 100 || unit.fleeing) {
     if (unit.morale < 30) {
         const moraleBadge = document.createElement('span');
         moraleBadge.className = 'status-badge morale-low';
-        moraleBadge.innerHTML = '<img src="ui/sad.png" style="width: 12px; height: 12px;"> Low Morale';
+        moraleBadge.innerHTML = '<img src="../ui/sad.png" style="width: 12px; height: 12px;"> Low Morale';
         statusSection.appendChild(moraleBadge);
     } else if (unit.morale > 80) {
         const moraleBadge = document.createElement('span');
         moraleBadge.className = 'status-badge morale-high';
-        moraleBadge.innerHTML = '<img src="ui/happy.png" style="width: 12px; height: 12px;"> High Morale';
+        moraleBadge.innerHTML = '<img src="../ui/happy.png" style="width: 12px; height: 12px;"> High Morale';
         statusSection.appendChild(moraleBadge);
     }
     
@@ -508,10 +508,10 @@ if (unit.injuries.length > 0 || unit.morale < 100 || unit.fleeing) {
         injuryBadge.className = 'status-badge injury';
         
         // Choose icon based on injury type
-        let icon = 'ui/wound.png';
-        if (injury.name.includes('Arm')) icon = 'ui/i-arm.png';
-        if (injury.name.includes('Leg')) icon = 'ui/i-leg.png';
-        if (injury.name.includes('Concussion')) icon = 'ui/i-head.png';
+        let icon = '../ui/wound.png';
+        if (injury.name.includes('Arm')) icon = '../ui/i-arm.png';
+        if (injury.name.includes('Leg')) icon = '../ui/i-leg.png';
+        if (injury.name.includes('Concussion')) icon = '../ui/i-head.png';
         
         injuryBadge.innerHTML = `<img src="${icon}" style="width: 12px; height: 12px;"> ${injury.name} (${injury.turnsRemaining}t)`;
         statusSection.appendChild(injuryBadge);
@@ -630,15 +630,15 @@ if (unit.injuries.length > 0 || unit.morale < 100 || unit.fleeing) {
 function getClassIcon(classType) {
     switch(classType) {
         case 'knight': 
-            return '<img src="ui/knight.png" style="width: 20px; height: 20px; vertical-align: middle;">';
+            return '<img src="../ui/knight.png" style="width: 20px; height: 20px; vertical-align: middle;">';
         case 'archer': 
-            return '<img src="ui/bow.png" style="width: 20px; height: 20px; vertical-align: middle;">';
+            return '<img src="../ui/bow.png" style="width: 20px; height: 20px; vertical-align: middle;">';
         case 'mage': 
-            return '<img src="ui/potion.png" style="width: 20px; height: 20px; vertical-align: middle;">';
+            return '<img src="../ui/potion.png" style="width: 20px; height: 20px; vertical-align: middle;">';
         case 'berserker': 
-            return '<img src="ui/axe.png" style="width: 20px; height: 20px; vertical-align: middle;">';
+            return '<img src="../ui/axe.png" style="width: 20px; height: 20px; vertical-align: middle;">';
         default: 
-            return '<img src="ui/shield.png" style="width: 20px; height: 20px; vertical-align: middle;">';
+            return '<img src="../ui/shield.png" style="width: 20px; height: 20px; vertical-align: middle;">';
     }
 }
 

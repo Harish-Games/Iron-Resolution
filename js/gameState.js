@@ -90,7 +90,9 @@ function initializeGameState() {
 }
 
 function endTurn() {
-   // ====== 1. CLASS-BASED MORALE RECOVERY ======
+    console.log("🔄 endTurn() called, current player is:", gameState.currentPlayer);
+    
+    // ====== 1. CLASS-BASED MORALE RECOVERY ======
     gameState.units.forEach(unit => {
         if (!unit.fleeing && unit.hp > 0) {
             let recoveryChance = 0.2; // Base 20%
@@ -173,28 +175,95 @@ function endTurn() {
             unit.morale = 30 + Math.floor(Math.random() * 21); // 30-50 morale
             unit.movesUsed = 0;
             unit.attacksUsed = 0;
-    unit.remainingActions = unit.maxActions; // Also reset actions
-    logMessage(`${unit.name} rallies with renewed vigor!`, 'system');
+            unit.remainingActions = unit.maxActions; // Also reset actions
+            logMessage(`${unit.name} rallies with renewed vigor!`, 'system');
     
-    // Update display if this unit is selected
-        if (gameState.selectedUnit && gameState.selectedUnit.id === unit.id) {
-            updateSelectedUnitStats();
-    
+            // Update display if this unit is selected
+            if (gameState.selectedUnit && gameState.selectedUnit.id === unit.id) {
+                updateSelectedUnitStats();
+            }
         }
-    }
     });
     
     gameState.selectedUnit = null;
     
-    logMessage(`--- TURN ${gameState.turnCount}: ${gameState.currentPlayer.toUpperCase()} ---`, 'system');
-    
-    if (gameState.currentPlayer === 'enemy') {
-        setTimeout(aiTurn, 1000);
+    // ====== SWITCH TURNS ======
+    if (gameState.currentPlayer === 'player') {
+        // Player is ending turn - switch to enemy
+        console.log("👤 Player → Enemy - Resetting ENEMY units for their turn");
+        
+        // RESET ENEMY UNIT ACTIONS (for AI to use)
+gameState.units.forEach(unit => {
+    if (unit.type === 'enemy' && !unit.fleeing && unit.hp > 0) {
+        unit.remainingActions = unit.maxActions;
+        unit.movesUsed = 0;
+        unit.attacksUsed = 0;  // Reset attack counter
+        
+        // Set canAttack and canHeal based on class
+        if (unit.classType === 'mage') {
+            unit.canAttack = false;   // Mages CANNOT attack
+            unit.canHeal = true;      // Mages CAN heal
+        } else {
+            unit.canAttack = true;    // Other classes CAN attack
+            unit.canHeal = false;     // Other classes CANNOT heal
+        }
     }
-    
-    renderAll([])
+});
 
+        gameState.currentPlayer = 'enemy';
+        gameState.turnCount++;
+        gameState.phase = 'select';
 
+        // Update UI
+        updateTurnCount();
+        updateEnemiesLeft();
+        updatePhaseIndicator();
+        
+        logMessage(`--- ENEMY TURN ${gameState.turnCount} ---`, 'system');
+        
+        // Clear highlights
+        renderAll([]);
+        
+        // Start AI turn after a short delay
+        setTimeout(aiTurn, 1000);
+    } else {
+        // Enemy is ending turn - switch BACK to player
+        console.log("👹 Enemy → Player - Resetting PLAYER units for their turn");
+        
+        // RESET PLAYER UNIT ACTIONS (for player to use)
+gameState.units.forEach(unit => {
+    if (unit.type === 'player' && !unit.fleeing && unit.hp > 0) {
+        console.log(`Resetting ${unit.name} (${unit.classType}): remainingActions=${unit.remainingActions}→${unit.maxActions}`);
+        unit.remainingActions = unit.maxActions;
+        unit.movesUsed = 0;
+        unit.attacksUsed = 0;  // Reset attack counter
+        
+        // Set canAttack and canHeal based on class
+        if (unit.classType === 'mage') {
+            unit.canAttack = false;   // Mages CANNOT attack
+            unit.canHeal = true;      // Mages CAN heal
+        } else {
+            unit.canAttack = true;    // Other classes CAN attack
+            unit.canHeal = false;     // Other classes CANNOT heal
+        }
+    }
+});
+
+        gameState.currentPlayer = 'player';
+        gameState.phase = 'select';
+        
+        // Update UI
+        updatePhaseIndicator();
+        updateUI();
+        updateUnitRoster();
+        
+        logMessage(`--- PLAYER TURN ${gameState.turnCount} ---`, 'system');
+        
+        // Clear highlights
+        renderAll([]);
+        
+        // DO NOT call aiTurn - it's player's turn now
+    }
 }
 
 // Make functions available globally

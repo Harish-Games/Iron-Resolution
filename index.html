@@ -11,9 +11,9 @@
 <body>
 
 	<h1>
-		<img src="../ui/sword.png" alt="⚔" class="title-icon">
+		<img src="ui/sword.png" alt="⚔" class="title-icon">
 		IRON RESOLUTION v0.75
-		<img src="../ui/sword.png" alt="⚔" class="title-icon">
+		<img src="ui/sword.png" alt="⚔" class="title-icon">
 	</h1>
 	
     <div class="subtitle">Weapons & Armor | Injuries & Morale | Battle Brothers Clone</div>
@@ -23,9 +23,9 @@
     <div class="intro-modal">
         <!-- GAME HEADER (Matches main game) -->
         <div class="intro-title">
-            <img src="../ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+            <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
             IRON RESOLUTION v0.75
-            <img src="../ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+            <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
         </div>
         
         <!-- SECTION 1: THE SITUATION -->
@@ -44,25 +44,25 @@
             <h3 class="section-header">YOUR FORCES</h3>
             <div class="section-content">
                 <div class="force-item">
-                    <img src="../ui/knight.png" class="force-icon">
+                    <img src="ui/knight.png" class="force-icon">
                     <div class="force-desc">
                         <strong>KNIGHTS:</strong> Heavy armor, strong defense, disciplined morale
                     </div>
                 </div>
                 <div class="force-item">
-                    <img src="../ui/bow.png" class="force-icon">
+                    <img src="ui/bow.png" class="force-icon">
                     <div class="force-desc">
                         <strong>ARCHERS:</strong> Long range attacks, high accuracy, mobile
                     </div>
                 </div>
                 <div class="force-item">
-                    <img src="../ui/potion.png" class="force-icon">
+                    <img src="ui/potion.png" class="force-icon">
                     <div class="force-desc">
                         <strong>MAGES:</strong> Healing support, magical abilities, fragile
                     </div>
                 </div>
                 <div class="force-item">
-                    <img src="../ui/axe.png" class="force-icon">
+                    <img src="ui/axe.png" class="force-icon">
                     <div class="force-desc">
                         <strong>BERSERKERS:</strong> Devastating damage, aggressive, unstable morale
                     </div>
@@ -127,7 +127,7 @@
         </div>
         
         <!-- ACTION BUTTON -->
-<button id="introContinueBtn" class="intro-continue-btn" onclick="hideIntroSplash()">            <img src="../ui/sword1.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+<button id="introContinueBtn" class="intro-continue-btn" onclick="hideIntroSplash()">            <img src="ui/sword1.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
             BEGIN YOUR COMMAND
         </button>
         
@@ -183,22 +183,22 @@
         <div class="left-panel">
             <div class="controls">
 <button id="endTurn" class="primary">
-    <img src="../ui/end.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+    <img src="ui/end.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
     END TURN (E)
 </button>
 
 <button id="attackBtn" disabled>
-    <img src="../ui/sword1.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+    <img src="ui/sword1.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
     ATTACK (A)
 </button>
 
 <button id="healBtn" class="heal-btn" disabled>
-    <img src="../ui/heart.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+    <img src="ui/heart.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
     HEAL (H)
 </button>
 
 <button id="cancelBtn" class="cancel-btn" disabled>
-    <img src="../ui/cancel.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+    <img src="ui/cancel.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
     CANCEL (ESC)
 </button>
 
@@ -218,7 +218,7 @@
                 <div id="phaseIndicator" class="phase-indicator">Select a unit</div>
                 <div id="rangeIndicator" class="range-indicator" style="display: none;">Range: 0</div>
 <div id="soundToggle" class="sound-toggle">
-    <img src="../ui/sound.png" style="width: 16px; height: 16px; vertical-align: middle;"> Sound: ON
+    <img src="ui/sound.png" style="width: 16px; height: 16px; vertical-align: middle;"> Sound: ON
 </div>
                 <div id="grid" class="grid"></div>
             </div>
@@ -230,7 +230,7 @@
         <!-- Selected Unit Panel -->
         <div class="su-container">
             <div class="panel-header">
-                <img src="../ui/target.png" style="width: 22px; height: 22px; vertical-align: bottom; margin-right: 2px;">
+                <img src="ui/target.png" style="width: 22px; height: 22px; vertical-align: bottom; margin-right: 2px;">
                 SELECTED UNIT
             </div>
             <div id="selectedUnitDisplay"></div>
@@ -239,7 +239,7 @@
         <!-- Unit Roster Panel -->
         <div class="roster-container">
             <div class="panel-header">
-                <img src="../ui/team.png" style="width: 22px; height: 22px; vertical-align: bottom; margin-right: 2px;">
+                <img src="ui/team.png" style="width: 22px; height: 22px; vertical-align: bottom; margin-right: 2px;">
                 UNIT ROSTER
             </div>
             <div id="unitRosterList"></div>
@@ -249,7 +249,7 @@
     <!-- Bottom Row: Battle Log (always full width) -->
     <div class="log-container">
         <div class="panel-header">
-            <img src="../ui/scroll.png" style="width: 24px; height: 24px; vertical-align: middle;">
+            <img src="ui/scroll.png" style="width: 24px; height: 24px; vertical-align: middle;">
             BATTLE LOG
         </div>
         <div id="battleLog"></div>

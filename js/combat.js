@@ -142,9 +142,9 @@ if (isCritical) {
             
             // Check for death
             if (defender.hp <= 0) {
-                console.log(`<img src="ui/skull.png" style="width: 16px; height: 16px; vertical-align: middle;"> ${defender.name} DIED! HP: ${defender.hp}`, defender);
+                console.log(`<img src="../ui/skull.png" style="width: 16px; height: 16px; vertical-align: middle;"> ${defender.name} DIED! HP: ${defender.hp}`, defender);
                 
-			logMessage(`<img src="ui/skull.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;"> ${defender.name} is defeated!`, 'system');
+			logMessage(`<img src="../ui/skull.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;"> ${defender.name} is defeated!`, 'system');
                 
                 // Update battle stats
                 if (attacker.type === 'player') {
