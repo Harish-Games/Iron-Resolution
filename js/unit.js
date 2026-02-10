@@ -1,4 +1,3 @@
-
 // Iron Resolution UNIT.js
 
         // ========== ENHANCED UNIT SYSTEM ==========
@@ -117,7 +116,7 @@
                         this.range = 3;
                         this.movement = 2;
                         this.maxActions = 2;
-                        this.maxAttacks = 0;
+                        this.maxAttacks = 2;
                         this.healPower = 10;
                         this.moraleThreshold = 50;
                         break;
@@ -429,7 +428,7 @@ checkHeroicRally() {
         }
     }
     return false;
-}
+		}
 }
 
 

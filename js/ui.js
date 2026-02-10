@@ -394,14 +394,18 @@ if (unit.classType === 'mage') {
     statsGrid.appendChild(createSimpleStat('Movement', 
         `${Math.min(unit.movement - unit.movesUsed, unit.remainingActions)}/${unit.movement}`));
     
-   // Show "Heals" for mages, "Attacks" for everyone else
+// Show "Heals" for mages, "Attacks" for everyone else
 if (unit.classType === 'mage') {
-    // Mages heal instead of attack
+    // Use maxHeals and attacksUsed for mages
+    const maxHeals = unit.maxHeals || 2
+    const attacksUsed = unit.attacksUsed || 0
+    const healsRemaining = maxHeals - attacksUsed;
+    
     statsGrid.appendChild(createSimpleStat('Heals', 
-        `${Math.min(unit.maxAttacks - unit.attacksUsed, unit.remainingActions)}/${unit.maxAttacks}`,
+        `${Math.min(healsRemaining, unit.remainingActions)}/${maxHeals}`,
         '#2ecc71')); // Green color for healing
 } else {
-    // Regular units attack
+    // Regular units use maxAttacks and attacksUsed
     statsGrid.appendChild(createSimpleStat('Attacks', 
         `${Math.min(unit.maxAttacks - unit.attacksUsed, unit.remainingActions)}/${unit.maxAttacks}`,
         '#ff6b6b')); // Red color for attacking

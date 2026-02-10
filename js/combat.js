@@ -201,9 +201,10 @@ if (isCritical) {
     healAmount = target.hp - oldHp; // Actual amount healed
 
     // ONLY INCREMENT HEAL COUNTER IF ACTUAL HEALING OCCURRED
-    if (healAmount > 0) {
-        healer.healsPerformed++;
-    }
+if (healAmount > 0) {
+    healer.healsPerformed++;  // Lifetime total
+    healer.attacksUsed++;       // Battle total ← ADD THIS LINE
+}
 
     // PHASE 2: Healing improves morale
     target.morale = Math.min(100, target.morale + 10);
@@ -227,14 +228,3 @@ if (isCritical) {
     
     await renderAll([]);
 }
- 
-
-
-
-// Import needed constants/functions (if using modules)
-// Or make sure they're globally available:
-// - showCombatResult should be in ui.js
-// - TERRAIN_EFFECTS should be in config.js
-// - INJURIES should be in config.js
-// - cleanupUnits should be in ui.js
-// - checkVictory should be in main.js

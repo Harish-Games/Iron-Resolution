@@ -1,9 +1,30 @@
 // Iron Resolution TERRAIN.js
 
+function resetBattleCounters() {
+    console.log("Resetting battle counters...");
+    gameState.units.forEach(unit => {
+        unit.attacksUsed = 0;
+        if (unit.classType === 'mage') {
+            unit.attacksUsed = 0;
+            console.log(`Reset ${unit.name} (mage) heals to 0`);
+        }
+    });
+    
+    // ALSO reset persistent units if they exist
+    if (gameState.persistentUnits) {
+        gameState.persistentUnits.forEach(unit => {
+            if (unit.classType === 'mage') {
+                unit.attacksUsed = 0;
+            }
+            unit.attacksUsed = 0;
+        });
+    }
+}
+
 // ========== TERRAIN GENERATION ==========
 function generateTerrain() {
     console.log(`Generating terrain for Level ${gameState.currentLevel}`);
-    
+  
     // ====== LEVEL 2: DARKWOOD APPROACH ======
 if (gameState.currentLevel === 2) {
     console.log("Generating Level 2: Darkwood Approach");
@@ -354,6 +375,8 @@ function createUnits() {
         }
         gameState.units.push(unit);
     }
+
+resetBattleCounters();
     
     // Enemies at top (below the top forest border)
     const travelEnemies = ['Goblin Archer', 'Goblin Archer', 'Orc Knight', 'Goblin Archer', 'Orc Knight'];
@@ -366,7 +389,9 @@ function createUnits() {
         
         gameState.units.push(unit);
     }
-    
+
+
+resetBattleCounters();    
     return;
 }
     
@@ -413,7 +438,9 @@ if (gameState.currentLevel === 4) {
         
         gameState.units.push(unit);
     }
-    
+
+
+resetBattleCounters();    
     // Enemy units defend the mountain pass (fewer but tougher)
     const mountainEnemies = ['Orc Knight', 'Goblin Archer', 'Troll Berserker', 'Orc Knight', 'Goblin Archer', 'Goblin Shaman'];
     for (let i = 0; i < mountainEnemies.length; i++) {
@@ -465,6 +492,8 @@ if (gameState.currentLevel === 4) {
         gameState.units.push(unit);
     }
     
+    resetBattleCounters();
+    
     return;
 }
     
@@ -476,6 +505,16 @@ if (gameState.currentLevel === 4) {
     
     // Create player units - either from persistent or new
     if (gameState.persistentUnits.length > 0) {
+		
+		 // RESET persistent units BEFORE copying
+    gameState.persistentUnits.forEach(unit => {
+        unit.attacksUsed = 0;
+        if (unit.classType === 'mage') {
+            unit.attacksUsed = 0;
+            console.log(`Reset persistent mage ${unit.name} heals to 0`);
+        }
+    });
+		
         gameState.units = [...gameState.persistentUnits];
         
         // Position and reset player units
@@ -489,6 +528,10 @@ if (gameState.currentLevel === 4) {
             unit.attacksUsed = 0;
             unit.acted = false;
             unit.fleeing = false;
+            
+            if (unit.classType === 'mage') {
+            unit.attacksUsed = 0;  // ← RESET HEALS TOO!
+        }
             
             // Apply upgrades
             unit.maxHp += gameState.playerUpgrades.health * 5;
@@ -567,6 +610,8 @@ if (gameState.currentLevel === 4) {
         gameState.units.push(unit);
     }
 }
+
+resetBattleCounters();
     
     // Create enemy units based on current level
 const level = LEVELS[gameState.currentLevel - 1];
@@ -672,6 +717,9 @@ if (gameState.currentLevel === 2) {
     
     gameState.units.push(unit);
 }
+
+resetBattleCounters();
+
 } else if (gameState.currentLevel === 3) {
     // LEVEL 3: HARD LEVEL WITH BOSS AND EXTRA ENEMIES
     console.log("Level 3: Boss level with extra enemies");
@@ -746,6 +794,8 @@ while (getUnitAt(unit.x, unit.y) ||
         
         gameState.units.push(unit);
     }
+resetBattleCounters();
+
 } else {
     // ORIGINAL CODE FOR LEVEL 1 AND ANY OTHER LEVELS
     for (let i = 0; i < enemyCount; i++) {
@@ -799,6 +849,7 @@ while (getUnitAt(unit.x, unit.y) ||
     }
 }
 }
+
  console.log("🚨 DEBUG: createUnits() ENDING");
     console.log("Total units created:", gameState.units.length);
     console.log("Units array:", gameState.units);
