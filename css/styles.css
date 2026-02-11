@@ -355,6 +355,13 @@
     box-shadow: 0 0 8px rgba(77, 205, 196, 0.5);
     position: relative;
     z-index: 2;
+        animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 5px rgba(0, 160, 255, 0.5); }
+    50% { box-shadow: 0 0 15px rgba(0, 160, 255, 0.8); }
+    100% { box-shadow: 0 0 5px rgba(0, 160, 255, 0.5); }
 }
     
     .tile.attackable { 

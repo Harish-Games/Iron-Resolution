@@ -454,6 +454,10 @@ if (unit.canMove && unit.remainingActions > 0) {
       
         // ========== HELPER FUNCTIONS ==========
         function selectUnit(unit) {
+     document.querySelectorAll('.tile.movable, .tile.selected').forEach(tile => {
+        tile.classList.remove('movable', 'selected');
+    });
+    
     gameState.selectedUnit = unit;
     logMessage(`Selected ${unit.name}`, 'system');
     soundSystem.playSelect();
