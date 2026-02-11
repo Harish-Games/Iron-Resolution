@@ -266,6 +266,351 @@ gameState.units.forEach(unit => {
     }
 }
 
+// ====== INJURY HEALING BETWEEN BATTLES ======
+// Add this to gameState.js or create a new injurySystem.js
+
+function healInjuriesBetweenBattles() {
+    console.log("=== HEALING PHASE ===");
+    
+    // Get all player units (using type, not team)
+    const playerUnits = gameState.units.filter(u => u.type === 'player' && u.hp > 0);
+    
+    if (playerUnits.length === 0) return null;
+    
+    // Find highest level mage
+    const mages = playerUnits.filter(u => u.classType === 'mage');
+    let mageLevelBonus = 0;
+    
+    if (mages.length > 0) {
+        // Get highest mage level (default to 1 if level undefined)
+        const highestMage = mages.reduce((max, mage) => 
+            (mage.level || 1) > (max.level || 1) ? mage : max
+        , mages[0]);
+        
+        mageLevelBonus = (highestMage.level || 1) * 10;
+        console.log(`Highest mage level: ${highestMage.level || 1} (+${mageLevelBonus}% healing chance)`);
+    }
+    
+    // Base 30% + mage bonus
+    const baseHealChance = 30 + mageLevelBonus;
+    
+    let totalHealed = 0;
+    let totalInjuries = 0;
+    let healingLog = []; // Store details for UI display
+    
+    // Check each player unit
+    playerUnits.forEach(unit => {
+        if (!unit.injuries || unit.injuries.length === 0) return;
+        
+        console.log(`\n${unit.name} (${unit.classType}):`);
+        console.log(`Injuries: ${unit.injuries.length}`);
+        
+        const remainingInjuries = [];
+        const unitLog = {
+            unitName: unit.name,
+            classType: unit.classType,
+            healed: [],
+            persisted: []
+        };
+        
+        // Roll for each injury independently
+        unit.injuries.forEach(injury => {
+            totalInjuries++;
+            
+            // Random roll 1-100
+            const roll = Math.floor(Math.random() * 100) + 1;
+            const healed = roll <= baseHealChance;
+            
+            console.log(`  • ${injury.name}: rolled ${roll}% (needed ≤${baseHealChance}%) - ${healed ? 'HEALED ✓' : 'persists'}`);
+            
+            if (healed) {
+                totalHealed++;
+                unitLog.healed.push(injury.name);
+                logMessage(`${unit.name}'s ${injury.name} healed between battles!`, 'heal');
+            } else {
+                remainingInjuries.push(injury);
+                unitLog.persisted.push(injury.name);
+            }
+        });
+        
+        // Update unit with remaining injuries
+        unit.injuries = remainingInjuries;
+        
+        // Update morale if all injuries healed
+        if (unit.injuries.length === 0) {
+            console.log(`  All injuries healed for ${unit.name}!`);
+            // Small morale boost when fully recovered
+            unit.morale = Math.min(100, (unit.morale || 100) + 15);
+        }
+        
+        if (unitLog.healed.length > 0 || unitLog.persisted.length > 0) {
+            healingLog.push(unitLog);
+        }
+    });
+    
+    console.log(`\n=== HEALING SUMMARY ===`);
+    console.log(`Total injuries: ${totalInjuries}`);
+    console.log(`Healed: ${totalHealed}`);
+    console.log(`Remaining: ${totalInjuries - totalHealed}`);
+    console.log(`Healing chance: ${baseHealChance}%`);
+    
+    return {
+        totalInjuries,
+        totalHealed,
+        remainingInjuries: totalInjuries - totalHealed,
+        healChance: baseHealChance,
+        mageLevelBonus,
+        healingLog
+    };
+}
+
+// Helper function to get current healing chance for display
+function getCurrentHealChance() {
+    const playerUnits = gameState.units.filter(u => u.type === 'player' && u.hp > 0);
+    const mages = playerUnits.filter(u => u.classType === 'mage');
+    
+    let mageLevelBonus = 0;
+    if (mages.length > 0) {
+        const highestMage = mages.reduce((max, mage) => 
+            (mage.level || 1) > (max.level || 1) ? mage : max
+        , mages[0]);
+        mageLevelBonus = (highestMage.level || 1) * 10;
+    }
+    
+    return {
+        base: 30,
+        mageBonus: mageLevelBonus,
+        total: 30 + mageLevelBonus
+    };
+}
+
+// Add healing summary to recruit screen
+function showHealingSummaryInRecruitScreen(healingResult) {
+    if (!healingResult || healingResult.totalInjuries === 0) {
+        // No injuries to heal - show nothing or a simple message
+        const existingSummary = document.getElementById('healingSummary');
+        if (existingSummary) existingSummary.remove();
+        return;
+    }
+    
+    // Remove existing summary if any
+    const existingSummary = document.getElementById('healingSummary');
+    if (existingSummary) existingSummary.remove();
+    
+    // Create healing summary section
+    const summaryDiv = document.createElement('div');
+    summaryDiv.id = 'healingSummary';
+    summaryDiv.style.cssText = `
+        margin: 20px 0;
+        padding: 15px;
+        background: rgba(46, 204, 113, 0.1);
+        border: 1px solid #2ecc71;
+        border-radius: 8px;
+    `;
+    
+    // Header
+    const header = document.createElement('div');
+    header.style.cssText = `
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 15px;
+        color: #2ecc71;
+        font-weight: bold;
+    `;
+    header.innerHTML = `
+        <img src="../ui/potion.png" style="width: 20px; height: 20px;">
+        BETWEEN BATTLES HEALING
+        <span style="margin-left: auto; font-size: 0.9em; color: #64ffda;">
+            ${healingResult.healChance}% Chance
+        </span>
+    `;
+    summaryDiv.appendChild(header);
+    
+    // Healing chance breakdown
+    const chanceBreakdown = document.createElement('div');
+    chanceBreakdown.style.cssText = `
+        font-size: 0.85em;
+        color: #8892b0;
+        margin-bottom: 15px;
+        padding: 8px;
+        background: rgba(100, 255, 218, 0.1);
+        border-radius: 4px;
+    `;
+    chanceBreakdown.innerHTML = `
+        <div style="display: flex; justify-content: space-between;">
+            <span>Base Recovery Chance:</span>
+            <span style="color: #e6f1ff;">30%</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+            <span>Mage Level Bonus (+${healingResult.mageLevelBonus}%):</span>
+            <span style="color: #2ecc71;">+${healingResult.mageLevelBonus}%</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 8px; font-weight: bold;">
+            <span>TOTAL HEALING CHANCE:</span>
+            <span style="color: #2ecc71;">${healingResult.healChance}%</span>
+        </div>
+    `;
+    summaryDiv.appendChild(chanceBreakdown);
+    
+    // Summary stats
+    const stats = document.createElement('div');
+    stats.style.cssText = `
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(46, 204, 113, 0.3);
+    `;
+    stats.innerHTML = `
+        <span>Injuries Healed: <span style="color: #2ecc71; font-weight: bold;">${healingResult.totalHealed}</span></span>
+        <span>Remaining: <span style="color: #ff6b6b; font-weight: bold;">${healingResult.remainingInjuries}</span></span>
+        <span>Total: <span style="color: #e6f1ff;">${healingResult.totalInjuries}</span></span>
+    `;
+    summaryDiv.appendChild(stats);
+    
+    // Detailed unit-by-unit breakdown
+    if (healingResult.healingLog && healingResult.healingLog.length > 0) {
+        const details = document.createElement('div');
+        details.style.cssText = `
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 5px;
+        `;
+        
+        healingResult.healingLog.forEach(unitLog => {
+            const unitEntry = document.createElement('div');
+            unitEntry.style.cssText = `
+                margin-bottom: 12px;
+                padding: 10px;
+                background: rgba(30, 73, 118, 0.4);
+                border-radius: 6px;
+                border-left: 3px solid ${unitLog.healed.length > 0 ? '#2ecc71' : '#ff6b6b'};
+            `;
+            
+            let icon = '';
+            switch(unitLog.classType) {
+                case 'knight': icon = '<img src="../ui/knight.png" style="width: 16px; height: 16px;">'; break;
+                case 'archer': icon = '<img src="../ui/bow.png" style="width: 16px; height: 16px;">'; break;
+                case 'mage': icon = '<img src="../ui/potion.png" style="width: 16px; height: 16px;">'; break;
+                case 'berserker': icon = '<img src="../ui/axe.png" style="width: 16px; height: 16px;">'; break;
+                default: icon = '<img src="../ui/shield.png" style="width: 16px; height: 16px;">';
+            }
+            
+            let html = `<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                ${icon}
+                <span style="font-weight: bold; color: #64ffda;">${unitLog.unitName}</span>
+            </div>`;
+            
+            if (unitLog.healed.length > 0) {
+                html += `<div style="color: #2ecc71; font-size: 0.9em; margin-bottom: 4px;">
+                    ✓ Healed: ${unitLog.healed.join(', ')}
+                </div>`;
+            }
+            
+            if (unitLog.persisted.length > 0) {
+                html += `<div style="color: #ff6b6b; font-size: 0.9em;">
+                    ✗ Persists: ${unitLog.persisted.join(', ')}
+                </div>`;
+            }
+            
+            unitEntry.innerHTML = html;
+            details.appendChild(unitEntry);
+        });
+        
+        summaryDiv.appendChild(details);
+    }
+    
+    // Insert into recruit screen (above the hire button)
+    const recruitModal = document.querySelector('.recruit-modal');
+    if (recruitModal) {
+        const hireBtn = document.getElementById('hireBtn');
+        if (hireBtn) {
+            recruitModal.insertBefore(summaryDiv, hireBtn.parentNode || hireBtn);
+        }
+    }
+}
+
+// Modified openRecruitScreen function
+const originalOpenRecruitScreen = window.openRecruitScreen;
+window.openRecruitScreen = function() {
+    console.log(`🛒 Opening recruit screen for level ${gameState.currentLevel}`);
+    
+    // ====== HEAL INJURIES BETWEEN BATTLES ======
+    const healingResult = healInjuriesBetweenBattles();
+    
+    // Continue with original recruit screen logic
+    document.getElementById('victoryOverlay').style.display = 'none';
+
+    // Calculate recruit cost
+    const recruitCost = 60 + (gameState.currentLevel * 20);
+
+    // Random class
+    const classes = ['Knight', 'Archer', 'Berserker', 'Mage'];
+    const randomClass = classes[Math.floor(Math.random() * classes.length)];
+
+    // Update recruit screen
+    document.getElementById('recruitClass').textContent = randomClass;
+    document.getElementById('recruitCost').textContent = `Cost: ${recruitCost} Gold`;
+    document.getElementById('currentGold').textContent = gameState.gold;
+
+    // Show healing summary if there were injuries
+    if (healingResult && healingResult.totalInjuries > 0) {
+        showHealingSummaryInRecruitScreen(healingResult);
+    }
+
+    // Hire button state
+    const hireBtn = document.getElementById('hireBtn');
+    hireBtn.disabled = gameState.gold < recruitCost;
+
+    // Store the current level for reference
+    const currentLevel = gameState.currentLevel;
+    
+    hireBtn.onclick = () => {
+        console.log(`🎯 Hire clicked for level ${currentLevel}`);
+        
+        if (gameState.gold >= recruitCost) {
+            gameState.gold -= recruitCost;
+            const newUnit = new Unit('player', `${randomClass} Recruit`, 0, 0);
+            newUnit.level = 1;
+            newUnit.xp = 0;
+            gameState.persistentUnits.push(newUnit);
+            logMessage(`Hired ${newUnit.name}!`, 'system');
+        }
+        
+        document.getElementById('recruitOverlay').style.display = 'none';
+        
+        // Handle ALL level transitions consistently
+        setTimeout(() => {
+            console.log(`🔄 Processing post-recruit transition for level ${currentLevel}`);
+            
+            // Map each level to its specific transition
+            if (currentLevel === 1) {
+                showLevel1To2Transition();
+            } else if (currentLevel === 2) {
+                showLevel2To3Transition();
+            } else if (currentLevel === 3) {
+                showLevel3To4Transition();
+            } else if (currentLevel === 4) {
+                showLevel4To5Transition();
+            } else if (currentLevel === 5) {
+                showGameCompleteScreen();
+            } else {
+                // Fallback - shouldn't happen
+                console.error(`❌ Unknown level ${currentLevel}, defaulting to startNextLevel()`);
+                startNextLevel();
+            }
+        }, 500);
+    };
+
+    // Show recruit screen
+    document.getElementById('recruitOverlay').style.display = 'flex';
+};
+
+	// Make functions globally available
+window.healInjuriesBetweenBattles = healInjuriesBetweenBattles;
+window.getCurrentHealChance = getCurrentHealChance;
+
 // Make functions available globally
 window.gameState = gameState;
 window.endTurn = endTurn;
