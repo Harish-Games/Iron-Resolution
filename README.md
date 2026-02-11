@@ -14,14 +14,3 @@ Features:
     Injuries that affect stats
     Leveling up with permanent growth
     Persistent company across levels 
-
-Your soldiers don't just die — they break.
-
-Complete 3 EPIC LEVELS:
-
-    Defend the Village - Training Ground
-    Forest pursuit across the river - Face tougher enemies
-    Mountain Fortress - Final boss battle! 
-
-Surviving units carry over between levels (with partial healing). 
-The fallen are lost forever!
