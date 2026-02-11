@@ -92,6 +92,59 @@
                     this.init();
                 }
             }
+
+            // ====== MENU SOUNDS ======
+            playMenuClick() { 
+                if (!gameState.soundEnabled || !this.initialized) return;
+                this.playBeep(600, 0.1, 'sine', 0.15); 
+            }
+            
+            playMenuHover() { 
+                if (!gameState.soundEnabled || !this.initialized) return;
+                this.playBeep(400, 0.05, 'sine', 0.08); 
+            }
+            
+            playMenuDenied() { 
+                if (!gameState.soundEnabled || !this.initialized) return;
+                this.playBeep(200, 0.3, 'sawtooth', 0.2); 
+            }
+            
+            playMenuConfirm() { 
+                if (!gameState.soundEnabled || !this.initialized) return;
+                this.playBeep(800, 0.2, 'sine', 0.2); 
+            }
+            
+            playMenuStart() {
+                if (!gameState.soundEnabled || !this.initialized) return;
+                try {
+                    const now = this.audioContext.currentTime;
+                    const oscillator1 = this.audioContext.createOscillator();
+                    const oscillator2 = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator1.connect(gainNode);
+                    oscillator2.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    // Triumphant two-tone
+                    oscillator1.frequency.value = 523;  // C5
+                    oscillator2.frequency.value = 659;  // E5
+                    oscillator1.type = 'sine';
+                    oscillator2.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0, now);
+                    gainNode.gain.linearRampToValueAtTime(0.3, now + 0.1);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 1.0);
+                    
+                    oscillator1.start(now);
+                    oscillator2.start(now + 0.05);
+                    oscillator1.stop(now + 1.0);
+                    oscillator2.stop(now + 1.0);
+                } catch (e) {
+                    console.log("Menu start sound failed:", e);
+                }
+            }
+
         }
         
         const soundSystem = new SoundSystem();
