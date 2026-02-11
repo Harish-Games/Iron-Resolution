@@ -8,14 +8,14 @@ function showLevel2To3Transition() {
         <div id="transitionOverlay" class="intro-overlay" style="display: flex;">
             <div class="intro-modal">
                 <div class="intro-title" style="margin-bottom: 25px;">
-                    <img src="../ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
                     MISSION UPDATE: FOREST PURSUIT
-                    <img src="../ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
                 </div>
                 
                 <div class="intro-section" style="margin-bottom: 25px;">
                     <h3 class="section-header" style="color: #4ecdc4; border-bottom: 2px solid #4ecdc4; padding-bottom: 8px;">
-                        <img src="../ui/target.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+                        <img src="ui/target.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
                         PHASE ONE COMPLETE
                     </h3>
                     <div class="section-content" style="font-size: 1.1em; line-height: 1.6;">
@@ -26,7 +26,7 @@ function showLevel2To3Transition() {
                 
                 <div class="intro-section" style="margin-bottom: 25px; background: rgba(30, 73, 118, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff6b6b;">
                     <h3 class="section-header" style="color: #ff9e6b;">
-                        <img src="../ui/running.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+                        <img src="ui/running.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
                         ENEMY MOVEMENT DETECTED
                     </h3>
                     <div class="section-content" style="font-size: 1.1em; line-height: 1.6; color: #e6f1ff;">
@@ -38,7 +38,7 @@ function showLevel2To3Transition() {
                 
                 <div class="intro-section" style="margin-bottom: 30px; background: rgba(30, 73, 118, 0.4); padding: 15px; border-radius: 8px; border-left: 4px solid #64ffda;">
                     <h3 class="section-header" style="color: #64ffda;">
-                        <img src="../ui/scroll.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+                        <img src="ui/scroll.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
                         NEW ORDERS
                     </h3>
                     <div class="section-content" style="font-size: 1.1em; line-height: 1.6; font-style: italic;">
@@ -48,12 +48,12 @@ function showLevel2To3Transition() {
                 </div>
                 
                 <div class="controls-note" style="margin: 20px 0; padding: 12px; background: rgba(30, 73, 118, 0.3); border: 1px solid rgba(255, 193, 7, 0.3); color: #f1c40f;">
-                    <img src="../ui/sword1.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+                    <img src="ui/sword1.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
                     <strong>OBJECTIVE:</strong> Cross the river and eliminate all remaining enemies in the Darkwood Forest
                 </div>
                 
                 <button id="continueToForestBtn" class="intro-continue-btn" style="margin-top: 20px; min-width: 280px;">
-                    <img src="../ui/forest.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
+                    <img src="ui/forest.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
                     ADVANCE INTO THE DARKWOOD
                 </button>
                 
@@ -125,9 +125,9 @@ function showLevel2To3Transition() {
         <div id="transition34Overlay" class="intro-overlay" style="display: flex;">
             <div class="intro-modal">
                 <div class="intro-title" style="margin-bottom: 25px;">
-                    <img src="../ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
                     TRAVEL: MOUNTAIN PASS
-                    <img src="../ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
                 </div>
                 
                 <div class="intro-section" style="margin-bottom: 20px;">
@@ -152,12 +152,12 @@ function showLevel2To3Transition() {
                 </div>
                 
                 <div class="controls-note" style="margin: 20px 0; padding: 12px; background: rgba(30, 73, 118, 0.3); border: 1px solid rgba(255, 193, 7, 0.3); color: #f1c40f;">
-                    <img src="../ui/mountain.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+                    <img src="ui/mountain.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
                     <strong>BATTLEFIELD:</strong> Travel level - narrow mountain pass (10x20 grid)
                 </div>
                 
                 <button id="continueToLevel4Btn" class="intro-continue-btn" style="margin-top: 20px; min-width: 280px;">
-                    <img src="../ui/running.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
+                    <img src="ui/running.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
                     PURSUE THROUGH THE PASS
                 </button>
                 
@@ -238,9 +238,9 @@ function showLevel4To5Transition() {
         <div id="transition45Overlay" class="intro-overlay" style="display: flex;">
             <div class="intro-modal">
                 <div class="intro-title" style="margin-bottom: 25px;">
-                    <img src="../ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
                     FINAL MISSION: ENEMY CITADEL
-                    <img src="../ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
                 </div>
                 
                 <div class="intro-section" style="margin-bottom: 20px;">
@@ -264,12 +264,12 @@ function showLevel4To5Transition() {
                 </div>
                 
                 <div class="controls-note" style="margin: 20px 0; padding: 12px; background: rgba(30, 73, 118, 0.3); border: 1px solid rgba(255, 193, 7, 0.3); color: #f1c40f;">
-                    <img src="../ui/fortress.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+                    <img src="ui/fortress.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
                     <strong>BATTLEFIELD:</strong> Enemy citadel - fortified positions and boss encounter
                 </div>
                 
                 <button id="continueToLevel5Btn" class="intro-continue-btn" style="margin-top: 20px; min-width: 280px;">
-                    <img src="../ui/trophy1.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
+                    <img src="ui/trophy1.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
                     ASSAULT THE CITADEL
                 </button>
                 
@@ -389,14 +389,14 @@ function showGameCompleteScreen() {
         <div id="transitionOverlay" class="intro-overlay" style="display: flex;">
             <div class="intro-modal">
                 <div class="intro-title" style="margin-bottom: 25px;">
-                    <img src="../ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
                     MISSION UPDATE: DARKWOOD APPROACH
-                    <img src="../ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
                 </div>
                 
                 <div class="intro-section" style="margin-bottom: 25px;">
                     <h3 class="section-header" style="color: #4ecdc4; border-bottom: 2px solid #4ecdc4; padding-bottom: 8px;">
-                        <img src="../ui/target.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+                        <img src="ui/target.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
                         VILLAGE DEFENDED
                     </h3>
                     <div class="section-content" style="font-size: 1.1em; line-height: 1.6;">
@@ -407,7 +407,7 @@ function showGameCompleteScreen() {
                 
                 <div class="intro-section" style="margin-bottom: 25px; background: rgba(30, 73, 118, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff6b6b;">
                     <h3 class="section-header" style="color: #ff9e6b;">
-                        <img src="../ui/running.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+                        <img src="ui/running.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
                         ENEMY RETREAT DETECTED
                     </h3>
                     <div class="section-content" style="font-size: 1.1em; line-height: 1.6; color: #e6f1ff;">
@@ -419,7 +419,7 @@ function showGameCompleteScreen() {
                 
                 <div class="intro-section" style="margin-bottom: 30px; background: rgba(30, 73, 118, 0.4); padding: 15px; border-radius: 8px; border-left: 4px solid #64ffda;">
                     <h3 class="section-header" style="color: #64ffda;">
-                        <img src="../ui/scroll.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+                        <img src="ui/scroll.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
                         NEW ORDERS
                     </h3>
                     <div class="section-content" style="font-size: 1.1em; line-height: 1.6; font-style: italic;">
@@ -430,12 +430,12 @@ function showGameCompleteScreen() {
                 </div>
                 
                 <div class="controls-note" style="margin: 20px 0; padding: 12px; background: rgba(30, 73, 118, 0.3); border: 1px solid rgba(255, 193, 7, 0.3); color: #f1c40f;">
-                    <img src="../ui/forest.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+                    <img src="images/forest.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
                     <strong>OBJECTIVE:</strong> Pursue the enemy through the Darkwood Forest and eliminate all threats
                 </div>
                 
                 <button id="continueToForestBtn" class="intro-continue-btn" style="margin-top: 20px; min-width: 280px;">
-                    <img src="../ui/forest.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
+                    <img src="images/forest.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
                     PURSUE INTO THE DARKWOOD
                 </button>
                 
@@ -506,9 +506,9 @@ function showLevel2To3Transition() {
         <div id="transition23Overlay" class="intro-overlay" style="display: flex;">
             <div class="intro-modal">
                 <div class="intro-title" style="margin-bottom: 25px;">
-                    <img src="../ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
                     FINAL MISSION: MOUNTAIN STRONGHOLD
-                    <img src="../ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
                 </div>
                 
                 <div class="intro-section" style="margin-bottom: 20px;">
@@ -555,12 +555,12 @@ function showLevel2To3Transition() {
                 </div>
                 
                 <div class="controls-note" style="margin: 20px 0; padding: 12px; background: rgba(30, 73, 118, 0.3); border: 1px solid rgba(255, 193, 7, 0.3); color: #f1c40f;">
-                    <img src="../ui/mountain.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+                    <img src="ui/mountain.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
                     <strong>BATTLEFIELD:</strong> Mountain stronghold with fortified enemy positions
                 </div>
                 
                 <button id="continueToLevel3Btn" class="intro-continue-btn" style="margin-top: 20px; min-width: 280px;">
-                    <img src="../ui/trophy1.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
+                    <img src="ui/trophy1.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
                     ASSAULT THE STRONGHOLD
                 </button>
                 
@@ -718,61 +718,61 @@ function advanceToLevel3() {
     document.getElementById('victoryRewards').innerHTML = `
         <div style="font-size: 1.3em; margin-bottom: 5px;">
             <span style="color: #9b59b6;">
-                <img src="../ui/levelup.png" class="small-icon"> +${finalXpReward} XP
+                <img src="ui/levelup.png" class="small-icon"> +${finalXpReward} XP
             </span> | 
             <span style="color: #f1c40f;">
-                <img src="../ui/sword1.png" class="small-icon"> +${finalGoldReward} Gold
+                <img src="ui/sword1.png" class="small-icon"> +${finalGoldReward} Gold
             </span>
         </div>
-        ${currentLevelData.boss ? '<div style="color: #ffd700; font-size: 1.1em;"><img src="../ui/trophy1.png" class="small-icon"> BOSS BONUS APPLIED!</div>' : ''}
+        ${currentLevelData.boss ? '<div style="color: #ffd700; font-size: 1.1em;"><img src="ui/trophy1.png" class="small-icon"> BOSS BONUS APPLIED!</div>' : ''}
     `;
     
     // ====== BUILD DETAILED STATS HTML ======
     let statsHTML = `
     <div class="victory-stats-grid">
         <div class="victory-stats-column">
-            <h4><img src="../ui/sword.png" class="small-icon"> Battle Statistics</h4>
+            <h4><img src="ui/sword.png" class="small-icon"> Battle Statistics</h4>
             <div class="victory-stat-row">
-                <span class="victory-stat-label"><img src="../ui/scroll.png" class="small-icon"> Total Rounds:</span>
+                <span class="victory-stat-label"><img src="ui/scroll.png" class="small-icon"> Total Rounds:</span>
                 <span class="victory-stat-value">${gameState.turnCount}</span>
             </div>
             <div class="victory-stat-row">
-                <span class="victory-stat-label"><img src="../ui/skull.png" class="small-icon"> Enemies Defeated:</span>
+                <span class="victory-stat-label"><img src="ui/skull.png" class="small-icon"> Enemies Defeated:</span>
                 <span class="victory-stat-value">${enemiesDefeated}</span>
             </div>
             <div class="victory-stat-row">
-                <span class="victory-stat-label"><img src="../ui/sword2.png" class="small-icon"> Damage Dealt:</span>
+                <span class="victory-stat-label"><img src="ui/sword2.png" class="small-icon"> Damage Dealt:</span>
                 <span class="victory-stat-value">${totalDamageDealt}</span>
             </div>
             <div class="victory-stat-row">
-                <span class="victory-stat-label"><img src="../ui/shield.png" class="small-icon"> Damage Taken:</span>
+                <span class="victory-stat-label"><img src="ui/shield.png" class="small-icon"> Damage Taken:</span>
                 <span class="victory-stat-value">${totalDamageTaken}</span>
             </div>
             <div class="victory-stat-row">
-                <span class="victory-stat-label"><img src="../ui/sword3.png" class="small-icon"> Damage Ratio:</span>
+                <span class="victory-stat-label"><img src="ui/sword3.png" class="small-icon"> Damage Ratio:</span>
                 <span class="victory-stat-value">${damageRatio}:1</span>
             </div>
         </div>
         <div class="victory-stats-column">
-            <h4><img src="../ui/berserker.png" class="small-icon"> Unit Statistics</h4>
+            <h4><img src="ui/berserker.png" class="small-icon"> Unit Statistics</h4>
             <div class="victory-stat-row">
-                <span class="victory-stat-label"><img src="../ui/target.png" class="small-icon"> Surviving Units:</span>
+                <span class="victory-stat-label"><img src="ui/target.png" class="small-icon"> Surviving Units:</span>
                 <span class="victory-stat-value">${playerUnits.length}/${UNITS_PER_TEAM}</span>
             </div>
             <div class="victory-stat-row">
-                <span class="victory-stat-label"><img src="../ui/running.png" class="small-icon"> Fleed Units:</span>
+                <span class="victory-stat-label"><img src="ui/running.png" class="small-icon"> Fleed Units:</span>
                 <span class="victory-stat-value">${gameState.battleStats.fleedUnits?.length || 0}</span>
             </div>
             <div class="victory-stat-row">
-                <span class="victory-stat-label"><img src="../ui/levelup.png" class="small-icon"> Total XP Earned:</span>
+                <span class="victory-stat-label"><img src="ui/levelup.png" class="small-icon"> Total XP Earned:</span>
                 <span class="victory-stat-value">${totalXP}</span>
             </div>
             <div class="victory-stat-row">
-                <span class="victory-stat-label"><img src="../ui/celebrate.png" class="small-icon"> Average Level:</span>
+                <span class="victory-stat-label"><img src="ui/celebrate.png" class="small-icon"> Average Level:</span>
                 <span class="victory-stat-value">${averageLevel}</span>
             </div>
             <div class="victory-stat-row">
-                <span class="victory-stat-label"><img src="../ui/tick.png" class="small-icon"> Missions Completed:</span>
+                <span class="victory-stat-label"><img src="ui/tick.png" class="small-icon"> Missions Completed:</span>
                 <span class="victory-stat-value">${gameState.completedLevels + 1}</span>
             </div>
         </div>
@@ -784,7 +784,7 @@ function advanceToLevel3() {
         statsHTML += `
             <div class="victory-heroes-section">
                 <div class="victory-heroes-title">
-                    <img src="../ui/trophy.png" class="small-icon"> Surviving Heroes
+                    <img src="ui/trophy.png" class="small-icon"> Surviving Heroes
                 </div>
                 <div class="victory-heroes-list">
         `;
@@ -802,7 +802,7 @@ function advanceToLevel3() {
                     <div class="victory-hero-name">${unit.name}</div>
                     <div class="victory-hero-level">Lvl ${unit.level}</div>
                     <div class="victory-hero-hp ${hpClass}">
-                        <img src="../ui/heart.png" class="small-icon">
+                        <img src="ui/heart.png" class="small-icon">
                         <span class="hp-value">${unit.hp}/${unit.maxHp}</span>
                     </div>
                 </div>
@@ -817,20 +817,20 @@ function advanceToLevel3() {
     
     // Add performance rating
     let performanceText = '';
-    let performanceIcon = '../ui/tick.png';
+    let performanceIcon = 'ui/tick.png';
 
     if (isPerfectVictory) {
         performanceText = 'PERFECT VICTORY! All units survived with minimal damage.';
-        performanceIcon = '../ui/trophy1.png';
+        performanceIcon = 'ui/trophy1.png';
     } else if (playerUnits.length === UNITS_PER_TEAM) {
         performanceText = 'Good work! All units survived.';
-        performanceIcon = '../ui/happy.png';
+        performanceIcon = 'ui/happy.png';
     } else if (playerUnits.length >= UNITS_PER_TEAM / 2) {
         performanceText = 'Acceptable losses. Some units were lost.';
-        performanceIcon = '../ui/wound.png';
+        performanceIcon = 'ui/wound.png';
     } else {
         performanceText = 'Heavy casualties. Better luck next time.';
-        performanceIcon = '../ui/sad.png';
+        performanceIcon = 'ui/sad.png';
     }
     
     statsHTML += `
@@ -846,11 +846,11 @@ function advanceToLevel3() {
     // Helper function for icons
     function getClassIconHTML(classType) {
         switch(classType) {
-            case 'knight': return '<img src="../ui/knight.png" style="width: 24px; height: 24px;">';
-            case 'archer': return '<img src="../ui/bow.png" style="width: 24px; height: 24px;">';
-            case 'mage': return '<img src="../ui/potion.png" style="width: 24px; height: 24px;">';
-            case 'berserker': return '<img src="../ui/axe.png" style="width: 24px; height: 24px;">';
-            default: return '<img src="../ui/shield.png" style="width: 24px; height: 24px;">';
+            case 'knight': return '<img src="ui/knight.png" style="width: 24px; height: 24px;">';
+            case 'archer': return '<img src="ui/bow.png" style="width: 24px; height: 24px;">';
+            case 'mage': return '<img src="ui/potion.png" style="width: 24px; height: 24px;">';
+            case 'berserker': return '<img src="ui/axe.png" style="width: 24px; height: 24px;">';
+            default: return '<img src="ui/shield.png" style="width: 24px; height: 24px;">';
         }
     }
     

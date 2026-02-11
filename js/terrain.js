@@ -360,8 +360,8 @@ function createUnits() {
     gameState.units = [];
     
     // Player units start at bottom (above the forest border)
-    const playerCount = Math.min(6, gameState.persistentUnits.length || 6);
-    for (let i = 0; i < playerCount; i++) {
+	const playerCount = gameState.persistentUnits.length || 6;    
+	for (let i = 0; i < playerCount; i++) {
         let unit;
         if (gameState.persistentUnits[i]) {
             unit = gameState.persistentUnits[i];
@@ -402,7 +402,7 @@ if (gameState.currentLevel === 4) {
     gameState.units = [];
     
     // Player units start on left side (entrance to mountain pass)
-    const playerCount = Math.min(6, gameState.persistentUnits.length || 6);
+	const playerCount = gameState.persistentUnits.length || 6;
     for (let i = 0; i < playerCount; i++) {
         let unit;
         if (gameState.persistentUnits[i]) {
