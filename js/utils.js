@@ -80,7 +80,7 @@ function seededRandom() {
         
         // ========== NUMBER OF AI UNITS PER LEVEL change for testing ========== 
 const LEVELS = [
-    { name: "Training Grounds", difficulty: "Easy", enemyBonus: 0, extraEnemies: 0, boss: false },
+    { name: "Training Grounds", difficulty: "Easy", enemyBonus: 0, extraEnemies: -5, boss: false },
     { name: "Darkwood Approach", difficulty: "Medium", enemyBonus: 0, extraEnemies: -2, boss: false },
     { name: "Forest Outpost", difficulty: "Medium", enemyBonus: 2, extraEnemies: 1, boss: false, hasRiver: true },
     { name: "Mountain Pass", difficulty: "Hard", enemyBonus: 3, extraEnemies: -1, boss: false },
