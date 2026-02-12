@@ -320,9 +320,29 @@
                 }
                 
               // After 3 turns of fleeing, remove from battle
-                if (this.fleeTurns >= 3) {
-                    return true;
-                }
+// After 3 turns of fleeing, remove from battle
+if (this.fleeTurns >= 3) {
+    // Store the unit's type before removal
+    const wasEnemy = this.type === 'enemy';
+    
+    // Remove the unit
+    gameState.units = gameState.units.filter(u => u.id !== this.id);
+    logMessage(`${this.name} has fled the battlefield!`, 'system');
+    
+    // CHECK VICTORY CONDITION IMMEDIATELY
+    if (wasEnemy) {
+        const remainingEnemies = gameState.units.filter(u => u.type === 'enemy' && !u.fleeing);
+        if (remainingEnemies.length === 0) {
+            logMessage("All enemies defeated! Victory!", 'system');
+            // Small delay to let the flee message show first
+            setTimeout(() => {
+                completeLevel();
+            }, 500);
+        }
+    }
+    
+    return true;
+}
                }
                 return false;
             }

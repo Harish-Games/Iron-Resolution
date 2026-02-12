@@ -28,13 +28,19 @@
         if (unit.remainingActions <= 0 || unit.fleeing) continue;
                 
       // Handle fleeing units
-        if (unit.fleeing) {
-            const removed = unit.performFlee();
-            if (removed) {
-                gameState.units = gameState.units.filter(u => u.id !== unit.id);
-            }
-            continue;
+if (unit.fleeing) {
+    const removed = unit.performFlee();
+    if (removed) {
+        // Check victory immediately after removal
+        const remainingEnemies = gameState.units.filter(u => u.type === 'enemy' && !u.fleeing);
+        if (remainingEnemies.length === 0) {
+            logMessage("All enemies defeated! Victory!", 'system');
+            completeLevel();
+            return; // Exit AI turn immediately
         }
+    }
+    continue;
+}
          // Set active unit for glow effect
         gameState.aiActiveUnit = unit;
         await renderAll([])
@@ -54,12 +60,15 @@
     checkVictory();
     
     // Only end turn if game is still going
-    const enemies = gameState.units.filter(u => u.type === 'enemy' && !u.fleeing);
-    const players = gameState.units.filter(u => u.type === 'player' && !u.fleeing);
-    
-    if (enemies.length > 0 && players.length > 0) {
-        setTimeout(endTurn, 1000);
-    }
+const enemies = gameState.units.filter(u => u.type === 'enemy' && !u.fleeing);
+const players = gameState.units.filter(u => u.type === 'player' && !u.fleeing);
+
+if (enemies.length > 0 && players.length > 0) {
+    setTimeout(endTurn, 1000);
+} else if (enemies.length === 0) {
+    // Victory!
+    completeLevel();
+}
 }
 
 async function performAIActions(unit) {
@@ -454,6 +463,10 @@ if (unit.canMove && unit.remainingActions > 0) {
       
         // ========== HELPER FUNCTIONS ==========
         function selectUnit(unit) {
+     document.querySelectorAll('.tile.movable, .tile.selected').forEach(tile => {
+        tile.classList.remove('movable', 'selected');
+    });
+    
     gameState.selectedUnit = unit;
     logMessage(`Selected ${unit.name}`, 'system');
     soundSystem.playSelect();
