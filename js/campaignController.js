@@ -43,19 +43,23 @@ const CampaignController = {
         }
     },  // ← Added comma here
     
-    onAdvanceToNextLevel() {
-        console.log("➡️ CampaignController: Advancing to next level");
-        
-        // Increment current level
-        this.currentLevel++;
-        
-        // For now, use the old startNextLevel function
+   onAdvanceToNextLevel() {
+    console.log("➡️ CampaignController: Advancing to next level");
+    
+    // Increment current level
+    this.currentLevel++;
+    
+    // Use BattleManager to start the level
+    if (typeof BattleManager !== 'undefined' && BattleManager.startLevel) {
+        BattleManager.startLevel(this.currentLevel);
+    } else {
+        console.error("BattleManager not found!");
+        // Fallback to old method
         if (typeof startNextLevel === 'function') {
             startNextLevel();
-        } else {
-            console.error("startNextLevel not found!");
         }
-    },  // ← Added comma here
+    }
+},
     
     // Helper
     getCurrentLevelData() {
