@@ -654,12 +654,29 @@ function showLevel2To3Transition() {
     const isPerfectVictory = playerUnits.length === UNITS_PER_TEAM && 
                              playerUnits.every(u => u.hp > u.maxHp * 0.5);
     
-    // ====== CALCULATE REWARDS ======
-    const currentLevelData = LEVELS[gameState.currentLevel - 1];
-    const baseXpReward = 100 + (gameState.currentLevel * 50);
-    const baseGoldReward = 50 + (gameState.currentLevel * 25);
-    const finalXpReward = currentLevelData.boss ? baseXpReward * 2 : baseXpReward;
-    const finalGoldReward = currentLevelData.boss ? baseGoldReward * 2 : baseGoldReward;
+    // ====== GET REWARDS FROM CAMPAIGN CONTROLLER ======
+    let finalXpReward, finalGoldReward;
+    let currentLevelData;
+    
+    if (typeof CampaignController !== 'undefined' && CampaignController.calculateRewards) {
+        const rewards = CampaignController.calculateRewards();
+        finalXpReward = rewards.xp;
+        finalGoldReward = rewards.gold;
+        currentLevelData = CampaignController.getCurrentLevelData();
+        console.log(`🎁 Rewards from controller: ${finalGoldReward} gold, ${finalXpReward} XP`);
+    } else {
+        // Fallback if controller not ready
+        currentLevelData = LEVELS[gameState.currentLevel - 1];
+        const baseXpReward = 100 + (gameState.currentLevel * 50);
+        const baseGoldReward = 50 + (gameState.currentLevel * 25);
+        finalXpReward = currentLevelData.boss ? baseXpReward * 2 : baseXpReward;
+        finalGoldReward = currentLevelData.boss ? baseGoldReward * 2 : baseGoldReward;
+        console.log("⚠️ Using fallback rewards calculation");
+    }
+    
+    // Add gold and XP to gameState
+    gameState.gold += finalGoldReward;
+    gameState.totalXP += finalXpReward;
     
     // ====== UPDATE VICTORY POPUP ======
     document.getElementById('victoryLevelName').textContent = currentLevelData.name;
@@ -818,8 +835,6 @@ function showLevel2To3Transition() {
     });
     
     gameState.completedLevels++;
-    gameState.totalXP += finalXpReward;
-    gameState.gold += finalGoldReward;
     
     // ====== SET UP CONTINUE BUTTON ======
     const continueBtn = document.getElementById('continueBtn');

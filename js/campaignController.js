@@ -60,6 +60,56 @@ const CampaignController = {
         }
     }
 },
+   
+       onAdvanceToNextLevel() {
+        console.log("➡️ CampaignController: Advancing to next level");
+        
+        // Increment current level
+        this.currentLevel++;
+        
+        // Use BattleManager to start the level
+        if (typeof BattleManager !== 'undefined' && BattleManager.startLevel) {
+            BattleManager.startLevel(this.currentLevel);
+        } else {
+            console.error("BattleManager not found!");
+            // Fallback to old method
+            if (typeof startNextLevel === 'function') {
+                startNextLevel();
+            }
+        }
+    },
+    
+    // Calculate rewards for current level
+    calculateRewards() {
+        const baseGold = 50 + (this.currentLevel * 25);
+        const baseXP = 100 + (this.currentLevel * 50);
+        const level = this.levels[this.currentLevel - 1];
+        
+        return {
+            gold: level.boss ? baseGold * 2 : baseGold,
+            xp: level.boss ? baseXP * 2 : baseXP,
+            bonus: level.boss ? "BOSS BONUS!" : ""
+        };
+    },
+    
+    // Helper
+    getCurrentLevelData() {
+        return this.levels[this.currentLevel - 1];
+    }
+    
+        // Calculate rewards for current level
+    calculateRewards() {
+        const baseGold = 50 + (this.currentLevel * 25);
+        const baseXP = 100 + (this.currentLevel * 50);
+        const level = this.levels[this.currentLevel - 1];
+        
+        return {
+            gold: level.boss ? baseGold * 2 : baseGold,
+            xp: level.boss ? baseXP * 2 : baseXP,
+            bonus: level.boss ? "BOSS BONUS!" : ""
+        };
+    },
+    
     
     // Helper
     getCurrentLevelData() {
