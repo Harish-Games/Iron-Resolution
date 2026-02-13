@@ -968,99 +968,69 @@ checkVictory();
         
         // ========== START GAME ==========
         
-function openRecruitScreen() {
-    console.log(`🛒 Opening recruit screen via UIManager`);
-    UIManager.showCampScreen({
-        level: gameState.currentLevel,
-        gold: gameState.gold,
-        units: gameState.units.filter(u => u.type === 'player')
-    });
-}	   
-	   
-	   // ====== UI MANAGER - HANDLES SCREEN DISPLAY ======
-const UIManager = {
-    
-    // Recruit screen - moved from openRecruitScreen()
-    showCampScreen(data) {
-        console.log("🏕️ UIManager: Showing camp screen", data);
-        
-        // Calculate recruit cost
-        const recruitCost = 60 + (CampaignController.currentLevel * 20);
-        
-        // Random class
-        const classes = ['Knight', 'Archer', 'Berserker', 'Mage'];
-        const randomClass = classes[Math.floor(Math.random() * classes.length)];
-        
-        // Update recruit screen
-        document.getElementById('recruitClass').textContent = randomClass;
-        document.getElementById('recruitCost').textContent = `Cost: ${recruitCost} Gold`;
-        document.getElementById('currentGold').textContent = gameState.gold;
-        
-        // Hire button state
-        const hireBtn = document.getElementById('hireBtn');
-        hireBtn.disabled = gameState.gold < recruitCost;
-        
-        /// Set up hire button
-hireBtn.onclick = () => {
-    console.log(`🎯 Hire clicked`);
-    
-    if (gameState.gold >= recruitCost) {
-        gameState.gold -= recruitCost;
-        const newUnit = new Unit('player', `${randomClass} Recruit`, 0, 0);
-        newUnit.level = 1;
-        newUnit.xp = 0;
-        gameState.persistentUnits.push(newUnit);
-        
-        // Update display
-        document.getElementById('currentGold').textContent = gameState.gold;
-        hireBtn.disabled = gameState.gold < recruitCost;
-        
-        logMessage(`Hired ${newUnit.name}!`, 'system');
-    }
-};
+    function openRecruitScreen() {
+    console.log(`🛒 Opening recruit screen for level ${gameState.currentLevel}`);
+    document.getElementById('victoryOverlay').style.display = 'none';
 
-// Add Rest button handler (if it exists)
-const restBtn = document.getElementById('restBtn');
-if (restBtn) {
-    restBtn.onclick = () => {
-        console.log(`💊 Rest clicked - healing units`);
-        gameState.persistentUnits.forEach(unit => {
-            unit.hp = Math.min(unit.maxHp, unit.hp + Math.floor(unit.maxHp * 0.3));
-            unit.morale = 100;
-            unit.injuries = [];
-        });
-        logMessage(`Company rests and recovers.`, 'system');
-    };
-}
+    // Calculate recruit cost
+    const recruitCost = 60 + (gameState.currentLevel * 20);
 
-// Add Next Mission button handler
-const nextBtn = document.getElementById('campNextBtn');
-if (nextBtn) {
-    nextBtn.onclick = () => {
-        console.log(`➡️ Next Mission clicked`);
+    // Random class
+    const classes = ['Knight', 'Archer', 'Berserker', 'Mage'];
+    const randomClass = classes[Math.floor(Math.random() * classes.length)];
+
+    // Update recruit screen
+    document.getElementById('recruitClass').textContent = randomClass;
+    document.getElementById('recruitCost').textContent = `Cost: ${recruitCost} Gold`;
+    document.getElementById('currentGold').textContent = gameState.gold;
+
+    // Hire button state
+    const hireBtn = document.getElementById('hireBtn');
+    hireBtn.disabled = gameState.gold < recruitCost;
+
+    // Store the current level for reference
+    const currentLevel = gameState.currentLevel;
+    
+    hireBtn.onclick = () => {
+        console.log(`🎯 Hire clicked for level ${currentLevel}`);
+        
+        if (gameState.gold >= recruitCost) {
+            gameState.gold -= recruitCost;
+            const newUnit = new Unit('player', `${randomClass} Recruit`, 0, 0);
+            newUnit.level = 1;
+            newUnit.xp = 0;
+            gameState.persistentUnits.push(newUnit);
+            logMessage(`Hired ${newUnit.name}!`, 'system');
+        }
+        
         document.getElementById('recruitOverlay').style.display = 'none';
         
-        // For now, just go back to the old transition flow
-        const currentLevel = gameState.currentLevel;
-        if (currentLevel === 1) {
-            showLevel1To2Transition();
-        } else if (currentLevel === 2) {
-            showLevel2To3Transition();
-        } else if (currentLevel === 3) {
-            showLevel3To4Transition();
-        } else if (currentLevel === 4) {
-            showLevel4To5Transition();
-        }
+        // Handle ALL level transitions consistently
+        setTimeout(() => {
+            console.log(`🔄 Processing post-recruit transition for level ${currentLevel}`);
+            
+            // Map each level to its specific transition
+            if (currentLevel === 1) {
+                showLevel1To2Transition();
+            } else if (currentLevel === 2) {
+                showLevel2To3Transition();
+            } else if (currentLevel === 3) {
+                showLevel3To4Transition();
+            } else if (currentLevel === 4) {
+                showLevel4To5Transition();
+            } else if (currentLevel === 5) {
+                showGameCompleteScreen();
+            } else {
+                // Fallback - shouldn't happen
+                console.error(`❌ Unknown level ${currentLevel}, defaulting to startNextLevel()`);
+                startNextLevel();
+            }
+        }, 500);
     };
-}
-        
-        // Show the overlay
-        document.getElementById('recruitOverlay').style.display = 'flex';
-    }
-};
 
-// Make globally available
-window.UIManager = UIManager;
+    // Show recruit screen
+    document.getElementById('recruitOverlay').style.display = 'flex';
+}
     
 // Make UI functions available globally
 window.renderAll = renderAll;
