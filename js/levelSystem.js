@@ -73,16 +73,18 @@ function showLevel2To3Transition() {
     const continueBtn = document.getElementById('continueToForestBtn');
     const transitionOverlay = document.getElementById('transitionOverlay');
     
-    // Button click
+     // Button click
     continueBtn.onclick = () => {
-        console.log("🎬 Continue button clicked");
+        console.log("🎬 Advance button clicked");
         if (transitionOverlay) {
             transitionOverlay.style.display = 'none';
         }
         if (overlayDiv.parentNode) {
             document.body.removeChild(overlayDiv);
         }
-        advanceToLevel2();
+        
+        // Tell controller to advance
+        CampaignController.onAdvanceToNextLevel();
     };
     
     // Space key
@@ -179,16 +181,18 @@ function showLevel2To3Transition() {
     const continueBtn = document.getElementById('continueToLevel4Btn');
     const transitionOverlay = document.getElementById('transition34Overlay');
     
-    // Button click
+     // Button click
     continueBtn.onclick = () => {
-        console.log("🎬 Continue to Level 4 button clicked");
+        console.log("🎬 Advance button clicked");
         if (transitionOverlay) {
             transitionOverlay.style.display = 'none';
         }
         if (overlayDiv.parentNode) {
             document.body.removeChild(overlayDiv);
         }
-        startNextLevel();
+        
+        // Tell controller to advance
+        CampaignController.onAdvanceToNextLevel();
     };
     
     // Space key
@@ -293,14 +297,16 @@ function showLevel4To5Transition() {
     
     // Button click
     continueBtn.onclick = () => {
-        console.log("🎬 Continue to Level 5 button clicked");
+        console.log("🎬 Advance button clicked");
         if (transitionOverlay) {
             transitionOverlay.style.display = 'none';
         }
         if (overlayDiv.parentNode) {
             document.body.removeChild(overlayDiv);
         }
-        startNextLevel();
+        
+        // Tell controller to advance
+        CampaignController.onAdvanceToNextLevel();
     };
     
     // Space key
@@ -455,16 +461,18 @@ function showGameCompleteScreen() {
     const continueBtn = document.getElementById('continueToForestBtn');
     const transitionOverlay = document.getElementById('transitionOverlay');
     
-    // Button click
+     // Button click
     continueBtn.onclick = () => {
-        console.log("🎬 Continue to Level 2 button clicked");
+        console.log("🎬 Advance button clicked");
         if (transitionOverlay) {
             transitionOverlay.style.display = 'none';
         }
         if (overlayDiv.parentNode) {
             document.body.removeChild(overlayDiv);
         }
-        advanceToLevel2();
+        
+        // Tell controller to advance
+        CampaignController.onAdvanceToNextLevel();
     };
     
     // Space key
@@ -625,67 +633,10 @@ function showLevel2To3Transition() {
     }
 }
 
-function advanceToLevel3() {
-    console.log("Advancing to Level 3: Mountain Stronghold");
-    
-    // Increment level
-    gameState.currentLevel = 3;
-    
-    // Reset game state for new level
-    gameState.units = [];
-    gameState.selectedUnit = null;
-    gameState.phase = 'select';
-    gameState.aiProcessing = false;
-    gameState.aiActiveUnit = null;
-    gameState.turnCount = 1;
-    gameState.currentPlayer = 'player';
-    
-    // Clear battle stats for new level
-    gameState.battleStats = {
-        playerKills: 0,
-        enemyKills: 0,
-        damageDealt: 0,
-        damageTaken: 0,
-        totalRounds: 0,
-        survivingUnits: [],
-        fleedUnits: []
-    };
-    
-    // Generate new terrain for Level 3 (with enemy villages and mountains)
-    generateTerrain();
-    
-    // Create units for Level 3
-    createUnits();
-    
-    // Reset UI
-    turnCountEl.textContent = '1';
-    updateEnemiesCounter();
-    updateSelectedUnitDisplay();
-    
-    // Clear battle log and add new messages
-    battleLogEl.innerHTML = '';
-    logMessage("=== LEVEL 3: MOUNTAIN STRONGHOLD ===", 'system');
-    logMessage("The enemy has retreated to their fortified mountain stronghold.", 'system');
-    logMessage("Objective: Breach the defenses and eliminate the enemy warlord.", 'system');
-    logMessage("Caution: Enemy camps provide defensive bonuses. Mountains offer high ground.", 'system');
-    
-    // Clear grid and recreate
-    createGrid();
-    
-    // Render everything fresh
-    renderAll([]);
-    
-    // Update UI
-    updateUI();
-    updatePhaseIndicator();
-    
-    // Play transition sound
-    if (soundSystem && soundSystem.initialized) {
-        soundSystem.playBeep(800, 0.4, 'sine', 0.3);
-    }
-}
-
     function completeLevel() {
+    
+        CampaignController.onVictory();
+    
     console.log(`🎉 completeLevel() called for level ${gameState.currentLevel}`);
         
     // ====== COMMON CALCULATIONS (for all levels) ======
@@ -873,83 +824,21 @@ function advanceToLevel3() {
     // ====== SET UP CONTINUE BUTTON ======
     const continueBtn = document.getElementById('continueBtn');
     
-    if (gameState.currentLevel >= gameState.maxLevel) {
-        // Final victory
-        continueBtn.onclick = () => {
-            document.getElementById('victoryOverlay').style.display = 'none';
-            // Simple final victory alert
-            alert("🎉 GAME COMPLETE! 🎉\nYou have defeated all enemies!\n\nFinal Stats:\n- Levels Completed: " + gameState.completedLevels + "\n- Total XP: " + gameState.totalXP + "\n- Gold: " + gameState.gold);
-            restartGame();
-        };
-    } else {
-        // For ALL non-final levels (1, 2, 3, 4)
-        continueBtn.onclick = () => {
-            console.log(`➡️ Continue button clicked for Level ${gameState.currentLevel}`);
-            document.getElementById('victoryOverlay').style.display = 'none';
-            openRecruitScreen();
-        };
-    }
-}
-     function advanceToLevel2() {
-    console.log("Advancing to Level 2: Forest Pursuit");
+    // Log to controller
+    CampaignController.onVictoryContinue();
     
-    // Increment level
-    gameState.currentLevel = 2;
+    // Set current level in controller
+    CampaignController.currentLevel = gameState.currentLevel;
     
-    // Reset game state for new level
-    gameState.units = [];
-    gameState.selectedUnit = null;
-    gameState.phase = 'select';
-    gameState.aiProcessing = false;
-    gameState.aiActiveUnit = null;
-    gameState.turnCount = 1;
-    gameState.currentPlayer = 'player';
-    
-    // Clear battle stats for new level
-    gameState.battleStats = {
-        playerKills: 0,
-        enemyKills: 0,
-        damageDealt: 0,
-        damageTaken: 0,
-        totalRounds: 0,
-        survivingUnits: [],
-        fleedUnits: []
+    continueBtn.onclick = () => {
+        console.log(`➡️ Continue button clicked for Level ${gameState.currentLevel}`);
+        document.getElementById('victoryOverlay').style.display = 'none';
+        
+        // Still call the old function for now
+        openRecruitScreen();
     };
-    
-    // Generate new terrain for Level 2 (with river)
-    generateTerrain();
-    
-    // Create units for Level 2
-    createUnits();
-    
-    // Reset UI
-    turnCountEl.textContent = '1';
-    updateEnemiesCounter();
-    updateSelectedUnitDisplay();
-    
-    // Clear battle log and add new messages
-    battleLogEl.innerHTML = '';
-    logMessage("=== LEVEL 2: FOREST PURSUIT ===", 'system');
-    logMessage("The enemy has retreated across the river into the Darkwood Forest.", 'system');
-    logMessage("Objective: Cross the river and eliminate all remaining threats.", 'system');
-    logMessage("Caution: The river is impassable except at bridge crossings.", 'system');
-    
-    // Clear grid and recreate
-    createGrid();
-    
-    // Render everything fresh
-    renderAll([]);
-    
-    // Update UI
-    updateUI();
-    updatePhaseIndicator();
-    
-    // Play transition sound if you have one
-    if (soundSystem && soundSystem.initialized) {
-        soundSystem.playBeep(600, 0.3, 'sine', 0.2);
-    }
 }
-   
+ 
     function startNextLevel() {
 	 console.log(`[DEBUG-TRACE] === ENTER startNextLevel() === Level: ${gameState.currentLevel}`);
     console.trace(); // This will show the call stack

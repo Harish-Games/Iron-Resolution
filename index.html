@@ -1090,19 +1090,29 @@
 </div>
 
 
-    <!-- RECRUIT SCREEN - HIRE NEW BROTHER -->
-    <div id="recruitOverlay" class="recruit-overlay">
-        <div class="recruit-modal">
-            <div class="recruit-title">NEW RECRUIT AVAILABLE</div>
-            <div class="recruit-info" id="recruitClass">Knight</div>
-            <div class="recruit-info">Level 1 • Basic Equipment</div>
-            <div class="recruit-cost" id="recruitCost">Cost: 80 Gold</div>
-            <div class="recruit-info">Current Gold: <span id="currentGold">0</span></div>
-            <div class="recruit-buttons">
-                <button id="hireBtn" class="hire-btn">HIRE</button>
-            </div>
+<!-- RECRUIT SCREEN - HIRE NEW BROTHER -->
+<div id="recruitOverlay" class="recruit-overlay">
+    <div class="recruit-modal">
+        <div class="recruit-title">NEW RECRUIT AVAILABLE</div>
+        <div class="recruit-info" id="recruitClass">Knight</div>
+        <div class="recruit-info">Level 1 • Basic Equipment</div>
+        <div class="recruit-cost" id="recruitCost">Cost: 80 Gold</div>
+        <div class="recruit-info">Current Gold: <span id="currentGold">0</span></div>
+        
+        <!-- BUTTONS GO INSIDE HERE -->
+        <div class="recruit-buttons" style="display: flex; flex-direction: column; gap: 10px;">
+            <button id="hireBtn" class="hire-btn" style="width: 100%;">HIRE RECRUIT</button>
+            <button id="restBtn" class="heal-btn" style="width: 100%;">
+                <img src="ui/heart.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 8px;">
+                REST & HEAL
+            </button>
+            <button id="campNextBtn" class="primary" style="width: 100%; margin-top: 10px;">
+                <img src="ui/sword1.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 8px;">
+                NEXT MISSION
+            </button>
         </div>
     </div>
+</div>
    
     <div class="game-container">
         <div class="left-panel">
@@ -1195,6 +1205,7 @@
 <script src="js/utils.js"></script>
 <script src="js/gameState.js"></script>
 <script src="js/unit.js"></script>
+<script src="js/campaignController.js"></script>
 <script src="js/terrain.js"></script>  
 <script src="js/combat.js"></script>
 <script src="js/ai.js"></script>
