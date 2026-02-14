@@ -73,6 +73,23 @@ const introBtn = document.getElementById('introContinueBtn');
         }
     });
     
+    // Add this after the heal button listener
+attackBtn.addEventListener('click', () => {
+    console.log('Attack button clicked');
+    if (gameState.selectedUnit && gameState.selectedUnit.canAttack) {
+        gameState.phase = 'attack';
+        logMessage(`${gameState.selectedUnit.name} ready to attack - click an enemy`, 'system');
+        renderAll([]);
+    } else {
+        console.log('Cannot attack:', {
+            hasUnit: !!gameState.selectedUnit,
+            canAttack: gameState.selectedUnit?.canAttack,
+            classType: gameState.selectedUnit?.classType
+        });
+    }
+});
+    
+    
     cancelBtn.addEventListener('click', cancelSelection);
     soundToggleEl.addEventListener('click', () => soundSystem.toggle());
     restartButton.addEventListener('click', restartGame);
