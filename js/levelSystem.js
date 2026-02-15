@@ -66,16 +66,17 @@
     const transitionOverlay = document.getElementById('transition34Overlay');
     
     // Button click
-    continueBtn.onclick = () => {
-        console.log("🎬 Continue to Level 4 button clicked");
-        if (transitionOverlay) {
-            transitionOverlay.style.display = 'none';
-        }
-        if (overlayDiv.parentNode) {
-            document.body.removeChild(overlayDiv);
-        }
-        startNextLevel();
-    };
+continueBtn.onclick = () => {
+    console.log("🎬 Continue to Level 4 button clicked");
+    if (transitionOverlay) {
+        transitionOverlay.style.display = 'none';
+    }
+    if (overlayDiv.parentNode) {
+        document.body.removeChild(overlayDiv);
+    }
+    gameState.currentLevel = 4;  // ← SET THE LEVEL
+    startNextLevel();  // ← NOW startNextLevel() will show stats
+};
     
     // Space key
     document.addEventListener('keydown', function transitionKeyHandler(e) {
@@ -199,7 +200,8 @@ function showLevel4To5Transition() {
         if (overlayDiv.parentNode) {
             document.body.removeChild(overlayDiv);
         }
-        startNextLevel();
+gameState.currentLevel = 5;
+startNextLevel();
     };
     
     // Space key
