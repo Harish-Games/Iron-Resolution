@@ -2,120 +2,6 @@
 
     
      // ========== LEVEL TRANSITION SCREEN ==========
-function showLevel2To3Transition() {    
-    // Create transition overlay
-    const transitionHTML = `
-        <div id="transitionOverlay" class="intro-overlay" style="display: flex;">
-            <div class="intro-modal">
-                <div class="intro-title" style="margin-bottom: 25px;">
-                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
-                    MISSION UPDATE: FOREST PURSUIT
-                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
-                </div>
-                
-                <div class="intro-section" style="margin-bottom: 25px;">
-                    <h3 class="section-header" style="color: #4ecdc4; border-bottom: 2px solid #4ecdc4; padding-bottom: 8px;">
-                        <img src="ui/target.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
-                        PHASE ONE COMPLETE
-                    </h3>
-                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6;">
-                        The village is secure. Your garrison has held the line against the initial assault.
-                        Casualties were taken, but the walls stand strong.
-                    </div>
-                </div>
-                
-                <div class="intro-section" style="margin-bottom: 25px; background: rgba(30, 73, 118, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff6b6b;">
-                    <h3 class="section-header" style="color: #ff9e6b;">
-                        <img src="ui/running.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
-                        ENEMY MOVEMENT DETECTED
-                    </h3>
-                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6; color: #e6f1ff;">
-                        Through the smoke and chaos, you watch as the last of the bandits disappear into the 
-                        <span style="color: #2ecc71; font-weight: bold;">mist-shrouded forest</span> across the river. 
-                        Your scouts report they're attempting to regroup.
-                    </div>
-                </div>
-                
-                <div class="intro-section" style="margin-bottom: 30px; background: rgba(30, 73, 118, 0.4); padding: 15px; border-radius: 8px; border-left: 4px solid #64ffda;">
-                    <h3 class="section-header" style="color: #64ffda;">
-                        <img src="ui/scroll.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
-                        NEW ORDERS
-                    </h3>
-                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6; font-style: italic;">
-                        "We cannot let them escape to fight another day. The river crossing is treacherous, 
-                        but we must pursue. Ready your remaining forces - we move into the Darkwood at dawn."
-                    </div>
-                </div>
-                
-                <div class="controls-note" style="margin: 20px 0; padding: 12px; background: rgba(30, 73, 118, 0.3); border: 1px solid rgba(255, 193, 7, 0.3); color: #f1c40f;">
-                    <img src="ui/sword1.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
-                    <strong>OBJECTIVE:</strong> Cross the river and eliminate all remaining enemies in the Darkwood Forest
-                </div>
-                
-                <button id="continueToForestBtn" class="intro-continue-btn" style="margin-top: 20px; min-width: 280px;">
-                    <img src="ui/forest.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
-                    ADVANCE INTO THE DARKWOOD
-                </button>
-                
-                <div class="intro-tip" style="margin-top: 15px; color: #8892b0; font-size: 0.9em;">
-                    Press Space or click to continue
-                </div>
-            </div>
-        </div>
-    `;
-    
-    // Add to body
-    const overlayDiv = document.createElement('div');
-    overlayDiv.innerHTML = transitionHTML;
-    document.body.appendChild(overlayDiv);
-  
-    // Set up event listeners
-    const continueBtn = document.getElementById('continueToForestBtn');
-    const transitionOverlay = document.getElementById('transitionOverlay');
-    
-    // Button click
-    continueBtn.onclick = () => {
-        console.log("🎬 Continue button clicked");
-        if (transitionOverlay) {
-            transitionOverlay.style.display = 'none';
-        }
-        if (overlayDiv.parentNode) {
-            document.body.removeChild(overlayDiv);
-        }
-        advanceToLevel2();
-    };
-    
-    // Space key
-    document.addEventListener('keydown', function transitionKeyHandler(e) {
-        if ((e.code === 'Space' || e.key === ' ') && transitionOverlay && transitionOverlay.style.display === 'flex') {
-            console.log("🎬 Space pressed to continue");
-            e.preventDefault();
-            if (transitionOverlay) {
-                transitionOverlay.style.display = 'none';
-            }
-            if (overlayDiv.parentNode) {
-                document.body.removeChild(overlayDiv);
-            }
-            document.removeEventListener('keydown', transitionKeyHandler);
-            advanceToLevel2();
-        }
-    });
-    
-    // Click overlay to close
-    if (transitionOverlay) {
-        transitionOverlay.addEventListener('click', function(e) {
-            if (e.target === transitionOverlay) {
-                console.log("🎬 Overlay clicked to continue");
-                transitionOverlay.style.display = 'none';
-                if (overlayDiv.parentNode) {
-                    document.body.removeChild(overlayDiv);
-                }
-                advanceToLevel2();
-            }
-        });
-    }
-}
-   
    
    function showLevel3To4Transition() {
     console.log("🎬 Creating Level 3 to Level 4 transition");
@@ -248,24 +134,37 @@ function showLevel4To5Transition() {
                         MOUNTAIN PASS CLEARED
                     </h3>
                     <div class="section-content" style="font-size: 1.1em; line-height: 1.6;">
-                        The ambush in the pass has been eliminated. Ahead lies the enemy's final 
-                        stronghold - an ancient citadel built into the mountainside itself.
+                        The ambush in the pass has been eliminated. Before you lies the 
+                        enemy's mountain citadel - a fortress carved into the peaks 
+                        themselves, bristling with defenses.
                     </div>
                 </div>
                 
                 <div class="intro-section" style="margin-bottom: 20px; background: rgba(30, 73, 118, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff6b6b;">
                     <h3 class="section-header" style="color: #ff9e6b;">
-                        THE CITADEL
+                        THE APPROACH
                     </h3>
                     <div class="section-content" style="font-size: 1.1em; line-height: 1.6; color: #e6f1ff;">
-                        Fortified walls, defensive camps, and the enemy's remaining forces are 
-                        massed for one final stand. Their leader, the High Warlord, awaits within.
+                        A narrow valley leads to the main gate, flanked by watchtowers 
+                        and defensive positions. Enemy camps dot the slopes, and the 
+                        sounds of war drums echo from within.
+                    </div>
+                </div>
+                
+                <div class="intro-section" style="margin-bottom: 20px; background: rgba(30, 73, 118, 0.4); padding: 15px; border-radius: 8px; border-left: 4px solid #64ffda;">
+                    <h3 class="section-header" style="color: #64ffda;">
+                        THE GARRISON
+                    </h3>
+                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6;">
+                        Intelligence suggests the warlord has gathered his remaining forces 
+                        for one final stand. Veterans, elite guards, and war beasts 
+                        all await your assault.
                     </div>
                 </div>
                 
                 <div class="controls-note" style="margin: 20px 0; padding: 12px; background: rgba(30, 73, 118, 0.3); border: 1px solid rgba(255, 193, 7, 0.3); color: #f1c40f;">
                     <img src="ui/fortress.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
-                    <strong>BATTLEFIELD:</strong> Enemy citadel - fortified positions and boss encounter
+                    <strong>OBJECTIVE:</strong> Breach the citadel and confront the enemy warlord
                 </div>
                 
                 <button id="continueToLevel5Btn" class="intro-continue-btn" style="margin-top: 20px; min-width: 280px;">
@@ -498,70 +397,59 @@ function showGameCompleteScreen() {
     }
 }
      
-     // ========== LEVEL 2 TO 3 TRANSITION ==========
+// ========== LEVEL 2 TO 3 TRANSITION ==========
 function showLevel2To3Transition() {
-	   
     // Create transition overlay
     const transitionHTML = `
         <div id="transition23Overlay" class="intro-overlay" style="display: flex;">
             <div class="intro-modal">
                 <div class="intro-title" style="margin-bottom: 25px;">
                     <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
-                    FINAL MISSION: MOUNTAIN STRONGHOLD
+                    MISSION UPDATE: FOREST OUTPOST
                     <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
                 </div>
                 
                 <div class="intro-section" style="margin-bottom: 20px;">
                     <h3 class="section-header" style="color: #4ecdc4; border-bottom: 2px solid #4ecdc4; padding-bottom: 8px;">
-                        FOREST PURSUIT COMPLETE
+                        DARKWOOD PURSUIT COMPLETE
                     </h3>
                     <div class="section-content" style="font-size: 1.1em; line-height: 1.6;">
-                        The Darkwood Forest is finally cleared, but victory came at a heavy price. 
-                        Your forces are battle-hardened but weary from the relentless pursuit.
+                        The Darkwood Forest has been cleared, but your scouts report a fortified enemy outpost 
+                        ahead. The bandits have dug in behind a defensive river line.
                     </div>
                 </div>
                 
                 <div class="intro-section" style="margin-bottom: 20px; background: rgba(30, 73, 118, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff6b6b;">
                     <h3 class="section-header" style="color: #ff9e6b;">
-                        ENEMY RETREAT
+                        RIVER DEFENSES
                     </h3>
                     <div class="section-content" style="font-size: 1.1em; line-height: 1.6; color: #e6f1ff;">
-                        Your scouts report the surviving enemy forces have retreated to their mountain stronghold - 
-                        the legendary Fortress of Thrak'gor. Carved into the peaks themselves, 
-                        the enemy has fortified every approach with camps and defensive positions along the high ground.
+                        A fast-flowing river cuts across the battlefield, blocking direct access to the enemy outpost.
+                        Only two narrow crossing points exist - one in the north and one in the south.
+                        The enemy has positioned archers to cover both approaches.
                     </div>
                 </div>
                 
                 <div class="intro-section" style="margin-bottom: 20px; background: rgba(30, 73, 118, 0.4); padding: 15px; border-radius: 8px; border-left: 4px solid #64ffda;">
                     <h3 class="section-header" style="color: #64ffda;">
-                        FINAL STAND
-                    </h3>
-                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6; font-style: italic;">
-                        "Ancient texts say no army has ever breached those walls, but we are not just any army. 
-                        The enemy warlord awaits, surrounded by his most loyal warriors. 
-                        This is their last stand - and ours."
-                    </div>
-                </div>
-                
-                <div class="intro-section" style="margin-bottom: 25px;">
-                    <h3 class="section-header" style="color: #f1c40f;">
-                        TERRAIN ANALYSIS
+                        TACTICAL SITUATION
                     </h3>
                     <div class="section-content" style="font-size: 1.1em; line-height: 1.6;">
-                        <div style="margin-bottom: 8px;"><strong>LEFT APPROACH:</strong> Mixed terrain for your advance</div>
-                        <div style="margin-bottom: 8px;"><strong>RIGHT FORTRESS:</strong> Concentrated enemy camps and mountain defenses</div>
-                        <div><strong>OBJECTIVE:</strong> Breach the stronghold and eliminate all enemy forces</div>
+                        <div style="margin-bottom: 8px;"><strong>LEFT SIDE:</strong> Your forces approach through mixed forest terrain</div>
+                        <div style="margin-bottom: 8px;"><strong>RIVER:</strong> Impassable except at two bridge crossings</div>
+                        <div style="margin-bottom: 8px;"><strong>RIGHT SIDE:</strong> Enemy outpost with defensive positions</div>
+                        <div><strong>OBJECTIVE:</strong> Cross the river and eliminate the enemy outpost</div>
                     </div>
                 </div>
                 
                 <div class="controls-note" style="margin: 20px 0; padding: 12px; background: rgba(30, 73, 118, 0.3); border: 1px solid rgba(255, 193, 7, 0.3); color: #f1c40f;">
-                    <img src="ui/mountain.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
-                    <strong>BATTLEFIELD:</strong> Mountain stronghold with fortified enemy positions
+                    <img src="ui/river.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+                    <strong>BATTLEFIELD:</strong> Forest outpost with river barrier - find the crossings!
                 </div>
                 
                 <button id="continueToLevel3Btn" class="intro-continue-btn" style="margin-top: 20px; min-width: 280px;">
-                    <img src="ui/trophy1.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
-                    ASSAULT THE STRONGHOLD
+                    <img src="ui/forest.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
+                    ADVANCE TO THE OUTPOST
                 </button>
                 
                 <div class="intro-tip" style="margin-top: 15px; color: #8892b0; font-size: 0.9em;">
@@ -624,7 +512,7 @@ function showLevel2To3Transition() {
         });
     }
 }
-
+     
 function advanceToLevel3() {
     console.log("Advancing to Level 3: Mountain Stronghold");
     

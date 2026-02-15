@@ -967,9 +967,79 @@ checkVictory();
         }
         
         // ========== START GAME ==========
+function showHealingSummaryInRecruitScreen(healingResult) {
+    if (!healingResult || healingResult.totalInjuries === 0) return;
+    
+    // Remove old summary if exists
+    const oldSummary = document.getElementById('healingSummary');
+    if (oldSummary) oldSummary.remove();
+    
+    // Create summary div
+    const summaryDiv = document.createElement('div');
+    summaryDiv.id = 'healingSummary';
+    summaryDiv.style.cssText = `
+        margin: 20px 0;
+        padding: 15px;
+        background: rgba(46, 204, 113, 0.1);
+        border: 1px solid #2ecc71;
+        border-radius: 8px;
+    `;
+    
+    // Header
+    summaryDiv.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px; color: #2ecc71; font-weight: bold;">
+            <img src="../ui/potion.png" style="width: 20px; height: 20px;">
+            BETWEEN BATTLES HEALING
+            <span style="margin-left: auto; font-size: 0.9em; color: #64ffda;">
+                ${healingResult.healChance}% Chance
+            </span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(46, 204, 113, 0.3);">
+            <span>Healed: <span style="color: #2ecc71; font-weight: bold;">${healingResult.totalHealed}</span></span>
+            <span>Remaining: <span style="color: #ff6b6b; font-weight: bold;">${healingResult.remainingInjuries}</span></span>
+            <span>Total: <span style="color: #e6f1ff;">${healingResult.totalInjuries}</span></span>
+        </div>
+    `;
+    
+    // Add each unit's injuries
+    if (healingResult.healingLog) {
+        healingResult.healingLog.forEach(unitLog => {
+            const unitDiv = document.createElement('div');
+            unitDiv.style.cssText = `
+                margin-bottom: 10px;
+                padding: 10px;
+                background: rgba(30, 73, 118, 0.4);
+                border-radius: 6px;
+                border-left: 3px solid ${unitLog.healed.length > 0 ? '#2ecc71' : '#ff6b6b'};
+            `;
+            
+            let html = `<div style="font-weight: bold; color: #64ffda; margin-bottom: 5px;">${unitLog.unitName}</div>`;
+            
+            if (unitLog.healed.length > 0) {
+                html += `<div style="color: #2ecc71; font-size: 0.9em;">✓ Healed: ${unitLog.healed.join(', ')}</div>`;
+            }
+            if (unitLog.persisted.length > 0) {
+                html += `<div style="color: #ff6b6b; font-size: 0.9em;">✗ Persists: ${unitLog.persisted.join(', ')}</div>`;
+            }
+            
+            unitDiv.innerHTML = html;
+            summaryDiv.appendChild(unitDiv);
+        });
+    }
+    
+    // Insert into recruit screen
+    const recruitModal = document.querySelector('.recruit-modal');
+    const hireBtn = document.getElementById('hireBtn');
+    if (recruitModal && hireBtn) {
+        recruitModal.insertBefore(summaryDiv, hireBtn.parentNode);
+    }
+}   
         
     function openRecruitScreen() {
     console.log(`🛒 Opening recruit screen for level ${gameState.currentLevel}`);
+    const healingResult = healInjuriesBetweenBattles(); //Call the healing summary for injuries between levels
+    showHealingSummaryInRecruitScreen(healingResult);
+    
     document.getElementById('victoryOverlay').style.display = 'none';
 
     // Calculate recruit cost

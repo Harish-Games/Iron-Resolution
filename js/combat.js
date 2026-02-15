@@ -155,6 +155,8 @@ if (isCritical) {
         updateSelectedUnitStats();
     }
 				attacker.kills++;
+				gameState.battleStats.playerKills++;	
+					
 					
 				} else {
                     gameState.battleStats.enemyKills++;
