@@ -2,7 +2,7 @@
 
 // ========== INITIALIZATION ==========
 function init() {
-        gameState.currentLevel = 1;  // ← LEVEL TO START GAME FOR TESTING
+        gameState.currentLevel = 3;  // ← LEVEL TO START GAME FOR TESTING
     generateTerrain();
     createGrid();
     createUnits();

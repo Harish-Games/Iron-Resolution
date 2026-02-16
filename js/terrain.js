@@ -721,8 +721,8 @@ if (gameState.currentLevel === 2) {
 resetBattleCounters();
 
 } else if (gameState.currentLevel === 3) {
-    // LEVEL 3: HARD LEVEL WITH BOSS AND EXTRA ENEMIES
-    console.log("Level 3: Boss level with extra enemies");
+    // LEVEL 3: LEVEL WITH RIVER
+    console.log("Level 3: River Level");
     
     // Create enemy types for Level 3 - 6 base enemies
     const level3EnemyTypes = [
@@ -752,9 +752,18 @@ resetBattleCounters();
         else if (baseName.includes('Berserker')) forcedClassType = 'berserker';
         else if (baseName.includes('Shaman') || baseName.includes('Mage')) forcedClassType = 'mage';
         
-        // Start enemy units on the right side (away from village)
-        const unit = new Unit('enemy', baseName, 12 + (i % 3), 3 + Math.floor(i / 2) * 4);
-        
+        // Start enemy units on the right side
+// 70% chance of grid position, 30% chance of random position
+if (Math.random() < 0.7) {
+    // Grid position
+    var unit = new Unit('enemy', baseName, 12 + (i % 3), 3 + Math.floor(i / 2) * 4);
+} else {
+    // Random position on right side
+    var unit = new Unit('enemy', baseName, 
+        8 + Math.floor(Math.random() * 8), 
+        3 + Math.floor(Math.random() * 10)
+    );
+}        
         // OVERRIDE classType to ensure correct icon and AI behavior
         if (forcedClassType) {
             unit.classType = forcedClassType;
@@ -836,13 +845,18 @@ resetBattleCounters();
             unit.remainingActions = unit.maxActions; // Set current actions
         }
         
+        // RANDOMIZE STARTING POSITION
         let attempts = 0;
-        while (getUnitAt(unit.x, unit.y) || gameState.terrain[unit.y][unit.x] === 'water') {
-            // Keep enemies on the right side
-            unit.x = 10 + Math.floor(Math.random() * 6);
-            unit.y = 3 + Math.floor(Math.random() * 10);
+        let validPosition = false;
+        
+        while (!validPosition && attempts < 30) {
+            unit.x = 8 + Math.floor(Math.random() * 8);  // Columns 8-15
+            unit.y = 3 + Math.floor(Math.random() * 10); // Rows 3-12
+            
+            validPosition = !getUnitAt(unit.x, unit.y) && 
+                           gameState.terrain[unit.y][unit.x] !== 'water' &&
+                           gameState.terrain[unit.y][unit.x] !== 'river';
             attempts++;
-            if (attempts > 20) break;
         }
         
         gameState.units.push(unit);
