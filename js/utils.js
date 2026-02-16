@@ -83,8 +83,8 @@ const LEVELS = [
     { name: "Training Grounds", difficulty: "Easy", enemyBonus: 0, extraEnemies: 0, boss: false },
     { name: "Darkwood Approach", difficulty: "Medium", enemyBonus: 0, extraEnemies: -2, boss: false },
     { name: "Forest Outpost", difficulty: "Medium", enemyBonus: 2, extraEnemies: 1, boss: false, hasRiver: true },
-    { name: "Mountain Pass", difficulty: "Hard", enemyBonus: 3, extraEnemies: -1, boss: false },
-    { name: "Mountain Fortress", difficulty: "Hard", enemyBonus: 4, extraEnemies: 5, boss: true }
+    { name: "Mountain Pass", difficulty: "Medium", enemyBonus: 3, extraEnemies: -1, boss: false },
+    { name: "Mountain Fortress", difficulty: "Hard", enemyBonus: 4, extraEnemies: 4, boss: true }
 ];
         
         // ========== INJURIES & MORALE SYSTEM (Phase 2) ==========

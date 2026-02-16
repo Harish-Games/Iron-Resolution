@@ -818,8 +818,29 @@ resetBattleCounters();
         else if (baseName.includes('Shaman') || baseName.includes('Mage')) forcedClassType = 'mage';
         
         // Start enemy units on the right side (away from village)
-        const unit = new Unit('enemy', baseName, 12 + (i % 3), 3 + Math.floor(i / 2) * 4);
+        let spawnX, spawnY;
         
+        if (gameState.currentLevel === 5) {
+            // Level 5: Cluster around boss
+            const bossX = 12;
+            const bossY = 8;
+            
+            if (i === 0) {
+                // Boss at center
+                spawnX = bossX;
+                spawnY = bossY;
+            } else {
+                // All other enemies clustered around the boss position
+                spawnX = bossX + (Math.floor(Math.random() * 5) - 2);
+                spawnY = bossY + (Math.floor(Math.random() * 5) - 2);
+            }
+        } else {
+            // Levels 1: Original grid pattern
+            spawnX = 12 + (i % 3);
+            spawnY = 3 + Math.floor(i / 2) * 4;
+        }
+        
+        const unit = new Unit('enemy', baseName, spawnX, spawnY);        
         // OVERRIDE classType to ensure correct icon and AI behavior
         if (forcedClassType) {
             unit.classType = forcedClassType;
