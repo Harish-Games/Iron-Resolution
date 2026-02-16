@@ -649,7 +649,15 @@ resetBattleCounters();
             if (gameState.persistentUnits[i]) {
                 unit = gameState.persistentUnits[i];
             } else {
-                const playerClasses = ['Knight', 'Archer', 'Berserker', 'Mage', 'Knight', 'Archer'];
+		// Define enemy classes based on level
+		let enemyClasses;
+		if (gameState.currentLevel >= 6) {
+			// Level 6 and beyond include gremlins
+			enemyClasses = ['Orc Knight', 'Goblin Archer', 'Troll Berserker', 'Goblin Mage', 'Gremlin'];
+		} else {
+			// Levels 1-5 no gremlins
+			enemyClasses = ['Orc Knight', 'Goblin Archer', 'Troll Berserker', 'Goblin Mage'];
+		}
                 const className = playerClasses[i % playerClasses.length];
                 unit = new Unit('player', className, 0, 0);
             }
