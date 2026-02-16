@@ -40,6 +40,7 @@
     if (lowerName.includes('knight') || lowerName.includes('orc')) return 'knight';
     if (lowerName.includes('archer') || lowerName.includes('goblin')) return 'archer';
     if (lowerName.includes('mage') || lowerName.includes('shaman')) return 'mage';
+	if (lowerName.includes('gremlin')) return 'gremlin';
     return 'warrior';
 }
             
@@ -120,6 +121,18 @@
                         this.healPower = 10;
                         this.moraleThreshold = 50;
                         break;
+                        
+                    case 'gremlin':
+						this.maxHp = 8 + Math.floor(Math.random() * 3); // 8-10 HP
+						this.hp = this.maxHp;
+						this.baseAttack = 3 + Math.floor(Math.random() * 2); // 3-4 attack
+						this.range = 1;
+						this.movement = 4;
+						this.maxActions = 5;
+						this.maxAttacks = 1;
+						this.moraleThreshold = 0; // No morale
+						this.morale = 100; // Always stays at 100
+						break;
                         
                     default:
                         this.maxHp = 30;

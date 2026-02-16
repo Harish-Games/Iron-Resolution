@@ -641,6 +641,8 @@ function getClassIcon(classType) {
             return '<img src="ui/potion.png" style="width: 20px; height: 20px; vertical-align: middle;">';
         case 'berserker': 
             return '<img src="ui/axe.png" style="width: 20px; height: 20px; vertical-align: middle;">';
+        case 'gremlin': 
+			return '<img src="ui/gremlin.png" style="width: 20px; height: 20px; vertical-align: middle;">';    
         default: 
             return '<img src="ui/shield.png" style="width: 20px; height: 20px; vertical-align: middle;">';
     }

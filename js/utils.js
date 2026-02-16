@@ -84,7 +84,8 @@ const LEVELS = [
     { name: "Darkwood Approach", difficulty: "Medium", enemyBonus: 0, extraEnemies: -2, boss: false },
     { name: "Forest Outpost", difficulty: "Medium", enemyBonus: 2, extraEnemies: 1, boss: false, hasRiver: true },
     { name: "Mountain Pass", difficulty: "Medium", enemyBonus: 3, extraEnemies: -1, boss: false },
-    { name: "Mountain Fortress", difficulty: "Hard", enemyBonus: 4, extraEnemies: 4, boss: true }
+    { name: "Mountain Fortress", difficulty: "Hard", enemyBonus: 4, extraEnemies: 4, boss: true },
+	{ name: "Gremlin Swarm", difficulty: "easy", enemyBonus: 0, extraEnemies: 9, boss: false } // 6 base + 9 extra = 15 gremlins
 ];
         
         // ========== INJURIES & MORALE SYSTEM (Phase 2) ==========
@@ -161,6 +162,14 @@ const LEVELS = [
                 offensiveAccuracy: 0,
                 movementPenalty: 999 // Also impassable
             },
+            'mountain-pass': {
+				name: "Mountain Pass",
+				icon: 'images/mountain-pass.webp',
+				accuracyAgainst: 0,
+				damageReduction: 0,
+				offensiveAccuracy: 0,
+				movementPenalty: 999 // Impassable like water
+},
             
         };
  
@@ -228,9 +237,9 @@ function hasPathWithinRange(startX, startY, targetX, targetY, maxMoves) {
             
             // Check if passable (not water/river, not occupied unless it's target)
             const isTarget = (newX === targetX && newY === targetY);
-            if (gameState.terrain[newY][newX] === 'water' || gameState.terrain[newY][newX] === 'river') {
-                continue;
-            }
+            if (gameState.terrain[newY][newX] === 'water' || gameState.terrain[newY][newX] === 'river' || gameState.terrain[newY][newX] === 'mountain-pass') {
+    continue;
+}
             
             if (!isTarget && getUnitAt(newX, newY)) {
                 continue;

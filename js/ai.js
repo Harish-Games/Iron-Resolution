@@ -97,6 +97,53 @@ async function performAIActions(unit) {
         return;
     }
     
+    // ====== GREMLIN SWARM BEHAVIOR ======
+if (unit.classType === 'gremlin') {
+    console.log(`🐭 ${unit.name} - Gremlin swarming!`);
+    
+    // Find closest player
+    let closestPlayer = null;
+    let closestDistance = Infinity;
+    
+    for (const player of players) {
+        const distance = Math.abs(unit.x - player.x) + Math.abs(unit.y - player.y);
+        if (distance < closestDistance) {
+            closestDistance = distance;
+            closestPlayer = player;
+        }
+    }
+    
+    if (!closestPlayer) {
+        unit.remainingActions = 0;
+        return;
+    }
+    
+    // Gremlins can move through each other
+    const canMoveThroughUnits = true;
+    
+    // Attack if in range
+    if (closestDistance <= unit.range && unit.canAttack) {
+        await performAttack(unit, closestPlayer);
+        unit.remainingActions = 0;
+        return;
+    }
+    
+    // Move toward closest player
+    if (unit.canMove) {
+        await moveTowardTarget(unit, closestPlayer.x, closestPlayer.y, true, canMoveThroughUnits);
+        
+        // Attack if now in range
+        const newDistance = Math.abs(unit.x - closestPlayer.x) + Math.abs(unit.y - closestPlayer.y);
+        if (newDistance <= unit.range && unit.canAttack) {
+            await performAttack(unit, closestPlayer);
+        }
+    }
+    
+    unit.remainingActions = 0;
+    return;
+}
+    
+    
         // ====== SHAMAN/MAGE BEHAVIOR - STAY WITH THE PACK ======
 if (unit.classType === 'mage') {
     console.log(`🔮 ${unit.name} - Support Mage`);
@@ -124,6 +171,9 @@ if (unit.classType === 'mage') {
         const dist = Math.abs(unit.x - ally.x) + Math.abs(unit.y - ally.y);
         return dist < closest.dist ? {unit: ally, dist} : closest;
     }, {unit: allies[0], dist: Infinity}).unit : null;
+    
+    
+    
     
     // ====== 1. PRIORITY: HEAL INJURED ALLIES ======
     if (unit.canHeal && unit.remainingActions > 0) {

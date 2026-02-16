@@ -179,6 +179,47 @@ if (gameState.currentLevel === 4) {
     console.log("Generated Level 4: Mountain Pass terrain");
     return;
 }
+ 
+// ====== LEVEL 6: GREMLIN SWARM ======
+if (gameState.currentLevel === 6) {
+    console.log("Generating Level 6: Gremlin Swarm");
+    
+    GRID_SIZE = 16;
+    gameState.terrain = [];
+    
+    // Define the maze layout (W = mountain-pass wall, ' ' = normal path)
+    const maze = [
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1],
+        [1,0,1,0,1,0,1,0,1,0,1,0,1,0,0,1],
+        [1,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1],
+        [1,0,1,1,1,0,1,1,1,0,1,1,1,1,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,1,1,1,1,1,0,1,1,1,1,1,0,0,1],
+        [1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1],
+        [1,1,1,1,0,0,1,1,1,1,0,0,1,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,1,1,1,1,1,0,1,1,1,1,1,1,0,1],
+        [1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1],
+        [1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+    ];
+    
+    // Convert the maze array to terrain
+    for (let y = 0; y < GRID_SIZE; y++) {
+        gameState.terrain[y] = [];
+        for (let x = 0; x < GRID_SIZE; x++) {
+            // 1 = mountain-pass (wall), 0 = normal (path)
+            gameState.terrain[y][x] = maze[y][x] === 1 ? 'mountain-pass' : 'normal';
+        }
+    }
+    
+    console.log("Level 6: Fixed maze layout loaded");
+    return;
+}
+
     
     // ====== LEVEL 5: BOSS LEVEL - ENEMY STRONGHOLD ======
     if (gameState.currentLevel === 5) {
@@ -437,7 +478,85 @@ if (gameState.currentLevel === 4) {
         }
         
         gameState.units.push(unit);
+		 return;
     }
+
+
+// ====== LEVEL 6: GREMLIN SWARM ======
+if (gameState.currentLevel === 6) {
+    console.log("Creating units for Level 6: Gremlin Swarm");
+    
+    gameState.units = [];
+    
+    // Player units at fixed safe positions from maze layout
+    const playerPositions = [
+        {x: 1, y: 1},  // Knight 1
+        {x: 3, y: 1},  // Archer 1
+        {x: 1, y: 3},  // Berserker
+        {x: 3, y: 3},  // Mage
+        {x: 2, y: 5},  // Knight 2
+        {x: 4, y: 5}   // Archer 2
+    ];
+    
+    const playerCount = gameState.persistentUnits.length || 6;
+    for (let i = 0; i < playerCount; i++) {
+        let unit;
+        if (gameState.persistentUnits[i]) {
+            unit = gameState.persistentUnits[i];
+        } else {
+            const playerClasses = ['Knight', 'Archer', 'Berserker', 'Mage', 'Knight', 'Archer'];
+            const className = playerClasses[i % playerClasses.length];
+            unit = new Unit('player', className, 0, 0);
+        }
+        
+        const pos = playerPositions[i];
+        unit.x = pos.x;
+        unit.y = pos.y;
+        unit.remainingActions = unit.maxActions;
+        unit.movesUsed = 0;
+        unit.attacksUsed = 0;
+        unit.acted = false;
+        unit.fleeing = false;
+        
+        gameState.units.push(unit);
+    }
+    
+    resetBattleCounters();
+    
+    // Create 15 gremlins at fixed positions on right side
+    const gremlinPositions = [
+        {x: 10, y: 3}, {x: 12, y: 3}, {x: 14, y: 3},
+        {x: 9, y: 5}, {x: 11, y: 5}, {x: 13, y: 5}, {x: 15, y: 5},
+        {x: 10, y: 7}, {x: 12, y: 7}, {x: 14, y: 7},
+        {x: 9, y: 9}, {x: 11, y: 9}, {x: 13, y: 9},
+        {x: 10, y: 11}, {x: 12, y: 11}
+    ];
+    
+    for (let i = 0; i < 15; i++) {
+        const pos = gremlinPositions[i];
+        const unit = new Unit('enemy', 'Gremlin', pos.x, pos.y);
+        unit.classType = 'gremlin';
+        gameState.units.push(unit);
+    }
+    
+    // Create 3 archers
+    const archerPositions = [
+        {x: 14, y: 9},
+        {x: 13, y: 11},
+        {x: 15, y: 13}
+    ];
+    
+    for (let i = 0; i < 3; i++) {
+        const pos = archerPositions[i];
+        const unit = new Unit('enemy', 'Goblin Archer', pos.x, pos.y);
+        unit.classType = 'archer';
+        gameState.units.push(unit);
+    }
+    
+    resetBattleCounters();
+    console.log(`Created ${gameState.units.length} units for Level 6`);
+    return;
+}
 
 
 resetBattleCounters();    
@@ -498,10 +617,87 @@ resetBattleCounters();
 }
     
     
-    const playerClasses = ['Knight', 'Archer', 'Berserker', 'Mage'];
-    const enemyClasses = ['Orc Knight', 'Goblin Archer', 'Troll Berserker', 'Goblin Mage'];
+     const playerClasses = ['Knight', 'Archer', 'Berserker', 'Mage'];
+    const enemyClasses = ['Orc Knight', 'Goblin Archer', 'Troll Berserker', 'Goblin Mage', 'Gremlin'];
     
     gameState.units = [];
+    
+    // ====== LEVEL 6: GREMLIN SWARM ======
+    if (gameState.currentLevel === 6) {
+        console.log("Creating units for Level 6: Gremlin Swarm");
+        
+        // Player units at fixed safe positions from maze layout
+        const playerPositions = [
+            {x: 1, y: 1},  // Knight 1
+            {x: 3, y: 1},  // Archer 1
+            {x: 1, y: 3},  // Berserker
+            {x: 3, y: 3},  // Mage
+            {x: 2, y: 5},  // Knight 2
+            {x: 4, y: 5}   // Archer 2
+        ];
+        
+        const playerCount = gameState.persistentUnits.length || 6;
+        for (let i = 0; i < playerCount; i++) {
+            let unit;
+            if (gameState.persistentUnits[i]) {
+                unit = gameState.persistentUnits[i];
+            } else {
+                const playerClasses = ['Knight', 'Archer', 'Berserker', 'Mage', 'Knight', 'Archer'];
+                const className = playerClasses[i % playerClasses.length];
+                unit = new Unit('player', className, 0, 0);
+            }
+            
+            const pos = playerPositions[i];
+            unit.x = pos.x;
+            unit.y = pos.y;
+            unit.remainingActions = unit.maxActions;
+            unit.movesUsed = 0;
+            unit.attacksUsed = 0;
+            unit.acted = false;
+            unit.fleeing = false;
+            
+            gameState.units.push(unit);
+        }
+        
+        // Create 15 gremlins at fixed positions on right side
+        const gremlinPositions = [
+            {x: 10, y: 3}, {x: 12, y: 3}, {x: 14, y: 3},
+            {x: 9, y: 5}, {x: 11, y: 5}, {x: 13, y: 5}, {x: 15, y: 5},
+            {x: 10, y: 7}, {x: 12, y: 7}, {x: 14, y: 7},
+            {x: 9, y: 9}, {x: 11, y: 9}, {x: 13, y: 9},
+            {x: 10, y: 11}, {x: 12, y: 11}
+        ];
+        
+        for (let i = 0; i < 15; i++) {
+            const pos = gremlinPositions[i];
+            const unit = new Unit('enemy', 'Gremlin', pos.x, pos.y);
+            unit.classType = 'gremlin';
+            gameState.units.push(unit);
+        }
+        
+        // Create 3 archers
+        const archerPositions = [
+            {x: 14, y: 9},
+            {x: 13, y: 11},
+            {x: 15, y: 13}
+        ];
+        
+        for (let i = 0; i < 3; i++) {
+            const pos = archerPositions[i];
+            const unit = new Unit('enemy', 'Goblin Archer', pos.x, pos.y);
+            unit.classType = 'archer';
+            gameState.units.push(unit);
+        }
+        
+        resetBattleCounters();
+        console.log(`Created ${gameState.units.length} units for Level 6`);
+        
+        // Skip all the default unit creation
+        console.log("🚨 DEBUG: createUnits() ENDING");
+        console.log("Total units created:", gameState.units.length);
+        console.log("Units array:", gameState.units);
+        return;  // Exit the function here
+    }
     
     // Create player units - either from persistent or new
     if (gameState.persistentUnits.length > 0) {
@@ -994,11 +1190,13 @@ async function moveAwayFromTarget(unit, targetX, targetY) {
     const tryX = unit.x + dx;
     const tryY = unit.y + dy;
     
-    if (tryX >= 0 && tryX < GRID_SIZE && 
-        tryY >= 0 && tryY < GRID_SIZE &&
-        !getUnitAt(tryX, tryY) && 
-	gameState.terrain[tryY][tryX] !== 'water' && 
-	gameState.terrain[tryY][tryX] !== 'river') {      
+if (tryX >= 0 && tryX < GRID_SIZE && 
+    tryY >= 0 && tryY < GRID_SIZE &&
+    (canMoveThroughUnits || !getUnitAt(tryX, tryY)) && 
+    gameState.terrain[tryY][tryX] !== 'water' &&
+    gameState.terrain[tryY][tryX] !== 'river' &&
+    gameState.terrain[tryY][tryX] !== 'mountain-pass') { 
+		
         await moveUnit(unit, tryX, tryY);
     } else {
         // Can't move in ideal direction, try perpendicular
@@ -1104,9 +1302,8 @@ logMessage(`${unit.name} moves from (${startX}, ${startY}) to (${destination.x},
     await renderAll([unit.id]);
 }
 
-// NEW IMPROVED HELPER FUNCTION: Move unit toward target using full movement with obstacle avoidance
-	async function moveTowardTarget(unit, targetX, targetY, aggressive = true) {
-    const movesLeft = unit.movement - unit.movesUsed;
+// Move unit toward target using full movement with obstacle avoidance
+	async function moveTowardTarget(unit, targetX, targetY, aggressive = true, canMoveThroughUnits = false) {    const movesLeft = unit.movement - unit.movesUsed;
     if (movesLeft <= 0 || unit.remainingActions <= 0) return;
     
     console.log(`${unit.name} moving toward (${targetX}, ${targetY}) with ${movesLeft} moves left`);
@@ -1142,11 +1339,12 @@ logMessage(`${unit.name} moves from (${startX}, ${startY}) to (${destination.x},
         
         // Check if primary move is valid
         let moved = false;
-        if (tryX >= 0 && tryX < GRID_SIZE && 
-            tryY >= 0 && tryY < GRID_SIZE &&
-            !getUnitAt(tryX, tryY) && 
-            gameState.terrain[tryY][tryX] !== 'water' &&
-			gameState.terrain[tryY][tryX] !== 'river') {
+if (tryX >= 0 && tryX < GRID_SIZE && 
+    tryY >= 0 && tryY < GRID_SIZE &&
+    (canMoveThroughUnits || !getUnitAt(tryX, tryY)) && 
+    gameState.terrain[tryY][tryX] !== 'water' &&
+    gameState.terrain[tryY][tryX] !== 'river' &&
+    gameState.terrain[tryY][tryX] !== 'mountain-pass') { 
             
             // Valid move - take it
             currentX = tryX;
@@ -1158,11 +1356,12 @@ logMessage(`${unit.name} moves from (${startX}, ${startY}) to (${destination.x},
                 tryX = currentX;
                 tryY = currentY + dy;
                 
-                if (tryX >= 0 && tryX < GRID_SIZE && 
-                    tryY >= 0 && tryY < GRID_SIZE &&
-                    !getUnitAt(tryX, tryY) && 
-            gameState.terrain[tryY][tryX] !== 'water' &&
-            gameState.terrain[tryY][tryX] !== 'river') {
+  if (tryX >= 0 && tryX < GRID_SIZE && 
+    tryY >= 0 && tryY < GRID_SIZE &&
+    (canMoveThroughUnits || !getUnitAt(tryX, tryY)) && 
+    gameState.terrain[tryY][tryX] !== 'water' &&
+    gameState.terrain[tryY][tryX] !== 'river' &&
+    gameState.terrain[tryY][tryX] !== 'mountain-pass') { 
                     
                     currentX = tryX;
                     currentY = tryY;
@@ -1235,10 +1434,11 @@ if (currentX !== unit.x || currentY !== unit.y) {
                     tryY = currentY + dir.dy;
                     
                     if (tryX >= 0 && tryX < GRID_SIZE && 
-                        tryY >= 0 && tryY < GRID_SIZE &&
-                        !getUnitAt(tryX, tryY) && 
-            gameState.terrain[tryY][tryX] !== 'water' &&
-            gameState.terrain[tryY][tryX] !== 'river') {
+    tryY >= 0 && tryY < GRID_SIZE &&
+    (canMoveThroughUnits || !getUnitAt(tryX, tryY)) && 
+    gameState.terrain[tryY][tryX] !== 'water' &&
+    gameState.terrain[tryY][tryX] !== 'river' &&
+    gameState.terrain[tryY][tryX] !== 'mountain-pass') { 
                         
                         currentX = tryX;
                         currentY = tryY;
@@ -1288,10 +1488,10 @@ if (unit.attack > 0) { // If unit can attack
                 
         async function moveUnit(unit, newX, newY) {
         // Prevent moving into water OR river
-    if (gameState.terrain[newY][newX] === 'water' || gameState.terrain[newY][newX] === 'river') {
-        logMessage("Cannot move into water!", 'system');
-        return;
-    }
+ if (gameState.terrain[newY][newX] === 'water' || gameState.terrain[newY][newX] === 'river' || gameState.terrain[newY][newX] === 'mountain-pass') {
+    logMessage("Cannot move into mountain pass!", 'system');
+    return;
+}
     
     const movesLeft = unit.movement - unit.movesUsed;
     

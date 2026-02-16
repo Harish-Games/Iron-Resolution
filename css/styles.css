@@ -389,6 +389,11 @@
         background: #1e88e5 url("../images/river.png") center/cover;
     }
     
+	.tile.mountain-pass { 
+		background: #4a4a4a url("../images/mountain-pass.webp") center/cover;
+		border: 1px solid #666;
+}
+    
     .tile.village-player { 
     background: #c19a6b url("../images/village-player.png") center/cover;
     border: 1px solid #8b7355;
@@ -511,7 +516,9 @@
     .unit.enemy.berserker .unit-icon { 
         background-image: url("../units/enemy/enemy_berserker.png");
     }
-    
+    .unit.enemy.gremlin .unit-icon { 
+    background-image: url("../units/enemy/enemy_gremlin.webp");
+	}
     /* Boss unit */
     .unit.enemy.boss .unit-icon { 
         background-image: url("../units/enemy/enemy_boss_1.png");
