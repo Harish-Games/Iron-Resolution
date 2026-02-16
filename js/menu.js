@@ -4,7 +4,7 @@ console.log("📜 menu.js loading...");
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log("=== MENU SYSTEM INITIALIZING ===");
-    
+
     // ====== ELEMENT REFERENCES ======
     // ADD THESE VARIABLE DECLARATIONS:
     const mainMenu = document.getElementById('mainMenuOverlay');
@@ -46,7 +46,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // One Player Game
     onePlayerBtn.addEventListener('click', function() {
-		console.log("🎮 One Player Game button clicked!");
+				console.log("🎮 One Player Game button clicked!");
+        
+         const menuMusic = document.getElementById('menuMusic');
+    if (menuMusic && gameState.soundEnabled) {
+        menuMusic.volume = 0.3;
+        menuMusic.play().catch(e => console.log("Music play failed:", e));
+    }
+        
         if (window.soundSystem) {
             window.soundSystem.playMenuConfirm();
         }
@@ -270,3 +277,16 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("✅ Menu system initialized!");
     
 }); 
+
+// ====== BACKGROUND MUSIC ======
+const menuMusic = document.getElementById('menuMusic');
+
+// Start music on ANY button click
+document.querySelectorAll('.menu-btn').forEach(btn => {
+    btn.addEventListener('click', function startMusic() {
+        if (menuMusic && gameState.soundEnabled) {
+            menuMusic.volume = 0.3;
+            menuMusic.play().catch(e => console.log("Music error:", e));
+        }
+    }, { once: true });
+});

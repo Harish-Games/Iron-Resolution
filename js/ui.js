@@ -799,6 +799,32 @@ let isCompletingLevel = false; // Add this at the top with your other gameState 
     updateEnemiesCounter();
 }
      
+     // ====== MUSIC FADE OUT ======
+function fadeOutMusic(duration = 2000) {
+    const menuMusic = document.getElementById('menuMusic');
+    if (!menuMusic || menuMusic.paused) return;
+    
+    const startVolume = menuMusic.volume;
+    const steps = 20;
+    const stepTime = duration / steps;
+    const volumeStep = startVolume / steps;
+    let currentStep = 0;
+    
+    const fadeInterval = setInterval(() => {
+        currentStep++;
+        if (currentStep >= steps) {
+            menuMusic.pause();
+            menuMusic.currentTime = 0;
+            menuMusic.volume = startVolume;
+            clearInterval(fadeInterval);
+            console.log("🎵 Music faded out");
+        } else {
+            menuMusic.volume = Math.max(0, startVolume - (volumeStep * currentStep));
+        }
+    }, stepTime);
+}
+     
+     
      // ========== SHOW/HIDE INTRO SPLASH ==========
 function showIntroSplash() {
     document.getElementById('introOverlay').style.display = 'flex';
@@ -807,6 +833,24 @@ function showIntroSplash() {
 
 function hideIntroSplash() {
     document.getElementById('introOverlay').style.display = 'none';
+    
+    // Simple fade out
+    const menuMusic = document.getElementById('menuMusic');
+    if (menuMusic) {
+        let volume = menuMusic.volume;
+        const fadeOut = setInterval(() => {
+            volume = Math.max(0, volume - 0.05);
+            menuMusic.volume = volume;
+            
+            if (volume <= 0) {
+                clearInterval(fadeOut);
+                menuMusic.pause();
+                menuMusic.currentTime = 0;
+                menuMusic.volume = 0.3; // Reset for next time
+            }
+        }, 100);
+    }
+    
     enableGame();
 }
     
