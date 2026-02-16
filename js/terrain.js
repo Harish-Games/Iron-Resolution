@@ -489,44 +489,51 @@ if (gameState.currentLevel === 6) {
     gameState.units = [];
     
     // Player units at fixed safe positions from maze layout
-    const playerPositions = [
-        {x: 1, y: 1},  // Knight 1
-        {x: 3, y: 1},  // Archer 1
-        {x: 1, y: 3},  // Berserker
-        {x: 3, y: 3},  // Mage
-        {x: 2, y: 5},  // Knight 2
-        {x: 4, y: 5}   // Archer 2
-    ];
-    
-    const playerCount = gameState.persistentUnits.length || 6;
-    for (let i = 0; i < playerCount; i++) {
-        let unit;
-        if (gameState.persistentUnits[i]) {
-            unit = gameState.persistentUnits[i];
-        } else {
-            const playerClasses = ['Knight', 'Archer', 'Berserker', 'Mage', 'Knight', 'Archer'];
-            const className = playerClasses[i % playerClasses.length];
-            unit = new Unit('player', className, 0, 0);
-        }
-        
-        const pos = playerPositions[i];
-        unit.x = pos.x;
-        unit.y = pos.y;
-        unit.remainingActions = unit.maxActions;
-        unit.movesUsed = 0;
-        unit.attacksUsed = 0;
-        unit.acted = false;
-        unit.fleeing = false;
-        
-        gameState.units.push(unit);
+const playerPositions = [
+    {x: 1, y: 1},  // Position 1
+    {x: 3, y: 1},  // Position 2
+    {x: 1, y: 3},  // Position 3
+    {x: 3, y: 3},  // Position 4
+    {x: 2, y: 5},  // Position 5
+    {x: 4, y: 5},  // Position 6
+    {x: 1, y: 7},  // Position 7 (extra)
+    {x: 3, y: 7},  // Position 8 (extra)
+    {x: 2, y: 9},  // Position 9 (extra)
+    {x: 4, y: 9},  // Position 10 (extra)
+    {x: 1, y: 11}, // Position 11 (extra)
+    {x: 3, y: 11}  // Position 12 (extra)
+];
+
+const playerCount = gameState.persistentUnits.length || 6;
+for (let i = 0; i < playerCount; i++) {
+    let unit;
+    if (gameState.persistentUnits[i]) {
+        unit = gameState.persistentUnits[i];
+    } else {
+        const playerClasses = ['Knight', 'Archer', 'Berserker', 'Mage', 'Knight', 'Archer'];
+        const className = playerClasses[i % playerClasses.length];
+        unit = new Unit('player', className, 0, 0);
     }
+    
+    // Use modulo to cycle through positions if more units than positions
+    const pos = playerPositions[i % playerPositions.length];
+    unit.x = pos.x;
+    unit.y = pos.y;
+    unit.remainingActions = unit.maxActions;
+    unit.movesUsed = 0;
+    unit.attacksUsed = 0;
+    unit.acted = false;
+    unit.fleeing = false;
+    
+    gameState.units.push(unit);
+}
     
     resetBattleCounters();
     
     // Create 15 gremlins at fixed positions on right side
     const gremlinPositions = [
-        {x: 10, y: 3}, {x: 12, y: 3}, {x: 14, y: 3},
-        {x: 9, y: 5}, {x: 11, y: 5}, {x: 13, y: 5}, {x: 15, y: 5},
+        {x: 9, y: 3}, {x: 12, y: 3}, {x: 14, y: 3},
+        {x: 9, y: 5}, {x: 11, y: 5}, {x: 13, y: 5}, {x: 14, y: 5},
         {x: 10, y: 7}, {x: 12, y: 7}, {x: 14, y: 7},
         {x: 9, y: 9}, {x: 11, y: 9}, {x: 13, y: 9},
         {x: 10, y: 11}, {x: 12, y: 11}
@@ -543,7 +550,7 @@ if (gameState.currentLevel === 6) {
     const archerPositions = [
         {x: 14, y: 9},
         {x: 13, y: 11},
-        {x: 15, y: 13}
+        {x: 14, y: 2}
     ];
     
     for (let i = 0; i < 3; i++) {
@@ -624,8 +631,8 @@ resetBattleCounters();
     
     // ====== LEVEL 6: GREMLIN SWARM ======
     if (gameState.currentLevel === 6) {
-        console.log("Creating units for Level 6: Gremlin Swarm");
-        
+    console.log("Creating units for Level 6: Gremlin Swarm");
+            
         // Player units at fixed safe positions from maze layout
         const playerPositions = [
             {x: 1, y: 1},  // Knight 1
@@ -647,7 +654,8 @@ resetBattleCounters();
                 unit = new Unit('player', className, 0, 0);
             }
             
-            const pos = playerPositions[i];
+            const posIndex = i % playerPositions.length;
+			const pos = playerPositions[posIndex];
             unit.x = pos.x;
             unit.y = pos.y;
             unit.remainingActions = unit.maxActions;
@@ -661,8 +669,8 @@ resetBattleCounters();
         
         // Create 15 gremlins at fixed positions on right side
         const gremlinPositions = [
-            {x: 10, y: 3}, {x: 12, y: 3}, {x: 14, y: 3},
-            {x: 9, y: 5}, {x: 11, y: 5}, {x: 13, y: 5}, {x: 15, y: 5},
+            {x: 9, y: 3}, {x: 12, y: 3}, {x: 14, y: 3},
+            {x: 9, y: 5}, {x: 11, y: 5}, {x: 13, y: 5}, {x: 14, y: 5},
             {x: 10, y: 7}, {x: 12, y: 7}, {x: 14, y: 7},
             {x: 9, y: 9}, {x: 11, y: 9}, {x: 13, y: 9},
             {x: 10, y: 11}, {x: 12, y: 11}
@@ -679,7 +687,7 @@ resetBattleCounters();
         const archerPositions = [
             {x: 14, y: 9},
             {x: 13, y: 11},
-            {x: 15, y: 13}
+            {x: 14, y: 2}
         ];
         
         for (let i = 0; i < 3; i++) {

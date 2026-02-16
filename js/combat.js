@@ -131,14 +131,19 @@ if (isCritical) {
 			updateSelectedUnitStats();
             
             // XP
-            if (attacker.type === 'player') {
-			const hitXp = 15 + (defender.level * 4);
-				attacker.addXp(hitXp);
-				
-				if (gameState.selectedUnit && gameState.selectedUnit.id === attacker.id) {
+if (attacker.type === 'player') {
+    let hitXp = 15 + (defender.level * 4);
+    
+    if (defender.classType === 'gremlin') {
+        hitXp = 3;
+    }
+    
+    attacker.addXp(hitXp);
+    
+    if (gameState.selectedUnit && gameState.selectedUnit.id === attacker.id) {
         updateSelectedUnitStats();
     }
-            }
+}
             
 // Check for death
 if (defender.hp <= 0) {
@@ -200,21 +205,24 @@ if (defender.hp <= 0) {
  
     
     logMessage(`<img src="ui/skull.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;"> ${defender.name} is defeated!`, 'system');
-        
-    // Update battle stats...           
-                // Update battle stats
-                if (attacker.type === 'player') {
-				const killXp = 40 + (defender.level * 8);
-					attacker.addXp(killXp);
-					
-					if (gameState.selectedUnit && gameState.selectedUnit.id === attacker.id) {
+               
+               // Update battle stats
+if (attacker.type === 'player') {
+    let killXp = 40 + (defender.level * 8);
+    
+    if (defender.classType === 'gremlin') {
+        killXp = 8;
+    }
+    
+    attacker.addXp(killXp);
+    
+    if (gameState.selectedUnit && gameState.selectedUnit.id === attacker.id) {
         updateSelectedUnitStats();
     }
-				attacker.kills++;
-				gameState.battleStats.playerKills++;	
-					
-					
-				} else {
+    attacker.kills++;
+    gameState.battleStats.playerKills++;
+}
+ else {
                     gameState.battleStats.enemyKills++;
                 }
                 

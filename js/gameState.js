@@ -590,7 +590,9 @@ window.openRecruitScreen = function() {
             } else if (currentLevel === 4) {
                 showLevel4To5Transition();
             } else if (currentLevel === 5) {
-                showGameCompleteScreen();
+				showLevel5To6Transition(); 
+			} else if (currentLevel === 6) {
+				showGameCompleteScreen();    // After Level 6, game complete
             } else {
                 // Fallback - shouldn't happen
                 console.error(`❌ Unknown level ${currentLevel}, defaulting to startNextLevel()`);

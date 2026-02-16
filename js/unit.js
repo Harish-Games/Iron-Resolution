@@ -241,6 +241,11 @@
             
             // PHASE 2: Morale system with flee behavior
             updateMorale(damageTaken, alliesLost = false) {
+				 // Gremlins don't have morale
+    if (this.classType === 'gremlin') {
+        return 0;
+    }
+    
                 let moraleLoss = Math.floor(damageTaken / 3);
                 if (alliesLost) moraleLoss += 15;
                 if (this.hpPercent < 50) moraleLoss += 10;

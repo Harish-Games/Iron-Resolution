@@ -235,6 +235,129 @@ startNextLevel();
     }
 }
 
+// ========== LEVEL 5 TO 6 TRANSITION ==========
+function showLevel5To6Transition() {
+    console.log("🎬 Creating Level 5 to Level 6 transition");
+    
+    // Create transition overlay
+    const transitionHTML = `
+        <div id="transition56Overlay" class="intro-overlay" style="display: flex;">
+            <div class="intro-modal">
+                <div class="intro-title" style="margin-bottom: 25px;">
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                    AFTERMATH: THE GREMLIN SWARM
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                </div>
+                
+                <div class="intro-section" style="margin-bottom: 20px;">
+                    <h3 class="section-header" style="color: #4ecdc4; border-bottom: 2px solid #4ecdc4; padding-bottom: 8px;">
+                        THE WARLORD FALLS
+                    </h3>
+                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6;">
+                        The warlord's body lies broken at your feet. His fortress, once thought impregnable, 
+                        now belongs to the fallen.
+                    </div>
+                </div>
+                
+                <div class="intro-section" style="margin-bottom: 20px; background: rgba(30, 73, 118, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff6b6b;">
+                    <h3 class="section-header" style="color: #ff9e6b;">
+                        UNWELCOME GUESTS
+                    </h3>
+                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6; color: #e6f1ff;">
+                        As you sift through the rubble, skittering noises echo from over the ridge. 
+                        Your veterans are exhausted, but you know you have to check.
+                    </div>
+                </div>
+                
+                <div class="intro-section" style="margin-bottom: 20px; background: rgba(30, 73, 118, 0.4); padding: 15px; border-radius: 8px; border-left: 4px solid #64ffda;">
+                    <h3 class="section-header" style="color: #64ffda;">
+                        WHAT ARE THEY?
+                    </h3>
+                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6;">
+                        You head down the mountain and are confronted by a... wait, what ARE they?<br><br>
+                        The Gremlin. Small. Annoying. And very, very in the way.<br><br>
+                        <strong>Hack through the swarm. Silence the archers. Let nothing escape.</strong>
+                    </div>
+                </div>
+                
+                <div class="controls-note" style="margin: 20px 0; padding: 12px; background: rgba(30, 73, 118, 0.3); border: 1px solid rgba(255, 193, 7, 0.3); color: #f1c40f;">
+                    <img src="ui/gremlin.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+                    <strong>OBJECTIVE:</strong> Clear the mountain pass of the gremlin infestation
+                </div>
+                
+                <button id="continueToLevel6Btn" class="intro-continue-btn" style="margin-top: 20px; min-width: 280px;">
+                    <img src="ui/mountain-pass.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
+                    DESCEND INTO THE PASS
+                </button>
+                
+                <div class="intro-tip" style="margin-top: 15px; color: #8892b0; font-size: 0.9em;">
+                    Press Space or click to continue
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add to body
+    const overlayDiv = document.createElement('div');
+    overlayDiv.innerHTML = transitionHTML;
+    document.body.appendChild(overlayDiv);
+    
+    console.log("🎬 Level 5→6 transition overlay added to DOM");
+    
+    // Set up event listeners
+    const continueBtn = document.getElementById('continueToLevel6Btn');
+    const transitionOverlay = document.getElementById('transition56Overlay');
+    
+    // Button click
+    continueBtn.onclick = () => {
+        console.log("🎬 Continue to Level 6 button clicked");
+        if (transitionOverlay) {
+            transitionOverlay.style.display = 'none';
+        }
+        if (overlayDiv.parentNode) {
+            document.body.removeChild(overlayDiv);
+        }
+        gameState.currentLevel = 6;
+        startNextLevel();
+    };
+    
+    // Space key
+    document.addEventListener('keydown', function transitionKeyHandler(e) {
+        if ((e.code === 'Space' || e.key === ' ') && transitionOverlay && transitionOverlay.style.display === 'flex') {
+            console.log("🎬 Space pressed to continue to Level 6");
+            e.preventDefault();
+            if (transitionOverlay) {
+                transitionOverlay.style.display = 'none';
+            }
+            if (overlayDiv.parentNode) {
+                document.body.removeChild(overlayDiv);
+            }
+            document.removeEventListener('keydown', transitionKeyHandler);
+            gameState.currentLevel = 6;
+            startNextLevel();
+        }
+    });
+    
+    // Click overlay to close
+    if (transitionOverlay) {
+        transitionOverlay.addEventListener('click', function(e) {
+            if (e.target === transitionOverlay) {
+                console.log("🎬 Overlay clicked to continue to Level 6");
+                transitionOverlay.style.display = 'none';
+                if (overlayDiv.parentNode) {
+                    document.body.removeChild(overlayDiv);
+                }
+                gameState.currentLevel = 6;
+                startNextLevel();
+            }
+        });
+    }
+}
+
+// Make sure to add it to the global exports at the bottom of the file
+window.showLevel5To6Transition = showLevel5To6Transition;
+
+
 function showGameCompleteScreen() {
     console.log("🏆 Showing game complete screen");
     

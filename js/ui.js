@@ -1082,21 +1082,23 @@ function showHealingSummaryInRecruitScreen(healingResult) {
             console.log(`🔄 Processing post-recruit transition for level ${currentLevel}`);
             
             // Map each level to its specific transition
-            if (currentLevel === 1) {
-                showLevel1To2Transition();
-            } else if (currentLevel === 2) {
-                showLevel2To3Transition();
-            } else if (currentLevel === 3) {
-                showLevel3To4Transition();
-            } else if (currentLevel === 4) {
-                showLevel4To5Transition();
-            } else if (currentLevel === 5) {
-                showGameCompleteScreen();
-            } else {
-                // Fallback - shouldn't happen
-                console.error(`❌ Unknown level ${currentLevel}, defaulting to startNextLevel()`);
-                startNextLevel();
-            }
+if (currentLevel === 1) {
+    showLevel1To2Transition();
+} else if (currentLevel === 2) {
+    showLevel2To3Transition();
+} else if (currentLevel === 3) {
+    showLevel3To4Transition();
+} else if (currentLevel === 4) {
+    showLevel4To5Transition();
+} else if (currentLevel === 5) {
+    showLevel5To6Transition();
+} else if (currentLevel === 6) {
+    showGameCompleteScreen(); 
+} else {
+    // Fallback - shouldn't happen
+    console.error(`❌ Unknown level ${currentLevel}, defaulting to startNextLevel()`);
+    startNextLevel();
+}
         }, 500);
     };
 
