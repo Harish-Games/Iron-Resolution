@@ -144,52 +144,63 @@ if (isCritical) {
 if (defender.hp <= 0) {
     console.log(`<img src="ui/skull.png" style="width: 16px; height: 16px; vertical-align: middle;"> ${defender.name} DIED! HP: ${defender.hp}`, defender);
     
-// ====== ADD EXPLOSION ANIMATION HERE ======
-const tile = getTile(defender.x, defender.y);
-const gridContainer = document.querySelector('.grid-container');
-
-if (tile && gridContainer) {
-    // Get the tile's position
-    const tileRect = tile.getBoundingClientRect();
-    const containerRect = gridContainer.getBoundingClientRect();
+    // ====== ADD EXPLOSION ANIMATION HERE ======
+    const tile = getTile(defender.x, defender.y);
+    const gridContainer = document.querySelector('.grid-container');
     
-    // Remove any existing combat indicators on this tile
-    const existingIndicators = tile.querySelectorAll('.combat-indicator');
-    existingIndicators.forEach(indicator => indicator.remove());
-    
-    // Create new image element
-    const explosion = new Image();
-    explosion.src = `Animations/Skull-Explode.webp?t=${Date.now()}`;
-    explosion.style.cssText = `
-        position: absolute;
-        top: ${tileRect.top - containerRect.top + tileRect.height/2}px;
-        left: ${tileRect.left - containerRect.left + tileRect.width/2}px;
-        transform: translate(-50%, -50%);
-        width: 100px;
-        height: 100px;
-        object-fit: contain;
-        z-index: 10000;
-        pointer-events: none;
-        filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.8));
-        opacity: 0;
-    `;
-    
-    // Fade in when loaded
-    explosion.onload = () => {
-        explosion.style.opacity = '1';
-    };
-    
-    gridContainer.appendChild(explosion);
-    
-    setTimeout(() => {
-        if (explosion.parentNode === gridContainer) {
-            gridContainer.removeChild(explosion);
-        }
-    }, 1200);
-}
+    if (tile && gridContainer) {
+        // Get the tile's position
+        const tileRect = tile.getBoundingClientRect();
+        const containerRect = gridContainer.getBoundingClientRect();
+        
+        // Remove any existing combat indicators on this tile
+        const existingIndicators = tile.querySelectorAll('.combat-indicator');
+        existingIndicators.forEach(indicator => indicator.remove());
+        
+        // Choose animation based on who died
+        const animationFile = defender.type === 'enemy' ? 'skull-explode.webp' : 'knight-explode.webp';
+        
+        // Create new image element
+        const explosion = new Image();
+        explosion.src = `Animations/${animationFile}?t=${Date.now()}`;
+        explosion.style.cssText = `
+            position: absolute;
+            top: ${tileRect.top - containerRect.top + tileRect.height/2}px;
+            left: ${tileRect.left - containerRect.left + tileRect.width/2}px;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            z-index: 10000;
+            pointer-events: none;
+            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.8));
+            opacity: 0;
+        `;
+        
+        // Fade in when loaded
+        explosion.onload = () => {
+            explosion.style.opacity = '1';
+        };
+        
+        gridContainer.appendChild(explosion);
+        
+        setTimeout(() => {
+            if (explosion.parentNode === gridContainer) {
+                gridContainer.removeChild(explosion);
+            }
+        }, 1200);
+    }
+ 
+     // ====== CALL THE DEATH SOUNDS HERE ======
+    if (defender.type === 'enemy') {
+        soundSystem.playEnemyDeath();
+    } else {
+        soundSystem.playPlayerDeath();
+    }
+ 
     
     logMessage(`<img src="ui/skull.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;"> ${defender.name} is defeated!`, 'system');
-    
+        
     // Update battle stats...           
                 // Update battle stats
                 if (attacker.type === 'player') {

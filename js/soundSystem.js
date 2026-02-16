@@ -93,6 +93,69 @@
                 }
             }
 
+playEnemyDeath() {
+    if (!gameState.soundEnabled || !this.initialized) return;
+    
+    const now = this.audioContext.currentTime;
+    const masterGain = this.audioContext.createGain();
+    masterGain.connect(this.audioContext.destination);
+    masterGain.gain.setValueAtTime(0.3, now);
+    
+    // Low demonic growl
+    const osc1 = this.audioContext.createOscillator();
+    osc1.type = 'sawtooth';
+    osc1.frequency.setValueAtTime(120, now);
+    osc1.frequency.exponentialRampToValueAtTime(50, now + 0.2);
+    
+    // High screech
+    const osc2 = this.audioContext.createOscillator();
+    osc2.type = 'square';
+    osc2.frequency.setValueAtTime(500, now);
+    osc2.frequency.exponentialRampToValueAtTime(900, now + 0.15);
+    
+    osc1.connect(masterGain);
+    osc2.connect(masterGain);
+    
+    masterGain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+    
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + 0.3);
+    osc2.stop(now + 0.25);
+}
+
+playPlayerDeath() {
+    if (!gameState.soundEnabled || !this.initialized) return;
+    
+    const now = this.audioContext.currentTime;
+    const masterGain = this.audioContext.createGain();
+    masterGain.connect(this.audioContext.destination);
+    masterGain.gain.setValueAtTime(0.4, now);
+    
+    // Heavy thud
+    const thud = this.audioContext.createOscillator();
+    thud.type = 'triangle';
+    thud.frequency.setValueAtTime(80, now);
+    thud.frequency.exponentialRampToValueAtTime(30, now + 0.25);
+    
+    // Metal clang
+    const clang = this.audioContext.createOscillator();
+    clang.type = 'square';
+    clang.frequency.setValueAtTime(250, now + 0.1);
+    clang.frequency.exponentialRampToValueAtTime(120, now + 0.3);
+    
+    thud.connect(masterGain);
+    clang.connect(masterGain);
+    
+    masterGain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+    
+    thud.start(now);
+    clang.start(now + 0.1);
+    thud.stop(now + 0.4);
+    clang.stop(now + 0.4);
+}
+
+
             // ====== MENU SOUNDS ======
             playMenuClick() { 
                 if (!gameState.soundEnabled || !this.initialized) return;
