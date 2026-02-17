@@ -124,15 +124,34 @@ document.addEventListener('DOMContentLoaded', function() {
         instructionsModal.style.display = 'flex';
     });
     
-    // Back from Instructions
-    instructionsBackBtn.addEventListener('click', function() {
-        if (window.soundSystem) {
-            window.soundSystem.playMenuClick();
-        }
-        instructionsModal.style.display = 'none';
-        mainMenu.style.display = 'flex';
-    });
+// Help/Instructions button (in-game)
+document.getElementById('helpBtn').addEventListener('click', () => {
+    // Store that we came from game
+    window.fromGame = true;
+    document.getElementById('instructionsOverlay').style.display = 'flex';
+});
+
+
+// Back from Instructions
+instructionsBackBtn.addEventListener('click', function() {
+    if (window.soundSystem) {
+        window.soundSystem.playMenuClick();
+    }
     
+    instructionsModal.style.display = 'none';
+    
+    // Check where we came from
+    if (window.fromGame) {
+        // Came from in-game HELP button - just show game
+        document.querySelector('.game-container').style.display = 'flex';
+        window.fromGame = false; // Reset
+    } else {
+        // Came from main menu - show menu
+        mainMenu.style.display = 'flex';
+    }
+});
+
+       
     // Quit Game
     quitBtn.addEventListener('click', function() {
         if (window.soundSystem) {
@@ -272,6 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error("❌ No tab buttons found!");
         }
     }, 100); // Small delay to ensure DOM is ready
+        
     
     // ====== INITIAL SETUP ======
     console.log("✅ Menu system initialized!");

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 
-    <title>Iron Resolution v0.826</title>
+    <title>Iron Resolution v0.827</title>
        
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link rel="stylesheet" href="css/styles.css">
@@ -12,7 +12,7 @@
 
 	<h1>
 		<img src="ui/sword.png" alt="⚔" class="title-icon">
-		IRON RESOLUTION v0.826
+		IRON RESOLUTION v0.827
 		<img src="ui/sword.png" alt="⚔" class="title-icon">
 	</h1>
 	
@@ -52,7 +52,7 @@
         <!-- Instructions Title -->
         <div class="instructions-title">
             <img src="ui/scroll.png" style="width: 28px; height: 28px;">
-            BATTLEFIELD MANUAL v0.826
+            BATTLEFIELD MANUAL v0.827
         </div>
         
         <!-- Tab Navigation -->
@@ -986,8 +986,8 @@
         
         <!-- Back Button -->
         <button id="instructionsBackBtn" class="instructions-back-btn">
-            <img src="ui/arrow-left.png" style="width: 16px; height: 16px;">
-            BACK TO MENU
+            <img src="ui/tick.png" style="width: 16px; height: 16px;">
+            BACK
         </button>
     </div>
 </div>
@@ -1052,7 +1052,7 @@
         
         <!-- ACTION BUTTON -->
         <button id="introContinueBtn" class="intro-continue-btn" onclick="hideIntroSplash()">
-            <img src="ui/sword1.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+            <img src="ui/sword.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
             BEGIN BATTLE
         </button>
         
@@ -1106,57 +1106,54 @@
    
     <div class="game-container">
         <div class="left-panel">
-            <div class="controls">
-<button id="endTurn" class="primary">
-    <img src="ui/end.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
-    END TURN (E)
-</button>
+			
+<div class="stats-bar">
+    <!-- Left side: Action buttons -->
+    <div class="action-buttons">
+        <button id="endTurn" class="primary">
+            <img src="ui/end.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+            END TURN (E)
+        </button>
 
-<button id="attackBtn" disabled>
-    <img src="ui/sword1.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
-    ATTACK (A)
-</button>
+        <button id="attackBtn" disabled>
+            <img src="ui/sword1.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+            ATTACK (A)
+        </button>
 
-<button id="healBtn" class="heal-btn" disabled>
-    <img src="ui/heart.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
-    HEAL (H)
-</button>
+        <button id="healBtn" class="heal-btn" disabled>
+            <img src="ui/heart.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+            HEAL (H)
+        </button>
 
-<button id="cancelBtn" class="cancel-btn" disabled>
-    <img src="ui/cancel.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
-    CANCEL (ESC)
-</button>
-
-    <div class="stats-display">
-    <!-- Turn indicator as a stat box -->
-    <div id="phaseIndicator" class="stat-box turn-stat">
-        <div class="stat-label">Turn Phase</div>
-        <div class="stat-value turn-value" id="turnPhase">Player</div>
+        <button id="cancelBtn" class="cancel-btn" disabled>
+            <img src="ui/cancel.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+            CANCEL (ESC)
+        </button>
     </div>
     
-    <!-- Existing turn counter -->
-    <div class="stat-box">
-        <div class="stat-label">Turn</div>
-        <div class="stat-value" id="turnCount">1</div>
+    <!-- Right side: Compact stats + new buttons -->
+    <div class="stats-group">
+        <div class="stat-item">
+            <span class="stat-label">TURN</span>
+            <span class="stat-value" id="turnCount">1</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">ENEMIES</span>
+            <span class="stat-value" id="enemiesLeft">8</span>
+        </div>
+        <button id="quitGameBtn" class="header-btn">QUIT</button>
+        <button id="helpBtn" class="header-btn">?</button>
     </div>
-    
-    <!-- Enemies counter -->
-    <div class="stat-box">
-        <div class="stat-label">Enemies</div>
-        <div class="stat-value" id="enemiesLeft">8</div>
-    </div>
-</div>
 </div>
             
             <div class="grid-container">
-                <div id="phaseIndicator" class="phase-indicator">Select a unit</div>
-                <div id="rangeIndicator" class="range-indicator" style="display: none;">Range: 0</div>
-<div id="soundToggle" class="sound-toggle">
-    <img src="ui/sound.png" style="width: 16px; height: 16px; vertical-align: middle;"> Sound: ON
-</div>
-                <div id="grid" class="grid"></div>
-            </div>
+            <div id="rangeIndicator" class="range-indicator" style="display: none;">Range: 0</div>
+			<div id="soundToggle" class="sound-toggle">
+			<img src="ui/sound.png" style="width: 16px; height: 16px; vertical-align: middle;"> Sound: ON
+		</div>
+            <div id="grid" class="grid"></div>
         </div>
+    </div>
         
         <div class="right-panel">
     <!-- Top Row: SU + Roster (scrollable horizontally) -->
@@ -1173,7 +1170,7 @@
         <!-- Unit Roster Panel -->
         <div class="roster-container">
             <div class="panel-header">
-                <img src="ui/team.png" style="width: 22px; height: 22px; vertical-align: bottom; margin-right: 2px;">
+                <img src="ui/trophy.png" style="width: 22px; height: 22px; vertical-align: bottom; margin-right: 2px;">
                 UNIT ROSTER
             </div>
             <div id="unitRosterList"></div>

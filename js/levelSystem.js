@@ -38,7 +38,7 @@
                 </div>
                 
                 <div class="controls-note" style="margin: 20px 0; padding: 12px; background: rgba(30, 73, 118, 0.3); border: 1px solid rgba(255, 193, 7, 0.3); color: #f1c40f;">
-                    <img src="ui/mountain.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+                    <img src="images/mountain.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
                     <strong>BATTLEFIELD:</strong> Travel level - narrow mountain pass (10x20 grid)
                 </div>
                 
@@ -164,7 +164,7 @@ function showLevel4To5Transition() {
                 </div>
                 
                 <div class="controls-note" style="margin: 20px 0; padding: 12px; background: rgba(30, 73, 118, 0.3); border: 1px solid rgba(255, 193, 7, 0.3); color: #f1c40f;">
-                    <img src="ui/fortress.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+                    <img src="images/village-enemy.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
                     <strong>OBJECTIVE:</strong> Breach the citadel and confront the enemy warlord
                 </div>
                 
@@ -281,12 +281,12 @@ function showLevel5To6Transition() {
                 </div>
                 
                 <div class="controls-note" style="margin: 20px 0; padding: 12px; background: rgba(30, 73, 118, 0.3); border: 1px solid rgba(255, 193, 7, 0.3); color: #f1c40f;">
-                    <img src="ui/gremlin.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+                    <img src="ui/sword2.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
                     <strong>OBJECTIVE:</strong> Clear the mountain pass of the gremlin infestation
                 </div>
                 
                 <button id="continueToLevel6Btn" class="intro-continue-btn" style="margin-top: 20px; min-width: 280px;">
-                    <img src="ui/mountain-pass.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
+                    <img src="images/mountain-pass.webp" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
                     DESCEND INTO THE PASS
                 </button>
                 
@@ -568,12 +568,12 @@ function showLevel2To3Transition() {
                 </div>
                 
                 <div class="controls-note" style="margin: 20px 0; padding: 12px; background: rgba(30, 73, 118, 0.3); border: 1px solid rgba(255, 193, 7, 0.3); color: #f1c40f;">
-                    <img src="ui/river.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+                    <img src="images/river.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
                     <strong>BATTLEFIELD:</strong> Forest outpost with river barrier - find the crossings!
                 </div>
                 
                 <button id="continueToLevel3Btn" class="intro-continue-btn" style="margin-top: 20px; min-width: 280px;">
-                    <img src="ui/forest.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
+                    <img src="images/forest.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
                     ADVANCE TO THE OUTPOST
                 </button>
                 

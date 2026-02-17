@@ -2,7 +2,7 @@
 
 // ========== INITIALIZATION ==========
 function init() {
-        gameState.currentLevel = 6;  // ← LEVEL TO START GAME FOR TESTING
+        gameState.currentLevel = 1;  // ← LEVEL TO START GAME FOR TESTING
     generateTerrain();
     createGrid();
     createUnits();
@@ -56,6 +56,14 @@ const introBtn = document.getElementById('introContinueBtn');
     } else {
         console.warn("Intro button not found!");
     }
+
+// Quit button
+document.getElementById('quitGameBtn').addEventListener('click', showQuitConfirmation);
+
+// Help/Instructions button
+document.getElementById('helpBtn').addEventListener('click', () => {
+    document.getElementById('instructionsOverlay').style.display = 'flex';
+});
 
       // Heal button - sets phase to heal mode (for mages)
     healBtn.addEventListener('click', () => {
@@ -274,6 +282,56 @@ if (!clickedUnit) {
             
             renderAll([]);
         }
+
+function showQuitConfirmation() {
+    // Create modal if it doesn't exist
+    let quitModal = document.getElementById('quitModal');
+    
+    if (!quitModal) {
+        quitModal = document.createElement('div');
+        quitModal.id = 'quitModal';
+        quitModal.className = 'modal-overlay';
+        quitModal.innerHTML = `
+            <div class="modal-content">
+                <h3>Return to Main Menu?</h3>
+                <p>Current progress will be lost.</p>
+                <div class="modal-buttons">
+                    <button id="confirmQuitBtn" class="modal-btn confirm">QUIT</button>
+                    <button id="cancelQuitBtn" class="modal-btn cancel">CANCEL</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(quitModal);
+        
+        // Add event listeners
+        document.getElementById('confirmQuitBtn').addEventListener('click', returnToMainMenu);
+        document.getElementById('cancelQuitBtn').addEventListener('click', () => {
+            quitModal.style.display = 'none';
+        });
+    }
+    
+    quitModal.style.display = 'flex';
+}
+
+function returnToMainMenu() {
+    // Hide game interface
+    document.getElementById('quitModal').style.display = 'none';
+    document.querySelector('.game-container').style.display = 'none';
+    
+    // Show main menu
+    document.getElementById('mainMenuOverlay').style.display = 'flex';
+    
+    // Reset game state
+    initializeGameState();
+    
+    // Stop any game music/sounds if needed
+    const menuMusic = document.getElementById('menuMusic');
+    if (menuMusic) {
+        menuMusic.currentTime = 0;
+        menuMusic.play().catch(e => console.log("Music play failed:", e));
+    }
+}
+
       
         // main.js - AT THE BOTTOM OF THE FILE
 window.addEventListener('DOMContentLoaded', function() {
@@ -281,7 +339,6 @@ window.addEventListener('DOMContentLoaded', function() {
     init();
     showIntroSplash();
 });
-
         
 // Make main functions available globally
 window.init = init;
