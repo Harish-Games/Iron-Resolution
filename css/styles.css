@@ -3524,3 +3524,97 @@
     color: #64ffda;
     border: 1px solid #64ffda;
 }
+
+/* ====== DIFFICULTY SELECTION ====== */
+.difficulty-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.difficulty-modal {
+    background: linear-gradient(145deg, #1e4976, #112240);
+    border: 3px solid #64ffda;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+}
+
+.difficulty-title {
+    color: #64ffda;
+    font-size: 2em;
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
+}
+
+.difficulty-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.difficulty-btn {
+    background: linear-gradient(145deg, #233554, #1e4976);
+    border: 2px solid #4ecdc4;
+    border-radius: 8px;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.difficulty-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+}
+
+.difficulty-btn.selected {
+    border-color: #f1c40f;
+    background: linear-gradient(145deg, #2a4b7a, #1e4976);
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.3);
+}
+
+.difficulty-name {
+    color: #64ffda;
+    font-size: 1.3em;
+    font-weight: bold;
+    text-align: left;
+}
+
+.difficulty-desc {
+    color: #e6f1ff;
+    font-size: 1em;
+    text-align: right;
+    min-width: 100px;
+}
+
+.difficulty-confirm-btn {
+    background: linear-gradient(145deg, #0a7c71, #4ecdc4);
+    border: 2px solid #64ffda;
+    color: white;
+    padding: 12px 30px;
+    font-size: 1.2em;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+}
+
+.difficulty-confirm-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+}

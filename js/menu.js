@@ -45,23 +45,72 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // One Player Game
-    onePlayerBtn.addEventListener('click', function() {
-				console.log("🎮 One Player Game button clicked!");
-        
-         const menuMusic = document.getElementById('menuMusic');
+onePlayerBtn.addEventListener('click', function() {
+    console.log("🎮 One Player Game button clicked!");
+    
+    // Start music
+    const menuMusic = document.getElementById('menuMusic');
     if (menuMusic && gameState.soundEnabled) {
         menuMusic.volume = 0.3;
-        menuMusic.play().catch(e => console.log("Music play failed:", e));
+        menuMusic.play().catch(e => console.log("Music error:", e));
     }
+    
+    if (window.soundSystem) {
+        window.soundSystem.playMenuConfirm();
+    }
+    
+    // Show difficulty overlay instead of intro directly
+    mainMenu.style.display = 'none';
+    document.getElementById('difficultyOverlay').style.display = 'flex';
+});
+    
+    // ====== DIFFICULTY SELECTION ======
+const difficultyOverlay = document.getElementById('difficultyOverlay');
+const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+const confirmBtn = document.getElementById('difficultyConfirmBtn');
+let selectedMultiplier = 1.0; // Default to normal
+
+// Handle difficulty button clicks
+difficultyBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Remove selected class from all buttons
+        difficultyBtns.forEach(b => b.classList.remove('selected'));
+        // Add selected class to clicked button
+        this.classList.add('selected');
+        // Store the multiplier
+        selectedMultiplier = parseFloat(this.dataset.multiplier);
         
-        if (window.soundSystem) {
-            window.soundSystem.playMenuConfirm();
-        }
-        // Hide main menu
-        mainMenu.style.display = 'none';
-        // Show your existing intro splash
-        introSplash.style.display = 'flex';
+        console.log(`Selected difficulty: ${selectedMultiplier}x`);
     });
+});
+
+// Handle confirm button
+confirmBtn.addEventListener('click', function() {
+    // Save to gameState
+    gameState.difficultyMultiplier = selectedMultiplier;
+    
+    // Set difficulty name
+    if (selectedMultiplier === 0.7) gameState.difficulty = 'easy';
+    else if (selectedMultiplier === 1.0) gameState.difficulty = 'normal';
+    else if (selectedMultiplier === 1.3) gameState.difficulty = 'hard';
+    else if (selectedMultiplier === 1.6) gameState.difficulty = 'superhard';
+    
+    console.log(`Game difficulty set to ${gameState.difficulty} (${gameState.difficultyMultiplier}x)`);
+    console.log("gameState after difficulty set:", gameState.difficultyMultiplier);
+    
+    // Hide difficulty overlay
+difficultyOverlay.style.display = 'none';
+
+// Start the game with selected difficulty
+if (typeof init === 'function') {
+    init(); // This regenerates the level with the new difficulty
+}
+
+// Show intro splash
+document.getElementById('introOverlay').style.display = 'flex';
+    document.getElementById('introOverlay').style.display = 'flex';
+});
+    
     
     // Two Player Game (placeholder)
     twoPlayerBtn.addEventListener('click', function() {

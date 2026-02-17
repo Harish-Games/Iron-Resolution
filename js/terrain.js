@@ -393,7 +393,8 @@ function createUnits() {
 	console.log("🚨 DEBUG: createUnits() STARTED");
     console.log("Current level:", gameState.currentLevel);
     console.log("gameState:", gameState);
-		
+	console.log("Current difficulty multiplier:", gameState.difficultyMultiplier);
+	    	
      // ====== TRAVEL LEVEL 2: DARKWOOD APPROACH ======
     if (gameState.currentLevel === 2) {
     console.log("Creating units for Level 2: Darkwood Approach");
@@ -830,6 +831,16 @@ const level = LEVELS[gameState.currentLevel - 1];
 const enemyCount = UNITS_PER_TEAM + level.extraEnemies;
 gameState.isBossLevel = level.boss;
 
+// Apply difficulty multiplier
+let finalEnemyCount = Math.round(enemyCount * gameState.difficultyMultiplier);
+
+// Ensure at least 1 enemy
+if (finalEnemyCount < 1) finalEnemyCount = 1;
+
+gameState.isBossLevel = level.boss;
+
+console.log(`Difficulty: ${gameState.difficulty} (${gameState.difficultyMultiplier}x), Base enemies: ${enemyCount}, Final: ${finalEnemyCount}`);
+
 // LEVEL 2: SPECIAL ENEMY COMPOSITION - 3 ARCHERS
 if (gameState.currentLevel === 2) {
     console.log("Level 2: Creating special enemy composition with 3 archers");
@@ -852,7 +863,8 @@ if (gameState.currentLevel === 2) {
     
     // Now create all the enemies with random positions
     const enemyCount = UNITS_PER_TEAM + level.extraEnemies; // Should be 1
-    for (let i = 0; i < enemyCount; i++) {    const baseName = level2EnemyTypes[i];
+    for (let i = 0; i < finalEnemyCount; i++) {
+		const baseName = level2EnemyTypes[i];
     
     // FORCE correct classType regardless of name
     let forcedClassType = '';
@@ -1019,8 +1031,8 @@ resetBattleCounters();
 
 } else {
     // ORIGINAL CODE FOR LEVEL 1 AND ANY OTHER LEVELS
-    for (let i = 0; i < enemyCount; i++) {
-        const baseName = enemyClasses[i % enemyClasses.length];
+	for (let i = 0; i < finalEnemyCount; i++) {
+	        const baseName = enemyClasses[i % enemyClasses.length];
         
         // FORCE correct classType regardless of name
         let forcedClassType = '';

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 
-    <title>Iron Resolution v0.827</title>
+    <title>Iron Resolution v0.83</title>
        
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link rel="stylesheet" href="css/styles.css">
@@ -12,7 +12,7 @@
 
 	<h1>
 		<img src="ui/sword.png" alt="⚔" class="title-icon">
-		IRON RESOLUTION v0.827
+		IRON RESOLUTION v0.83
 		<img src="ui/sword.png" alt="⚔" class="title-icon">
 	</h1>
 	
@@ -45,6 +45,36 @@
     </div>
 </div>
 
+<!-- ====== DIFFICULTY SELECTION OVERLAY ====== -->
+<div id="difficultyOverlay" class="difficulty-overlay" style="display: none;">
+    <div class="difficulty-modal">
+        <div class="difficulty-title">SELECT DIFFICULTY</div>
+        
+        <div class="difficulty-buttons">
+            <button id="difficultyEasy" class="difficulty-btn" data-multiplier="0.7">
+                <span class="difficulty-name">EASY</span>
+                <span class="difficulty-desc">0.7x enemies</span>
+            </button>
+            
+            <button id="difficultyNormal" class="difficulty-btn selected" data-multiplier="1.0">
+                <span class="difficulty-name">NORMAL</span>
+                <span class="difficulty-desc">1.0x enemies</span>
+            </button>
+            
+            <button id="difficultyHard" class="difficulty-btn" data-multiplier="1.3">
+                <span class="difficulty-name">HARD</span>
+                <span class="difficulty-desc">1.3x enemies</span>
+            </button>
+            
+            <button id="difficultySuperHard" class="difficulty-btn" data-multiplier="1.6">
+                <span class="difficulty-name">SUPER HARD</span>
+                <span class="difficulty-desc">1.6x enemies</span>
+            </button>
+        </div>
+        
+        <button id="difficultyConfirmBtn" class="difficulty-confirm-btn">CONFIRM</button>
+    </div>
+</div>
 
 <!-- ====== INSTRUCTIONS MODAL ====== -->
 <div id="instructionsOverlay" class="instructions-overlay" style="display: none;">
@@ -52,7 +82,7 @@
         <!-- Instructions Title -->
         <div class="instructions-title">
             <img src="ui/scroll.png" style="width: 28px; height: 28px;">
-            BATTLEFIELD MANUAL v0.827
+            BATTLEFIELD MANUAL v0.83
         </div>
         
         <!-- Tab Navigation -->

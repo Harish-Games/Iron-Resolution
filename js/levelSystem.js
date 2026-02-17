@@ -965,15 +965,14 @@ function advanceToLevel3() {
    
     function startNextLevel() {
 	 console.log(`[DEBUG-TRACE] === ENTER startNextLevel() === Level: ${gameState.currentLevel}`);
-    console.trace(); // This will show the call stack
     
      if (gameState.currentLevel < gameState.maxLevel) {
         gameState.currentLevel++;
         console.log(`📈 Auto-incrementing to Level ${gameState.currentLevel}`);
     }
     
-    console.log(`🎮 startNextLevel() called. Now at level: ${gameState.currentLevel}`);
-    
+    console.log("Current difficulty multiplier in startNextLevel:", gameState.difficultyMultiplier);
+        
     // ====== CRITICAL: CLEAR OLD STATE FIRST ======
     gameState.units = [];  // Clear all units
     gameState.selectedUnit = null;

@@ -8,6 +8,8 @@
     selectedUnit: null,
     turnCount: 1,
     nextUnitId: 0,
+    difficulty: 'normal',
+    difficultyMultiplier: 1.0, 
     terrain: [],
     damagePopups: [],
     soundEnabled: true,
