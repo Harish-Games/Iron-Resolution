@@ -103,38 +103,43 @@ attackBtn.addEventListener('click', () => {
     restartButton.addEventListener('click', restartGame);
     
     document.addEventListener('keydown', (e) => {
+    // If name entry is active, don't trigger game shortcuts
+    if (window.nameEntryActive) {
+        return;
+    }
+    
     const key = e.key.toLowerCase();
     
     // Space to continue intro (check if intro is visible)
     if ((e.code === 'Space' || key === ' ') && 
         document.getElementById('introOverlay').style.display === 'flex') {
         hideIntroSplash();
-        e.preventDefault(); // Prevent space from scrolling
+        e.preventDefault();
         return;
     }
     
     // Escape key - call cancelSelection directly
     if (key === 'escape' || e.code === 'Escape') {
-        e.preventDefault(); // Prevent default escape behavior
+        e.preventDefault();
         cancelSelection();
         return;
     }
     
     // Other key handlers...
     if (key === 'e') {
-        e.preventDefault(); // Prevent default
+        e.preventDefault();
         endTurn();
     }
     
     // Attack shortcut
     if (key === 'a' && gameState.selectedUnit && gameState.selectedUnit.canAttack) {
-        e.preventDefault(); // Prevent default
+        e.preventDefault();
         attackBtn.click();
     }
     
     // Heal shortcut
     if (key === 'h' && gameState.selectedUnit && gameState.selectedUnit.canHeal) {
-        e.preventDefault(); // Prevent default
+        e.preventDefault();
         healBtn.click();
     }
 });
@@ -314,22 +319,24 @@ function showQuitConfirmation() {
 }
 
 function returnToMainMenu() {
-    // Hide game interface
+    // Calculate stats before quitting
+    const playerUnits = gameState.units.filter(u => u.type === 'player');
+    const survivors = playerUnits.length;
+    const kills = gameState.battleStats.playerKills || 0;
+    const xp = playerUnits.reduce((sum, u) => sum + u.xp, 0);
+    
+    // Hide quit modal
     document.getElementById('quitModal').style.display = 'none';
-    document.querySelector('.game-container').style.display = 'none';
     
-    // Show main menu
-    document.getElementById('mainMenuOverlay').style.display = 'flex';
+    // Show name entry
+    showNameEntry(xp, gameState.currentLevel, kills, survivors, gameState.difficulty);
     
-    // Reset game state
-    initializeGameState();
-    
-    // Stop any game music/sounds if needed
-    const menuMusic = document.getElementById('menuMusic');
-    if (menuMusic) {
-        menuMusic.currentTime = 0;
-        menuMusic.play().catch(e => console.log("Music play failed:", e));
-    }
+    // Return to main menu after a short delay
+    setTimeout(() => {
+        document.querySelector('.game-container').style.display = 'none';
+        document.getElementById('mainMenuOverlay').style.display = 'flex';
+        initializeGameState();
+    }, 1000);
 }
 
       

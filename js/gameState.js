@@ -643,43 +643,88 @@ window.openRecruitScreen = function() {
 };
 
 function showNameEntry(xp, level, kills, survivors, difficulty) {
-    // Store the stats to save
-    window.pendingScore = {
-        xp: xp,
-        level: level,
-        kills: kills,
-        survivors: survivors,
-        difficulty: difficulty
-    };
+    console.log("📝 showNameEntry called");
     
-    // Show the overlay
-    document.getElementById('nameEntryOverlay').style.display = 'flex';
+    // Set a flag that name entry is active
+window.nameEntryActive = true;
+    
+    // Remove any existing name entry modal
+    const existing = document.getElementById('dynamicNameEntry');
+    if (existing) existing.remove();
+    
+    // Create modal from scratch
+    const modal = document.createElement('div');
+    modal.id = 'dynamicNameEntry';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 20000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(10px);
+    `;
+    
+    modal.innerHTML = `
+        <div class="intro-modal" style="max-width: 400px;">
+            <div class="intro-title" style="font-size: 1.8em; margin-bottom: 20px;">
+                <img src="ui/trophy1.png" style="width: 34px; height: 34px; vertical-align: middle;">
+                NEW HIGH SCORE!
+            </div>
+            
+            <div style="margin: 25px 0; text-align: left;">
+                <div style="color: #64ffda; margin-bottom: 8px;">Enter your name:</div>
+                <input type="text" id="dynamicNameInput" maxlength="20" placeholder="Champion" 
+                    style="width: 100%; padding: 10px; background: #1e4976; border: 2px solid #64ffda; 
+                    color: white; border-radius: 5px; font-size: 1.2em;">
+            </div>
+            
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button id="dynamicSaveBtn" class="intro-continue-btn" style="padding: 10px 25px;">
+                    <img src="ui/tick.png" style="width: 16px; height: 16px;">
+                    SAVE SCORE
+                </button>
+                <button id="dynamicSkipBtn" class="cancel-btn" style="padding: 10px 25px;">
+                    <img src="ui/cancel.png" style="width: 16px; height: 16px;">
+                    SKIP
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
     
     // Focus the input
-    setTimeout(() => document.getElementById('playerNameInput').focus(), 100);
+    setTimeout(() => document.getElementById('dynamicNameInput').focus(), 100);
     
     // Set up save button
-    document.getElementById('saveScoreBtn').onclick = () => {
-        const name = document.getElementById('playerNameInput').value.trim();
+    document.getElementById('dynamicSaveBtn').onclick = () => {
+        const name = document.getElementById('dynamicNameInput').value.trim();
         if (name === '') {
             alert('Please enter a name');
             return;
         }
         
         saveHighScore(name, xp, level, kills, survivors, difficulty);
-        document.getElementById('nameEntryOverlay').style.display = 'none';
-        window.pendingScore = null;
-        
-        // Optional: Show hall of fame after saving
-        // showHallOfFame();
+        modal.remove();
+        window.nameEntryActive = false;
+        showHallOfFame();
+        enableGame();
     };
     
     // Set up skip button
-    document.getElementById('skipScoreBtn').onclick = () => {
-        document.getElementById('nameEntryOverlay').style.display = 'none';
-        window.pendingScore = null;
+    document.getElementById('dynamicSkipBtn').onclick = () => {
+        modal.remove();
+        window.nameEntryActive = false; 
+        enableGame();
     };
 }
+
+
 function showHallOfFame() {
     // Create modal if it doesn't exist
     let hallModal = document.getElementById('hallOfFameModal');
