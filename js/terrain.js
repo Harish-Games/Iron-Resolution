@@ -421,16 +421,17 @@ function createUnits() {
 resetBattleCounters();
     
     // Enemies at top (below the top forest border)
-    const travelEnemies = ['Goblin Archer', 'Goblin Archer', 'Orc Knight', 'Goblin Archer', 'Orc Knight'];
-    for (let i = 0; i < travelEnemies.length; i++) {
-        const unit = new Unit('enemy', travelEnemies[i], 6 + (i % 3), 3 + Math.floor(i / 3));
-        
-        // Make scouts a bit weaker
-        unit.maxHp = Math.floor(unit.maxHp * 0.8);
-        unit.hp = unit.maxHp;
-        
-        gameState.units.push(unit);
-    }
+const travelEnemies = ['Goblin Archer', 'Goblin Archer', 'Orc Knight', 'Goblin Archer', 'Orc Knight'];
+for (let i = 0; i < finalEnemyCount; i++) {
+    const enemyType = travelEnemies[i % travelEnemies.length];
+    const unit = new Unit('enemy', enemyType, 6 + (i % 3), 3 + Math.floor(i / 3));
+    
+    // Make scouts a bit weaker
+    unit.maxHp = Math.floor(unit.maxHp * 0.8);
+    unit.hp = unit.maxHp;
+    
+    gameState.units.push(unit);
+}
 
 
 resetBattleCounters();    
