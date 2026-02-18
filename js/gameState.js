@@ -17,6 +17,7 @@
     isUpdating: false,
     aiActiveUnit: null,
     phase: 'select',
+    highScores: JSON.parse(localStorage.getItem('ironResolutionHighScores')) || [],
     battleStats: {
         playerKills: 0,
         enemyKills: 0,
@@ -40,6 +41,35 @@
     totalXP: 0,
     isBossLevel: false
 };
+ 
+function saveHighScore(playerName, xp, level, kills, survivors, difficulty) {
+    const score = {
+        name: playerName,
+        xp: xp,
+        level: level,
+        kills: kills,
+        survivors: survivors,
+        difficulty: difficulty,
+        date: new Date().toLocaleDateString()
+    };
+    
+    // Add to array
+    gameState.highScores.push(score);
+    
+    // Sort by XP (highest first)
+    gameState.highScores.sort((a, b) => b.xp - a.xp);
+    
+    // Keep top 25
+    if (gameState.highScores.length > 25) {
+        gameState.highScores = gameState.highScores.slice(0, 25);
+    }
+    
+    // Save to localStorage
+    localStorage.setItem('ironResolutionHighScores', JSON.stringify(gameState.highScores));
+    
+    console.log("🏆 High score saved:", score);
+} 
+ 
         
         // ========== DOM ELEMENTS ==========
 const gridEl = document.getElementById('grid');
@@ -612,6 +642,132 @@ window.openRecruitScreen = function() {
     document.getElementById('recruitOverlay').style.display = 'flex';
 };
 
+function showNameEntry(xp, level, kills, survivors, difficulty) {
+    // Store the stats to save
+    window.pendingScore = {
+        xp: xp,
+        level: level,
+        kills: kills,
+        survivors: survivors,
+        difficulty: difficulty
+    };
+    
+    // Show the overlay
+    document.getElementById('nameEntryOverlay').style.display = 'flex';
+    
+    // Focus the input
+    setTimeout(() => document.getElementById('playerNameInput').focus(), 100);
+    
+    // Set up save button
+    document.getElementById('saveScoreBtn').onclick = () => {
+        const name = document.getElementById('playerNameInput').value.trim();
+        if (name === '') {
+            alert('Please enter a name');
+            return;
+        }
+        
+        saveHighScore(name, xp, level, kills, survivors, difficulty);
+        document.getElementById('nameEntryOverlay').style.display = 'none';
+        window.pendingScore = null;
+        
+        // Optional: Show hall of fame after saving
+        // showHallOfFame();
+    };
+    
+    // Set up skip button
+    document.getElementById('skipScoreBtn').onclick = () => {
+        document.getElementById('nameEntryOverlay').style.display = 'none';
+        window.pendingScore = null;
+    };
+}
+function showHallOfFame() {
+    // Create modal if it doesn't exist
+    let hallModal = document.getElementById('hallOfFameModal');
+    
+    if (!hallModal) {
+        hallModal = document.createElement('div');
+        hallModal.id = 'hallOfFameModal';
+        hallModal.style.zIndex = '15000'; 
+        hallModal.className = 'stats-overlay'; // Reuse existing style
+        document.body.appendChild(hallModal);
+    }
+    
+    // Build the table
+    let html = `
+        <div class="stats-modal" style="max-width: 800px;">
+            <div class="stats-header">
+                <img src="ui/trophy1.png" style="width: 34px; height: 34px; vertical-align: middle;">
+                HALL OF FAME
+                <img src="ui/trophy1.png" style="width: 34px; height: 34px; vertical-align: middle;">
+            </div>
+            <div style="max-height: 500px; overflow-y: auto;">
+                <table style="width: 100%; color: #e6f1ff; border-collapse: collapse;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #64ffda;">
+                            <th style="padding: 10px; text-align: left;"></th>
+                            <th style="padding: 10px; text-align: left;">Name</th>
+                            <th style="padding: 10px; text-align: right;">XP</th>
+                            <th style="padding: 10px; text-align: center;">Level</th>
+                            <th style="padding: 10px; text-align: right;">Kills</th>
+                            <th style="padding: 10px; text-align: center;">Units</th>
+                            <th style="padding: 10px; text-align: left;">Difficulty</th>
+                            <th style="padding: 10px; text-align: left;">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    `;
+    
+    if (gameState.highScores.length === 0) {
+        html += `
+            <tr>
+                <td colspan="8" style="padding: 40px; text-align: center; color: #8892b0;">
+                    No scores yet. Complete a campaign to enter the Hall of Fame!
+                </td>
+            </tr>
+        `;
+    } else {
+        gameState.highScores.forEach((score, index) => {
+            const rank = index + 1;
+            let rankIcon = '';
+            if (rank === 1) rankIcon = '🥇 ';
+            else if (rank === 2) rankIcon = '🥈 ';
+            else if (rank === 3) rankIcon = '🥉 ';
+            
+            const survivorsClass = score.survivors >= 4 ? '#2ecc71' : '#ff6b6b';
+            
+            html += `
+                <tr style="border-bottom: 1px solid #1e4976;">
+                    <td style="padding: 8px; text-align: left; font-size: 1.2em;">${rankIcon}</td>
+                    <td style="padding: 8px; text-align: left; color: #64ffda;">${score.name}</td>
+                    <td style="padding: 8px; text-align: right;">${score.xp}</td>
+                    <td style="padding: 8px; text-align: center;">${score.level}</td>
+                    <td style="padding: 8px; text-align: right;">${score.kills}</td>
+                    <td style="padding: 8px; text-align: center; color: ${survivorsClass};">${score.survivors}/6</td>
+                    <td style="padding: 8px; text-align: left;">${score.difficulty}</td>
+                    <td style="padding: 8px; text-align: left;">${score.date}</td>
+                </tr>
+            `;
+        });
+    }
+    
+    html += `
+                    </tbody>
+                </table>
+            </div>
+            <button id="closeHallBtn" class="restart-button primary" style="margin-top: 20px;">
+                CLOSE
+            </button>
+        </div>
+    `;
+    
+    hallModal.innerHTML = html;
+    hallModal.style.display = 'flex';
+    
+    document.getElementById('closeHallBtn').onclick = () => {
+        hallModal.style.display = 'none';
+    };
+}
+
 // Make functions globally available
 window.healInjuriesBetweenBattles = healInjuriesBetweenBattles;
 window.getCurrentHealChance = getCurrentHealChance;
@@ -620,3 +776,5 @@ window.endTurn = endTurn;
 window.updateEnemiesLeft = updateEnemiesLeft;
 window.updateTurnCount = updateTurnCount;
 window.initializeGameState = initializeGameState;
+window.saveHighScore = saveHighScore;
+window.showHallOfFame = showHallOfFame;

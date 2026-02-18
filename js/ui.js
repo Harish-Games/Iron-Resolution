@@ -990,7 +990,16 @@ checkVictory();
             statsOverlay.style.display = 'flex';
             
             disableGame();
-        }
+            
+           if (!victory) {
+        const playerUnits = gameState.units.filter(u => u.type === 'player');
+        const survivors = playerUnits.length;
+        const kills = gameState.battleStats.playerKills || 0;
+        const xp = playerUnits.reduce((sum, u) => sum + u.xp, 0);
+        
+        showNameEntry(xp, gameState.currentLevel, kills, survivors, gameState.difficulty);
+    }
+} 
         
         function disableGame() {
             endTurnBtn.disabled = true;
@@ -1163,7 +1172,6 @@ window.showIntroSplash = showIntroSplash;
 window.hideIntroSplash = hideIntroSplash;
 window.openRecruitScreen = openRecruitScreen;
 window.showBattleStats = showBattleStats;
-// Add all the helper functions too...
 window.getTile = getTile;
 window.updateEnemiesCounter = updateEnemiesCounter;
 window.updateUI = updateUI;

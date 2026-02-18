@@ -1117,6 +1117,36 @@ function advanceToLevel3() {
         };
     }
 }
+   
+   
+   // ====== SET UP CONTINUE BUTTON ======
+    const continueBtn = document.getElementById('continueBtn');
+    
+    if (gameState.currentLevel >= gameState.maxLevel) {
+        // Final victory - ask for name
+        const survivors = playerUnits.length;
+        const kills = gameState.battleStats.playerKills || 0;
+        showNameEntry(totalXP, gameState.currentLevel, kills, survivors, gameState.difficulty);
+        
+        continueBtn.onclick = () => {
+            document.getElementById('victoryOverlay').style.display = 'none';
+            // Maybe show hall of fame here
+            // showHallOfFame();
+        };
+    } else {
+        // Not final level - just continue to recruit
+        continueBtn.onclick = () => {
+            document.getElementById('victoryOverlay').style.display = 'none';
+            openRecruitScreen();
+        };
+    }
+}
+   
+   
+   
+   
+   
+   
      function advanceToLevel2() {
     console.log("Advancing to Level 2: Forest Pursuit");
     

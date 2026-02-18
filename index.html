@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 
-    <title>Iron Resolution v0.836</title>
+    <title>Iron Resolution v0.84</title>
        
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link rel="stylesheet" href="css/styles.css">
@@ -12,7 +12,7 @@
 
 	<h1>
 		<img src="ui/sword.png" alt="⚔" class="title-icon">
-		IRON RESOLUTION v0.836
+		IRON RESOLUTION v0.84
 		<img src="ui/sword.png" alt="⚔" class="title-icon">
 	</h1>
 	
@@ -26,23 +26,27 @@
     
     <!-- Buttons at bottom -->
     <div class="menu-buttons">
-        <button class="menu-btn primary" id="onePlayerBtn">
-            <img src="ui/sword1.png" style="width: 16px; height: 16px;">
-            ONE PLAYER GAME
-        </button>
-        <button class="menu-btn" id="twoPlayerBtn">
-            <img src="ui/team.png" style="width: 16px; height: 16px;">
-            TWO PLAYER GAME
-        </button>
-        <button class="menu-btn" id="instructionsBtn">
-            <img src="ui/scroll.png" style="width: 16px; height: 16px;">
-            INSTRUCTIONS
-        </button>
-        <button class="menu-btn cancel-btn" id="quitBtn">
-            <img src="ui/cancel.png" style="width: 16px; height: 16px;">
-            QUIT
-        </button>
-    </div>
+    <button class="menu-btn primary" id="onePlayerBtn">
+        <img src="ui/sword1.png" style="width: 16px; height: 16px;">
+        ONE PLAYER GAME
+    </button>
+    <button class="menu-btn" id="twoPlayerBtn">
+        <img src="ui/team.png" style="width: 16px; height: 16px;">
+        TWO PLAYER GAME
+    </button>
+    <button class="menu-btn" id="instructionsBtn">
+        <img src="ui/scroll.png" style="width: 16px; height: 16px;">
+        INSTRUCTIONS
+    </button>
+    <button class="menu-btn" id="hallOfFameBtn">
+        <img src="ui/trophy1.png" style="width: 16px; height: 16px;">
+        HALL OF FAME
+    </button>
+    <button class="menu-btn cancel-btn" id="quitBtn">
+        <img src="ui/cancel.png" style="width: 16px; height: 16px;">
+        QUIT
+    </button>
+</div>
 </div>
 
 <!-- ====== DIFFICULTY SELECTION OVERLAY ====== -->
@@ -82,7 +86,7 @@
         <!-- Instructions Title -->
         <div class="instructions-title">
             <img src="ui/scroll.png" style="width: 28px; height: 28px;">
-            BATTLEFIELD MANUAL v0.836
+            BATTLEFIELD MANUAL v0.84
         </div>
         
         <!-- Tab Navigation -->
@@ -1223,6 +1227,33 @@
     Your browser does not support the audio element.
 </audio>
 
+<!-- HIGH SCORE NAME ENTRY -->
+<div id="nameEntryOverlay" class="intro-overlay" style="display: none;">
+    <div class="intro-modal" style="max-width: 400px;">
+        <div class="intro-title" style="font-size: 1.8em; margin-bottom: 20px;">
+            <img src="ui/trophy1.png" style="width: 34px; height: 34px; vertical-align: middle;">
+            NEW HIGH SCORE!
+        </div>
+        
+        <div style="margin: 25px 0; text-align: left;">
+            <div style="color: #64ffda; margin-bottom: 8px;">Enter your name:</div>
+            <input type="text" id="playerNameInput" maxlength="20" placeholder="Champion" 
+                style="width: 100%; padding: 10px; background: #1e4976; border: 2px solid #64ffda; 
+                color: white; border-radius: 5px; font-size: 1.2em;">
+        </div>
+        
+        <div style="display: flex; gap: 15px; justify-content: center;">
+            <button id="saveScoreBtn" class="intro-continue-btn" style="padding: 10px 25px;">
+                <img src="ui/tick.png" style="width: 16px; height: 16px;">
+                SAVE SCORE
+            </button>
+            <button id="skipScoreBtn" class="cancel-btn" style="padding: 10px 25px;">
+                <img src="ui/cancel.png" style="width: 16px; height: 16px;">
+                SKIP
+            </button>
+        </div>
+    </div>
+</div>
         
 <!-- Script includes (IN ORDER) -->
 <script src="js/utils.js"></script>

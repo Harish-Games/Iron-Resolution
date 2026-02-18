@@ -63,6 +63,14 @@ onePlayerBtn.addEventListener('click', function() {
     mainMenu.style.display = 'none';
     document.getElementById('difficultyOverlay').style.display = 'flex';
 });
+
+// Hall of Fame button
+document.getElementById('hallOfFameBtn').addEventListener('click', () => {
+    if (window.soundSystem) {
+        window.soundSystem.playMenuClick();
+    }
+    showHallOfFame();
+});
     
     // ====== DIFFICULTY SELECTION ======
 const difficultyOverlay = document.getElementById('difficultyOverlay');

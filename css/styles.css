@@ -2123,7 +2123,7 @@
     backdrop-filter: blur(10px);
     z-index: 2; /* Above everything */
     width: 100%;
-    max-width: 900px;
+    max-width: 1000px;
     justify-content: center;
     flex-wrap: wrap;
     box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
@@ -2134,12 +2134,12 @@
     background: linear-gradient(145deg, #233554, #1e4976);
     color: #64ffda;
     border: 1px solid #64ffda;
-    padding: 12px 24px;
+    padding: 12px 18px;
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
     transition: all 0.2s;
-    min-width: 180px;
+    min-width: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
