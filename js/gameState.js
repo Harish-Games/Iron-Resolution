@@ -28,7 +28,7 @@
     },
     // ====== ADD THESE LINES FOR LEVEL SYSTEM ======
     currentLevel: 1,
-    maxLevel: 7,
+    maxLevel: 8,
     completedLevels: 0,
     persistentUnits: [], // Units that carry over between levels
     playerUpgrades: {
@@ -596,7 +596,9 @@ window.openRecruitScreen = function() {
 			} else if (currentLevel === 6) {
                 showLevel6To7Transition();
             } else if (currentLevel === 7) {
-                showGameCompleteScreen();    // Now Level 7 is final
+				showLevel7To8Transition();
+			} else if (currentLevel === 8) {
+				showGameCompleteScreen();    // Now Level 8 is final
             } else {
                 // Fallback - shouldn't happen
                 console.error(`❌ Unknown level ${currentLevel}, defaulting to startNextLevel()`);

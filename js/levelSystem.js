@@ -462,6 +462,115 @@ function showLevel6To7Transition() {
     }
 }
 
+// ========== LEVEL 7 TO 8 TRANSITION ==========
+function showLevel7To8Transition() {
+    console.log("🎬 Creating Level 7 to Level 8 transition");
+    
+    const transitionHTML = `
+        <div id="transition78Overlay" class="intro-overlay" style="display: flex;">
+            <div class="intro-modal">
+                <div class="intro-title" style="margin-bottom: 25px;">
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                    THE SWAMP OF SORROWS
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                </div>
+                
+                <div class="intro-section" style="margin-bottom: 20px;">
+                    <h3 class="section-header" style="color: #4ecdc4; border-bottom: 2px solid #4ecdc4; padding-bottom: 8px;">
+                        THE VALLEY FLOOR ENDS
+                    </h3>
+                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6;">
+                        Not gradually, but suddenly - as if the land itself gave up trying.
+                        Black water stretches before you, dotted with cypress trees draped in moss.
+                        Fog rolls across the surface, hiding what lies beneath.
+                    </div>
+                </div>
+                
+                <div class="intro-section" style="margin-bottom: 20px; background: rgba(30, 73, 118, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #2ecc71;">
+                    <h3 class="section-header" style="color: #2ecc71;">
+                        THE AIR SMELLS OF DECAY
+                    </h3>
+                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6; color: #e6f1ff;">
+                        Your scouts report movement. Gremlins, of course - they're everywhere here. 
+                        But also archers, finding rare patches of solid ground. Mages, whispering into the mist. 
+                        Knights, standing guard on the only dry approaches.
+                    </div>
+                </div>
+                
+                <div class="intro-section" style="margin-bottom: 20px; background: rgba(30, 73, 118, 0.4); padding: 15px; border-radius: 8px; border-left: 4px solid #ff6b6b;">
+                    <h3 class="section-header" style="color: #ff6b6b;">
+                        TERRAIN PENALTY
+                    </h3>
+                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6;">
+                        <strong>Swamp:</strong> Movement halved (rounded down) each turn.<br>
+                        <strong>Note:</strong> Gremlins are unaffected - they're native to these waters.
+                    </div>
+                </div>
+                
+                <div class="controls-note" style="margin: 20px 0; padding: 12px; background: rgba(30, 73, 118, 0.3); border: 1px solid rgba(255, 193, 7, 0.3); color: #f1c40f;">
+                    <img src="images/swamp.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+                    <strong>BATTLEFIELD:</strong> 55% Swamp | 20% Water | 15% Forest | 10% Normal
+                </div>
+                
+                <button id="continueToLevel8Btn" class="intro-continue-btn" style="margin-top: 20px; min-width: 280px;">
+                    <img src="images/swamp.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
+                    ENTER THE SWAMP
+                </button>
+                
+                <div class="intro-tip" style="margin-top: 15px; color: #8892b0; font-size: 0.9em;">
+                    Press Space or click to continue
+                </div>
+            </div>
+        </div>
+    `;
+    
+    const overlayDiv = document.createElement('div');
+    overlayDiv.innerHTML = transitionHTML;
+    document.body.appendChild(overlayDiv);
+    
+    const continueBtn = document.getElementById('continueToLevel8Btn');
+    const transitionOverlay = document.getElementById('transition78Overlay');
+    
+    continueBtn.onclick = () => {
+        if (transitionOverlay) {
+            transitionOverlay.style.display = 'none';
+        }
+        if (overlayDiv.parentNode) {
+            document.body.removeChild(overlayDiv);
+        }
+        gameState.currentLevel = 8;
+        startNextLevel();
+    };
+    
+    document.addEventListener('keydown', function transitionKeyHandler(e) {
+        if ((e.code === 'Space' || e.key === ' ') && transitionOverlay && transitionOverlay.style.display === 'flex') {
+            e.preventDefault();
+            if (transitionOverlay) {
+                transitionOverlay.style.display = 'none';
+            }
+            if (overlayDiv.parentNode) {
+                document.body.removeChild(overlayDiv);
+            }
+            document.removeEventListener('keydown', transitionKeyHandler);
+            gameState.currentLevel = 8;
+            startNextLevel();
+        }
+    });
+    
+    if (transitionOverlay) {
+        transitionOverlay.addEventListener('click', function(e) {
+            if (e.target === transitionOverlay) {
+                transitionOverlay.style.display = 'none';
+                if (overlayDiv.parentNode) {
+                    document.body.removeChild(overlayDiv);
+                }
+                gameState.currentLevel = 8;
+                startNextLevel();
+            }
+        });
+    }
+}
+
 
 function showGameCompleteScreen() {
     console.log("🏆 Showing game complete screen");
@@ -1140,6 +1249,7 @@ window.showLevel3To4Transition = showLevel3To4Transition;
 window.showLevel4To5Transition = showLevel4To5Transition;
 window.showLevel5To6Transition = showLevel5To6Transition;
 window.showLevel6To7Transition = showLevel6To7Transition;
+window.showLevel7To8Transition = showLevel7To8Transition;
 window.showGameCompleteScreen = showGameCompleteScreen;
 window.completeLevel = completeLevel;
 window.startNextLevel = startNextLevel;

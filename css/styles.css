@@ -398,7 +398,10 @@
     background: #c19a6b url("../images/village-player.png") center/cover;
     border: 1px solid #8b7355;
 }
-
+.tile.swamp { 
+    background: #4a6b3f url("../images/swamp.png") center/cover;
+    border: 1px solid #2d4a1e;
+}
 .tile.village-enemy { 
     background: #8b7355 url("../images/village-enemy.png") center/cover;
     border: 1px solid #8b7355;

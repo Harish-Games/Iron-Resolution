@@ -290,6 +290,58 @@ if (gameState.currentLevel === 7) {
     console.log("Generated Level 7: Misty Lowlands terrain");
     return;
 }
+    // ====== LEVEL 8: THE SWAMP OF SORROWS ======
+if (gameState.currentLevel === 8) {
+    console.log("Generating Level 8: The Swamp of Sorrows");
+    
+    GRID_SIZE = 16;
+    gameState.terrain = [];
+    
+    for (let y = 0; y < GRID_SIZE; y++) {
+        gameState.terrain[y] = [];
+        for (let x = 0; x < GRID_SIZE; x++) {
+            const rand = Math.random();
+            let cumulative = 0;
+            
+            // Swamp: 55%
+            cumulative += 0.55;
+            if (rand < cumulative) {
+                gameState.terrain[y][x] = 'swamp';
+                continue;
+            }
+            
+            // Water: 20%
+            cumulative += 0.20;
+            if (rand < cumulative) {
+                gameState.terrain[y][x] = 'water';
+                continue;
+            }
+            
+            // Forest: 15%
+            cumulative += 0.15;
+            if (rand < cumulative) {
+                gameState.terrain[y][x] = 'forest';
+                continue;
+            }
+            
+            // Normal: 10%
+            gameState.terrain[y][x] = 'normal';
+        }
+    }
+    
+    // Add some solid ground paths (normal tiles) connecting left and right
+    for (let y = 3; y < 13; y+=2) {
+        for (let x = 2; x < 14; x++) {
+            if (Math.random() < 0.3) {
+                gameState.terrain[y][x] = 'normal';
+            }
+        }
+    }
+    
+    console.log("Generated Level 8: Swamp of Sorrows terrain");
+    return;
+}
+    
     
     // ====== LEVEL 5: BOSS LEVEL - ENEMY STRONGHOLD ======
     if (gameState.currentLevel === 5) {
