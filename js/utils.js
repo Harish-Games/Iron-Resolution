@@ -88,6 +88,60 @@ const LEVELS = [
 	{ name: "Gremlin Swarm", difficulty: "easy", enemyBonus: 0, extraEnemies: 9, boss: false } // 6 base + 9 extra = 15 gremlins
 ];
         
+     // ========== ENEMY UNIT COMPOSITION BY LEVEL ==========
+const ENEMY_COMPOSITION = {
+    1: [ // Level 1 - Training Grounds
+        { type: 'knight', min: 2, chance: 50, name: 'Orc Knight' },
+        { type: 'archer', min: 1, chance: 30, name: 'Goblin Archer' },
+        { type: 'mage', min: 0, chance: 0, name: 'Goblin Mage' },
+        { type: 'berserker', min: 1, chance: 20, name: 'Troll Berserker' },
+        { type: 'gremlin', min: 0, chance: 0, name: 'Gremlin' },
+        { type: 'boss', min: 0, chance: 0, name: 'Boss', isBoss: true }
+    ],
+    2: [ // Level 2 - Darkwood Approach
+        { type: 'knight', min: 1, chance: 40, name: 'Orc Knight' },
+        { type: 'archer', min: 2, chance: 60, name: 'Goblin Archer' },
+        { type: 'mage', min: 0, chance: 0, name: 'Goblin Mage' },
+        { type: 'berserker', min: 0, chance: 0, name: 'Troll Berserker' },
+        { type: 'gremlin', min: 0, chance: 0, name: 'Gremlin' },
+        { type: 'boss', min: 0, chance: 0, name: 'Boss', isBoss: true }
+    ],
+    3: [ // Level 3 - Forest Outpost
+        { type: 'knight', min: 1, chance: 30, name: 'Orc Knight' },
+        { type: 'archer', min: 1, chance: 35, name: 'Goblin Archer' },
+        { type: 'mage', min: 0, chance: 15, name: 'Goblin Mage' },
+        { type: 'berserker', min: 1, chance: 20, name: 'Troll Berserker' },
+        { type: 'gremlin', min: 0, chance: 0, name: 'Gremlin' },
+        { type: 'boss', min: 0, chance: 0, name: 'Boss', isBoss: true }
+    ],
+    4: [ // Level 4 - Mountain Pass
+        { type: 'knight', min: 1, chance: 35, name: 'Orc Knight' },
+        { type: 'archer', min: 1, chance: 30, name: 'Goblin Archer' },
+        { type: 'mage', min: 0, chance: 15, name: 'Goblin Mage' },
+        { type: 'berserker', min: 1, chance: 20, name: 'Troll Berserker' },
+        { type: 'gremlin', min: 0, chance: 0, name: 'Gremlin' },
+        { type: 'boss', min: 0, chance: 0, name: 'Boss', isBoss: true }
+    ],
+    5: [ // Level 5 - Mountain Fortress (Boss Level)
+        { type: 'knight', min: 2, chance: 35, name: 'Orc Knight' },
+        { type: 'archer', min: 1, chance: 25, name: 'Goblin Archer' },
+        { type: 'mage', min: 0, chance: 15, name: 'Goblin Mage' },
+        { type: 'berserker', min: 1, chance: 25, name: 'Troll Berserker' },
+        { type: 'gremlin', min: 0, chance: 0, name: 'Gremlin' },
+        { type: 'boss', min: 1, chance: 5, name: 'Boss', isBoss: true }
+    ],
+    6: [ // Level 6 - Gremlin Swarm
+        { type: 'knight', min: 0, chance: 0, name: 'Orc Knight' },
+        { type: 'archer', min: 2, chance: 15, name: 'Goblin Archer' },
+        { type: 'mage', min: 0, chance: 0, name: 'Goblin Mage' },
+        { type: 'berserker', min: 0, chance: 0, name: 'Troll Berserker' },
+        { type: 'gremlin', min: 10, chance: 85, name: 'Gremlin' },
+        { type: 'boss', min: 0, chance: 0, name: 'Boss', isBoss: true }
+    ]
+};   
+            
+        
+        
         // ========== INJURIES & MORALE SYSTEM (Phase 2) ==========
         const INJURIES = {
             minor_wound: { name: "Minor Wound", effect: { hp: -5 }, duration: 1 },
@@ -185,12 +239,14 @@ const LEVELS = [
             return gameState.units.find(u => u.x === x && u.y === y);
         }
         
-       function isInMovementRange(x, y, unit) {
+   function isInMovementRange(x, y, unit) {
     const movesLeft = unit.movement - unit.movesUsed;
     
     // Quick checks
     if (x === unit.x && y === unit.y) return false;
     if (gameState.terrain[y][x] === 'water') return false;
+    if (gameState.terrain[y][x] === 'river') return false;
+    if (gameState.terrain[y][x] === 'mountain-pass') return false;
     if (getUnitAt(x, y)) return false;
     if (movesLeft <= 0) return false;
     
@@ -237,7 +293,9 @@ function hasPathWithinRange(startX, startY, targetX, targetY, maxMoves) {
             
             // Check if passable (not water/river, not occupied unless it's target)
             const isTarget = (newX === targetX && newY === targetY);
-            if (gameState.terrain[newY][newX] === 'water' || gameState.terrain[newY][newX] === 'river' || gameState.terrain[newY][newX] === 'mountain-pass') {
+            if (gameState.terrain[newY][newX] === 'water' || 
+                gameState.terrain[newY][newX] === 'river' || 
+                gameState.terrain[newY][newX] === 'mountain-pass') {
     continue;
 }
             
@@ -469,3 +527,7 @@ function getCumulativeXpForLevel(level) {
     return xpTable[level] || 0;
 }
   
+// Make sure these are available globally
+window.ENEMY_COMPOSITION = ENEMY_COMPOSITION;
+window.LEVELS = LEVELS;
+window.TERRAIN_EFFECTS = TERRAIN_EFFECTS;

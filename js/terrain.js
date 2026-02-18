@@ -25,49 +25,48 @@ function resetBattleCounters() {
 function generateTerrain() {
     console.log(`Generating terrain for Level ${gameState.currentLevel}`);
   
-    // ====== LEVEL 2: DARKWOOD APPROACH ======
-if (gameState.currentLevel === 2) {
-    console.log("Generating Level 2: Darkwood Approach");
-    
-    // Keep full 16x16 grid but add dense forest borders
-    GRID_SIZE = 16; // Keep full size
-    gameState.terrain = [];
-    
-    for (let y = 0; y < GRID_SIZE; y++) {
-        gameState.terrain[y] = [];
-        for (let x = 0; x < GRID_SIZE; x++) {
-            // Create forest borders at top and bottom
-            if (y < 3 || y > GRID_SIZE - 4) {
-                // Top 3 and bottom 3 rows are dense forest
-                gameState.terrain[y][x] = 'forest';
-            } else {
-                // Middle area is a winding path
-                const pathCenter = Math.floor(GRID_SIZE/2) + Math.sin(y * 0.5) * 2;
-                
-                if (Math.abs(x - pathCenter) <= 1) {
-                    // Path - mostly normal terrain
-                    gameState.terrain[y][x] = 'normal';
-                } else if (Math.abs(x - pathCenter) <= 2) {
-                    // Forest edges
+      // ====== LEVEL 2: DARKWOOD APPROACH ======
+    if (gameState.currentLevel === 2) {
+        console.log("Generating Level 2: Darkwood Approach");
+        
+        GRID_SIZE = 16;
+        gameState.terrain = [];
+        
+        for (let y = 0; y < GRID_SIZE; y++) {
+            gameState.terrain[y] = [];
+            for (let x = 0; x < GRID_SIZE; x++) {
+                // Create forest borders at top and bottom
+                if (y < 3 || y > GRID_SIZE - 4) {
+                    // Top 3 and bottom 3 rows are dense forest
                     gameState.terrain[y][x] = 'forest';
                 } else {
-                    // Dense forest on sides
-                    gameState.terrain[y][x] = 'forest';
-                }
-                
-                // Add river crossing in the middle
-                if (y === 8 || y === 9) {
-                    if (x >= pathCenter - 1 && x <= pathCenter + 1) {
-                        gameState.terrain[y][x] = 'river';
+                    // Middle area is a winding path
+                    const pathCenter = Math.floor(GRID_SIZE/2) + Math.sin(y * 0.5) * 2;
+                    
+                    if (Math.abs(x - pathCenter) <= 1) {
+                        // Path - mostly normal terrain
+                        gameState.terrain[y][x] = 'normal';
+                    } else if (Math.abs(x - pathCenter) <= 2) {
+                        // Forest edges
+                        gameState.terrain[y][x] = 'forest';
+                    } else {
+                        // Dense forest on sides
+                        gameState.terrain[y][x] = 'forest';
+                    }
+                    
+                    // Add river crossing in the middle
+                    if (y === 8 || y === 9) {
+                        if (x >= pathCenter - 1 && x <= pathCenter + 1) {
+                            gameState.terrain[y][x] = 'water';
+                        }
                     }
                 }
             }
         }
+        
+        return;
     }
-    
-    return;
-}
-    
+  
     
 // ====== LEVEL 3: FOREST OUTPOST (WITH RIVER BARRIER) ======
 if (gameState.currentLevel === 3) {
@@ -394,347 +393,26 @@ function createUnits() {
     console.log("Current level:", gameState.currentLevel);
     console.log("gameState:", gameState);
 	console.log("Current difficulty multiplier:", gameState.difficultyMultiplier);
-	    	
-     // ====== TRAVEL LEVEL 2: DARKWOOD APPROACH ======
-    if (gameState.currentLevel === 2) {
-    console.log("Creating units for Level 2: Darkwood Approach");
     
+    // Clear existing units
     gameState.units = [];
     
-    // Player units start at bottom (above the forest border)
-	const playerCount = gameState.persistentUnits.length || 6;    
-	for (let i = 0; i < playerCount; i++) {
-        let unit;
-        if (gameState.persistentUnits[i]) {
-            unit = gameState.persistentUnits[i];
-            // Position in bottom area (rows 11-13, above the bottom forest border)
-            unit.x = 6 + (i % 3);
-            unit.y = 12 - Math.floor(i / 3);
-        } else {			
-            const playerClasses = ['Knight', 'Archer', 'Berserker', 'Mage', 'Knight', 'Archer'];
-            const className = playerClasses[i % playerClasses.length];
-            unit = new Unit('player', className, 6 + (i % 3), 12 - Math.floor(i / 3));
-        }
-        gameState.units.push(unit);
-    }
-
-resetBattleCounters();
+    // ====== CREATE PLAYER UNITS ======
+    const playerClasses = ['Knight', 'Archer', 'Berserker', 'Mage'];
     
-    // Enemies at top (below the top forest border)
-const travelEnemies = ['Goblin Archer', 'Goblin Archer', 'Orc Knight', 'Goblin Archer', 'Orc Knight'];
-for (let i = 0; i < finalEnemyCount; i++) {
-    const enemyType = travelEnemies[i % travelEnemies.length];
-    const unit = new Unit('enemy', enemyType, 6 + (i % 3), 3 + Math.floor(i / 3));
-    
-    // Make scouts a bit weaker
-    unit.maxHp = Math.floor(unit.maxHp * 0.8);
-    unit.hp = unit.maxHp;
-    
-    gameState.units.push(unit);
-}
-
-
-resetBattleCounters();    
-    return;
-}
-    
-   // ====== LEVEL 4: MOUNTAIN PASS ======
-if (gameState.currentLevel === 4) {
-    console.log("Creating units for Level 4: Mountain Pass");
-    
-    gameState.units = [];
-    
-    // Player units start on left side (entrance to mountain pass)
-	const playerCount = gameState.persistentUnits.length || 6;
-    for (let i = 0; i < playerCount; i++) {
-        let unit;
-        if (gameState.persistentUnits[i]) {
-            unit = gameState.persistentUnits[i];
-            // Start at left side, near the mountain pass entrance
-            unit.x = 3 + (i % 3);
-            unit.y = 10 + Math.floor(i / 3) * 2;
-        } else {
-            const playerClasses = ['Knight', 'Archer', 'Berserker', 'Mage', 'Knight', 'Archer'];
-            const className = playerClasses[i % playerClasses.length];
-            unit = new Unit('player', className, 3 + (i % 3), 10 + Math.floor(i / 3) * 2);
-        }
-        
-        // Ensure units don't spawn in mountains
-        if (gameState.terrain[unit.y][unit.x] === 'mountain' || 
-            gameState.terrain[unit.y][unit.x] === 'river') {
-            // Move to nearest valid position
-            for (let dy = -1; dy <= 1; dy++) {
-                for (let dx = -1; dx <= 1; dx++) {
-                    const newX = unit.x + dx;
-                    const newY = unit.y + dy;
-                    if (newX >= 0 && newX < GRID_SIZE && newY >= 0 && newY < GRID_SIZE &&
-                        gameState.terrain[newY][newX] !== 'mountain' &&
-                        gameState.terrain[newY][newX] !== 'river' &&
-                        !getUnitAt(newX, newY)) {
-                        unit.x = newX;
-                        unit.y = newY;
-                        break;
-                    }
-                }
-            }
-        }
-        
-        gameState.units.push(unit);
-		 return;
-    }
-
-
-// ====== LEVEL 6: GREMLIN SWARM ======
-if (gameState.currentLevel === 6) {
-    console.log("Creating units for Level 6: Gremlin Swarm");
-    
-    gameState.units = [];
-    
-    // Player units at fixed safe positions from maze layout
-const playerPositions = [
-    {x: 1, y: 1},  // Position 1
-    {x: 3, y: 1},  // Position 2
-    {x: 1, y: 3},  // Position 3
-    {x: 3, y: 3},  // Position 4
-    {x: 2, y: 5},  // Position 5
-    {x: 4, y: 5},  // Position 6
-    {x: 1, y: 7},  // Position 7 (extra)
-    {x: 3, y: 7},  // Position 8 (extra)
-    {x: 2, y: 9},  // Position 9 (extra)
-    {x: 4, y: 9},  // Position 10 (extra)
-    {x: 1, y: 11}, // Position 11 (extra)
-    {x: 3, y: 11}  // Position 12 (extra)
-];
-
-const playerCount = gameState.persistentUnits.length || 6;
-for (let i = 0; i < playerCount; i++) {
-    let unit;
-    if (gameState.persistentUnits[i]) {
-        unit = gameState.persistentUnits[i];
-    } else {
-        const playerClasses = ['Knight', 'Archer', 'Berserker', 'Mage', 'Knight', 'Archer'];
-        const className = playerClasses[i % playerClasses.length];
-        unit = new Unit('player', className, 0, 0);
-    }
-    
-    // Use modulo to cycle through positions if more units than positions
-    const pos = playerPositions[i % playerPositions.length];
-    unit.x = pos.x;
-    unit.y = pos.y;
-    unit.remainingActions = unit.maxActions;
-    unit.movesUsed = 0;
-    unit.attacksUsed = 0;
-    unit.acted = false;
-    unit.fleeing = false;
-    
-    gameState.units.push(unit);
-}
-    
-    resetBattleCounters();
-    
-    // Create 15 gremlins at fixed positions on right side
-    const gremlinPositions = [
-        {x: 9, y: 3}, {x: 12, y: 3}, {x: 14, y: 3},
-        {x: 9, y: 5}, {x: 11, y: 5}, {x: 13, y: 5}, {x: 14, y: 5},
-        {x: 10, y: 7}, {x: 12, y: 7}, {x: 14, y: 7},
-        {x: 9, y: 9}, {x: 11, y: 9}, {x: 13, y: 9},
-        {x: 10, y: 11}, {x: 12, y: 11}
-    ];
-    
-    for (let i = 0; i < 15; i++) {
-        const pos = gremlinPositions[i];
-        const unit = new Unit('enemy', 'Gremlin', pos.x, pos.y);
-        unit.classType = 'gremlin';
-        gameState.units.push(unit);
-    }
-    
-    // Create 3 archers
-    const archerPositions = [
-        {x: 14, y: 9},
-        {x: 13, y: 11},
-        {x: 14, y: 2}
-    ];
-    
-    for (let i = 0; i < 3; i++) {
-        const pos = archerPositions[i];
-        const unit = new Unit('enemy', 'Goblin Archer', pos.x, pos.y);
-        unit.classType = 'archer';
-        gameState.units.push(unit);
-    }
-    
-    resetBattleCounters();
-    console.log(`Created ${gameState.units.length} units for Level 6`);
-    return;
-}
-
-
-resetBattleCounters();    
-    // Enemy units defend the mountain pass (fewer but tougher)
-    const mountainEnemies = ['Orc Knight', 'Goblin Archer', 'Troll Berserker', 'Orc Knight', 'Goblin Archer', 'Goblin Shaman'];
-    for (let i = 0; i < mountainEnemies.length; i++) {
-        // Position enemies on right side, in defensive positions
-        const baseName = mountainEnemies[i];
-        
-        // FORCE correct classType
-        let forcedClassType = '';
-        if (baseName.includes('Knight')) forcedClassType = 'knight';
-        else if (baseName.includes('Archer')) forcedClassType = 'archer';
-        else if (baseName.includes('Berserker')) forcedClassType = 'berserker';
-        else if (baseName.includes('Shaman') || baseName.includes('Mage')) forcedClassType = 'mage';
-        
-        const unit = new Unit('enemy', baseName, 12 + (i % 3), 4 + Math.floor(i / 2) * 3);
-        
-        // OVERRIDE classType
-        if (forcedClassType) {
-            unit.classType = forcedClassType;
-        }
-        
-        // Mountain enemies are tougher (adapted to high altitude)
-        unit.maxHp = Math.floor(unit.maxHp * 1.3);
-        unit.hp = unit.maxHp;
-        if (unit.attack > 0) {
-            unit.attack += 3;
-        }
-        unit.morale += 20; // Defending their home terrain
-        
-        // Ensure enemies don't spawn in impassable terrain
-        if (gameState.terrain[unit.y][unit.x] === 'mountain' || 
-            gameState.terrain[unit.y][unit.x] === 'river') {
-            // Move to nearest valid position
-            for (let dy = -1; dy <= 1; dy++) {
-                for (let dx = -1; dx <= 1; dx++) {
-                    const newX = unit.x + dx;
-                    const newY = unit.y + dy;
-                    if (newX >= 0 && newX < GRID_SIZE && newY >= 0 && newY < GRID_SIZE &&
-                        gameState.terrain[newY][newX] !== 'mountain' &&
-                        gameState.terrain[newY][newX] !== 'river' &&
-                        !getUnitAt(newX, newY)) {
-                        unit.x = newX;
-                        unit.y = newY;
-                        break;
-                    }
-                }
-            }
-        }
-        
-        gameState.units.push(unit);
-    }
-    
-    resetBattleCounters();
-    
-    return;
-}
-    
-    
-     const playerClasses = ['Knight', 'Archer', 'Berserker', 'Mage'];
-    const enemyClasses = ['Orc Knight', 'Goblin Archer', 'Troll Berserker', 'Goblin Mage', 'Gremlin'];
-    
-    gameState.units = [];
-    
-    // ====== LEVEL 6: GREMLIN SWARM ======
-    if (gameState.currentLevel === 6) {
-    console.log("Creating units for Level 6: Gremlin Swarm");
-            
-        // Player units at fixed safe positions from maze layout
-        const playerPositions = [
-            {x: 1, y: 1},  // Knight 1
-            {x: 3, y: 1},  // Archer 1
-            {x: 1, y: 3},  // Berserker
-            {x: 3, y: 3},  // Mage
-            {x: 2, y: 5},  // Knight 2
-            {x: 4, y: 5}   // Archer 2
-        ];
-        
-        const playerCount = gameState.persistentUnits.length || 6;
-        for (let i = 0; i < playerCount; i++) {
-            let unit;
-            if (gameState.persistentUnits[i]) {
-                unit = gameState.persistentUnits[i];
-            } else {
-		// Define enemy classes based on level
-		let enemyClasses;
-		if (gameState.currentLevel >= 6) {
-			// Level 6 and beyond include gremlins
-			enemyClasses = ['Orc Knight', 'Goblin Archer', 'Troll Berserker', 'Goblin Mage', 'Gremlin'];
-		} else {
-			// Levels 1-5 no gremlins
-			enemyClasses = ['Orc Knight', 'Goblin Archer', 'Troll Berserker', 'Goblin Mage'];
-		}
-                const className = playerClasses[i % playerClasses.length];
-                unit = new Unit('player', className, 0, 0);
-            }
-            
-            const posIndex = i % playerPositions.length;
-			const pos = playerPositions[posIndex];
-            unit.x = pos.x;
-            unit.y = pos.y;
-            unit.remainingActions = unit.maxActions;
-            unit.movesUsed = 0;
-            unit.attacksUsed = 0;
-            unit.acted = false;
-            unit.fleeing = false;
-            
-            gameState.units.push(unit);
-        }
-        
-        // Create 15 gremlins at fixed positions on right side
-        const gremlinPositions = [
-            {x: 9, y: 3}, {x: 12, y: 3}, {x: 14, y: 3},
-            {x: 9, y: 5}, {x: 11, y: 5}, {x: 13, y: 5}, {x: 14, y: 5},
-            {x: 10, y: 7}, {x: 12, y: 7}, {x: 14, y: 7},
-            {x: 9, y: 9}, {x: 11, y: 9}, {x: 13, y: 9},
-            {x: 10, y: 11}, {x: 12, y: 11}
-        ];
-        
-        for (let i = 0; i < 15; i++) {
-            const pos = gremlinPositions[i];
-            const unit = new Unit('enemy', 'Gremlin', pos.x, pos.y);
-            unit.classType = 'gremlin';
-            gameState.units.push(unit);
-        }
-        
-        // Create 3 archers
-        const archerPositions = [
-            {x: 14, y: 9},
-            {x: 13, y: 11},
-            {x: 14, y: 2}
-        ];
-        
-        for (let i = 0; i < 3; i++) {
-            const pos = archerPositions[i];
-            const unit = new Unit('enemy', 'Goblin Archer', pos.x, pos.y);
-            unit.classType = 'archer';
-            gameState.units.push(unit);
-        }
-        
-        resetBattleCounters();
-        console.log(`Created ${gameState.units.length} units for Level 6`);
-        
-        // Skip all the default unit creation
-        console.log("🚨 DEBUG: createUnits() ENDING");
-        console.log("Total units created:", gameState.units.length);
-        console.log("Units array:", gameState.units);
-        return;  // Exit the function here
-    }
-    
-    // Create player units - either from persistent or new
     if (gameState.persistentUnits.length > 0) {
-		
-		 // RESET persistent units BEFORE copying
-    gameState.persistentUnits.forEach(unit => {
-        unit.attacksUsed = 0;
-        if (unit.classType === 'mage') {
+        // Use persistent units from previous levels
+        gameState.persistentUnits.forEach(unit => {
             unit.attacksUsed = 0;
-            console.log(`Reset persistent mage ${unit.name} heals to 0`);
-        }
-    });
-		
-        gameState.units = [...gameState.persistentUnits];
+            if (unit.classType === 'mage') {
+                unit.attacksUsed = 0;
+            }
+            gameState.units.push(unit);
+        });
         
-        // Position and reset player units
+        // Position player units
         for (let i = 0; i < gameState.units.length; i++) {
             const unit = gameState.units[i];
-            // Start player units in the village area (left side)
             unit.x = 2 + (i % 3);
             unit.y = 5 + Math.floor(i / 3) * 3;
             unit.remainingActions = unit.maxActions;
@@ -742,334 +420,127 @@ resetBattleCounters();
             unit.attacksUsed = 0;
             unit.acted = false;
             unit.fleeing = false;
-            
-            if (unit.classType === 'mage') {
-            unit.attacksUsed = 0;  // ← RESET HEALS TOO!
-        }
-            
-            // Apply upgrades
-            unit.maxHp += gameState.playerUpgrades.health * 5;
-            unit.hp = unit.maxHp;
-            unit.attack += gameState.playerUpgrades.damage * 2;
-            unit.morale += gameState.playerUpgrades.morale * 10;
-            
-            // Keep within bounds
-            unit.x = Math.max(0, Math.min(GRID_SIZE - 1, unit.x));
-            unit.y = Math.max(0, Math.min(GRID_SIZE - 1, unit.y));
         }
     } else {
-    // Create new player units for first level
-    for (let i = 0; i < UNITS_PER_TEAM; i++) {
-        const className = playerClasses[i % playerClasses.length];
+        // Create new player units for first level
+        for (let i = 0; i < UNITS_PER_TEAM; i++) {
+            const className = playerClasses[i % playerClasses.length];
+            
+            // Random spawn positions for player units
+            let spawnX, spawnY;
+            let attempts = 0;
+            let validPosition = false;
+            
+            while (!validPosition && attempts < 50) {
+                spawnX = Math.floor(Math.random() * 8);
+                spawnY = 3 + Math.floor(Math.random() * 10);
+                
+                validPosition = !getUnitAt(spawnX, spawnY) && 
+                               gameState.terrain[spawnY][spawnX] !== 'water' &&
+                               gameState.terrain[spawnY][spawnX] !== 'river' &&
+                               gameState.terrain[spawnY][spawnX] !== 'mountain-pass';
+                attempts++;
+            }
+            
+            if (!validPosition) {
+                spawnX = 2 + (i % 3);
+                spawnY = 5 + Math.floor(i / 2) * 3;
+            }
+            
+            const unit = new Unit('player', className, spawnX, spawnY);
+            gameState.units.push(unit);
+        }
+    }
+    
+    // ====== CREATE ENEMY UNITS USING COMPOSITION TABLE ======
+    const level = LEVELS[gameState.currentLevel - 1];
+    const baseEnemyCount = UNITS_PER_TEAM + level.extraEnemies;
+    let finalEnemyCount = Math.round(baseEnemyCount * gameState.difficultyMultiplier);
+    if (finalEnemyCount < 1) finalEnemyCount = 1;
+    
+    console.log(`Difficulty: ${gameState.difficulty} (${gameState.difficultyMultiplier}x), Base enemies: ${baseEnemyCount}, Final: ${finalEnemyCount}`);
+    
+    // Get composition for current level
+    const composition = ENEMY_COMPOSITION[gameState.currentLevel] || ENEMY_COMPOSITION[1];
+    
+    // First, calculate minimum guaranteed units
+    let guaranteedUnits = [];
+    composition.forEach(config => {
+        for (let i = 0; i < config.min; i++) {
+            guaranteedUnits.push({
+                type: config.type,
+                name: config.name,
+                isBoss: config.isBoss || false
+            });
+        }
+    });
+    
+    // Calculate how many additional units we need
+    const additionalNeeded = Math.max(0, finalEnemyCount - guaranteedUnits.length);
+    let additionalUnits = [];
+    
+    // Generate additional units based on percentage chances
+    for (let i = 0; i < additionalNeeded; i++) {
+        const pool = [];
+        composition.forEach(config => {
+            if (config.chance > 0) {
+                const weight = Math.max(1, Math.round(config.chance / 10));
+                for (let w = 0; w < weight; w++) {
+                    pool.push({
+                        type: config.type,
+                        name: config.name,
+                        isBoss: config.isBoss || false
+                    });
+                }
+            }
+        });
         
-        // RANDOM SPAWN POSITIONS FOR PLAYER UNITS
+        if (pool.length > 0) {
+            const randomIndex = Math.floor(Math.random() * pool.length);
+            additionalUnits.push(pool[randomIndex]);
+        }
+    }
+    
+    // Combine guaranteed and additional units
+    const enemyTypes = [...guaranteedUnits, ...additionalUnits];
+    
+    // Shuffle the array for random placement order
+    for (let i = enemyTypes.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [enemyTypes[i], enemyTypes[j]] = [enemyTypes[j], enemyTypes[i]];
+    }
+    
+    console.log(`Creating ${enemyTypes.length} enemies for Level ${gameState.currentLevel}:`, enemyTypes);
+    
+    // Create all the enemies
+    for (let i = 0; i < enemyTypes.length; i++) {
+        const enemyInfo = enemyTypes[i];
+        const baseName = enemyInfo.name;
+        
+        // Start enemy units on the right side
         let spawnX, spawnY;
         let attempts = 0;
         let validPosition = false;
         
-        // Keep trying until we find a valid position
         while (!validPosition && attempts < 50) {
-            if (gameState.currentLevel === 2) {
-                // Level 2: Spawn on LEFT side of river (columns 0-7)
-                spawnX = Math.floor(Math.random() * 8);  // Columns 0-7
-                spawnY = 3 + Math.floor(Math.random() * 10); // Rows 3-12
-            } else {
-                // Level 1 & 3: Spawn on left side of map
-                spawnX = Math.floor(Math.random() * 8);  // Columns 0-7 (left side)
-                spawnY = 3 + Math.floor(Math.random() * 10); // Rows 3-12
-            }
+            spawnX = 8 + Math.floor(Math.random() * 8);
+            spawnY = 3 + Math.floor(Math.random() * 10);
             
-            // Check if position is valid
             validPosition = !getUnitAt(spawnX, spawnY) && 
+                           gameState.terrain[spawnY] && 
                            gameState.terrain[spawnY][spawnX] !== 'water' &&
                            gameState.terrain[spawnY][spawnX] !== 'river' &&
-                           spawnX >= 0 && spawnX < GRID_SIZE &&
-                           spawnY >= 0 && spawnY < GRID_SIZE;
+                           gameState.terrain[spawnY][spawnX] !== 'mountain-pass';
             attempts++;
         }
         
-        // If we couldn't find a valid random position, use fallback positions
         if (!validPosition) {
-            // Fallback to original positions
-            if (gameState.currentLevel === 2) {
-                spawnX = 2 + (i % 3);
-                spawnY = 4 + Math.floor(i / 2) * 3;
-            } else {
-                spawnX = 2 + (i % 3);
-                spawnY = 5 + Math.floor(i / 2) * 3;
-            }
-        }
-        
-        const unit = new Unit('player', className, spawnX, spawnY);
-        
-        // Additional validation (just in case)
-        if (getUnitAt(unit.x, unit.y) || gameState.terrain[unit.y][unit.x] === 'water' || gameState.terrain[unit.y][unit.x] === 'river') {
-            // Find nearest valid position
-            for (let dx = -2; dx <= 2; dx++) {
-                for (let dy = -2; dy <= 2; dy++) {
-                    const checkX = unit.x + dx;
-                    const checkY = unit.y + dy;
-                    if (checkX >= 0 && checkX < GRID_SIZE && checkY >= 0 && checkY < GRID_SIZE &&
-                        !getUnitAt(checkX, checkY) && 
-                        gameState.terrain[checkY][checkX] !== 'water' &&
-                        gameState.terrain[checkY][checkX] !== 'river') {
-                        unit.x = checkX;
-                        unit.y = checkY;
-                        break;
-                    }
-                }
-            }
-        }
-        
-        gameState.units.push(unit);
-    }
-}
-
-resetBattleCounters();
-    
-    // Create enemy units based on current level
-const level = LEVELS[gameState.currentLevel - 1];
-const enemyCount = UNITS_PER_TEAM + level.extraEnemies;
-gameState.isBossLevel = level.boss;
-
-// Apply difficulty multiplier
-let finalEnemyCount = Math.round(enemyCount * gameState.difficultyMultiplier);
-
-// Ensure at least 1 enemy
-if (finalEnemyCount < 1) finalEnemyCount = 1;
-
-gameState.isBossLevel = level.boss;
-
-console.log(`Difficulty: ${gameState.difficulty} (${gameState.difficultyMultiplier}x), Base enemies: ${enemyCount}, Final: ${finalEnemyCount}`);
-
-// LEVEL 2: SPECIAL ENEMY COMPOSITION - 3 ARCHERS
-if (gameState.currentLevel === 2) {
-    console.log("Level 2: Creating special enemy composition with 3 archers");
-    
-    // Create specific enemy types for Level 2 - 6 base enemies with 3 archers
-    const level2EnemyTypes = [
-        'Orc Knight',
-        'Goblin Archer',
-        'Goblin Archer',
-        'Goblin Archer',
-        'Troll Berserker',
-        'Goblin Shaman'
-    ];
-    
-    // Add extra enemies if needed (Level 2 has extraEnemies: 1)
-    for (let i = 0; i < level.extraEnemies; i++) {
-        // Add the extra enemy - you can choose what type
-        level2EnemyTypes.push('Orc Knight'); // Add another knight as the extra
-    }
-    
-    // Now create all the enemies with random positions
-    const enemyCount = UNITS_PER_TEAM + level.extraEnemies; // Should be 1
-    for (let i = 0; i < finalEnemyCount; i++) {
-		const baseName = level2EnemyTypes[i];
-    
-    // FORCE correct classType regardless of name
-    let forcedClassType = '';
-    if (baseName.includes('Knight')) forcedClassType = 'knight';
-    else if (baseName.includes('Archer')) forcedClassType = 'archer';
-    else if (baseName.includes('Berserker')) forcedClassType = 'berserker';
-    else if (baseName.includes('Shaman') || baseName.includes('Mage')) forcedClassType = 'mage';
-    
-    // RANDOM SPAWN POSITION FOR ENEMIES
-    let spawnX, spawnY;
-    let attempts = 0;
-    let validPosition = false;
-    
-    // Keep trying until we find a valid position
-    while (!validPosition && attempts < 50) {
-        if (gameState.currentLevel === 2) {
-            // Level 2: Spawn on RIGHT side of river (columns 9-15)
-            spawnX = 9 + Math.floor(Math.random() * 7);  // Columns 9-15
-        } else {
-            // Level 1 & 3: Spawn on right side of map
-            spawnX = 8 + Math.floor(Math.random() * 8);  // Columns 8-15 (right side)
-        }
-        
-        spawnY = 3 + Math.floor(Math.random() * 10); // Rows 3-12
-        
-        // Check if position is valid
-        validPosition = !getUnitAt(spawnX, spawnY) && 
-                       gameState.terrain[spawnY][spawnX] !== 'water' &&
-                       gameState.terrain[spawnY][spawnX] !== 'river' &&
-                       spawnX >= 0 && spawnX < GRID_SIZE &&
-                       spawnY >= 0 && spawnY < GRID_SIZE;
-        
-        attempts++;
-    }
-    
-    // If we couldn't find a valid random position, use fallback positions
-    if (!validPosition) {
-        spawnX = 12 + (i % 3);
-        spawnY = 3 + Math.floor(i / 2) * 4;
-    }
-    
-    const unit = new Unit('enemy', baseName, spawnX, spawnY);
-    
-    // OVERRIDE classType to ensure correct icon and AI behavior
-    if (forcedClassType) {
-        unit.classType = forcedClassType;
-    }
-    
-    // Scale enemies based on level
-    unit.maxHp += level.enemyBonus;
-    unit.hp = unit.maxHp;
-    if (unit.attack > 0) {
-        unit.attack += Math.floor(level.enemyBonus / 2);
-    }
-    
-    // Additional validation (just in case)
-    if (getUnitAt(unit.x, unit.y) || gameState.terrain[unit.y][unit.x] === 'water' || gameState.terrain[unit.y][unit.x] === 'river') {
-        // Find nearest valid position
-        for (let dx = -2; dx <= 2; dx++) {
-            for (let dy = -2; dy <= 2; dy++) {
-                const checkX = unit.x + dx;
-                const checkY = unit.y + dy;
-                if (checkX >= 0 && checkX < GRID_SIZE && checkY >= 0 && checkY < GRID_SIZE &&
-                    !getUnitAt(checkX, checkY) && 
-                    gameState.terrain[checkY][checkX] !== 'water' &&
-                    gameState.terrain[checkY][checkX] !== 'river') {
-                    unit.x = checkX;
-                    unit.y = checkY;
-                    break;
-                }
-            }
-        }
-    }
-    
-    gameState.units.push(unit);
-}
-
-resetBattleCounters();
-
-} else if (gameState.currentLevel === 3) {
-    // LEVEL 3: LEVEL WITH RIVER
-    console.log("Level 3: River Level");
-    
-    // Create enemy types for Level 3 - 6 base enemies
-    const level3EnemyTypes = [
-        'Orc Knight',
-        'Goblin Archer', 
-        'Troll Berserker',
-        'Goblin Shaman',
-        'Orc Knight',
-        'Goblin Archer'
-    ];
-    
-    // Add extra enemies if needed (Level 3 has extraEnemies: 2)
-    for (let i = 0; i < level.extraEnemies; i++) {
-        // Add more challenging enemies for Level 3
-        const extraTypes = ['Troll Berserker', 'Orc Knight', 'Goblin Archer'];
-        level3EnemyTypes.push(extraTypes[i % extraTypes.length]);
-    }
-    
-    // Now create all the enemies
-    for (let i = 0; i < level3EnemyTypes.length; i++) {
-        const baseName = level3EnemyTypes[i];
-        
-        // FORCE correct classType regardless of name
-        let forcedClassType = '';
-        if (baseName.includes('Knight')) forcedClassType = 'knight';
-        else if (baseName.includes('Archer')) forcedClassType = 'archer';
-        else if (baseName.includes('Berserker')) forcedClassType = 'berserker';
-        else if (baseName.includes('Shaman') || baseName.includes('Mage')) forcedClassType = 'mage';
-        
-        // Start enemy units on the right side
-// 70% chance of grid position, 30% chance of random position
-if (Math.random() < 0.7) {
-    // Grid position
-    var unit = new Unit('enemy', baseName, 12 + (i % 3), 3 + Math.floor(i / 2) * 4);
-} else {
-    // Random position on right side
-    var unit = new Unit('enemy', baseName, 
-        8 + Math.floor(Math.random() * 8), 
-        3 + Math.floor(Math.random() * 10)
-    );
-}        
-        // OVERRIDE classType to ensure correct icon and AI behavior
-        if (forcedClassType) {
-            unit.classType = forcedClassType;
-        }
-        
-        // Scale enemies based on level
-        unit.maxHp += level.enemyBonus;
-        unit.hp = unit.maxHp;
-        if (unit.attack > 0) {
-            unit.attack += Math.floor(level.enemyBonus / 2);
-        }
-        
-        // Boss gets extra buffs (first enemy is boss in Level 3)
-        if (level.boss && i === 0) {
-            unit.maxHp *= 1.5;
-            unit.hp = unit.maxHp;
-            unit.attack *= 1.5;
-            unit.name = generateRandomName('enemy', baseName, true);
-            unit.morale = 150;
-            unit.isBoss = true;
-            unit.movement += 1;  // Boss gets +1 movement
-            unit.maxActions += 1; // Boss gets +1 action per turn
-            unit.remainingActions = unit.maxActions; // Set current actions
-        }
-        
-        let attempts = 0;
-while (getUnitAt(unit.x, unit.y) || 
-       unit.y >= gameState.terrain.length || 
-       unit.x >= gameState.terrain[0].length ||
-       gameState.terrain[unit.y][unit.x] === 'water') {
-		   // Keep enemies on the right side
-            unit.x = 10 + Math.floor(Math.random() * 6);
-            unit.y = 3 + Math.floor(Math.random() * 10);
-            attempts++;
-            if (attempts > 20) break;
-        }
-        
-        gameState.units.push(unit);
-    }
-resetBattleCounters();
-
-} else {
-    // ORIGINAL CODE FOR LEVEL 1 AND ANY OTHER LEVELS
-	for (let i = 0; i < finalEnemyCount; i++) {
-	        const baseName = enemyClasses[i % enemyClasses.length];
-        
-        // FORCE correct classType regardless of name
-        let forcedClassType = '';
-        if (baseName.includes('Knight')) forcedClassType = 'knight';
-        else if (baseName.includes('Archer')) forcedClassType = 'archer';
-        else if (baseName.includes('Berserker')) forcedClassType = 'berserker';
-        else if (baseName.includes('Shaman') || baseName.includes('Mage')) forcedClassType = 'mage';
-        
-        // Start enemy units on the right side (away from village)
-        let spawnX, spawnY;
-        
-        if (gameState.currentLevel === 5) {
-            // Level 5: Cluster around boss
-            const bossX = 12;
-            const bossY = 8;
-            
-            if (i === 0) {
-                // Boss at center
-                spawnX = bossX;
-                spawnY = bossY;
-            } else {
-                // All other enemies clustered around the boss position
-                spawnX = bossX + (Math.floor(Math.random() * 5) - 2);
-                spawnY = bossY + (Math.floor(Math.random() * 5) - 2);
-            }
-        } else {
-            // Levels 1: Original grid pattern
             spawnX = 12 + (i % 3);
             spawnY = 3 + Math.floor(i / 2) * 4;
         }
         
-        const unit = new Unit('enemy', baseName, spawnX, spawnY);        
-        // OVERRIDE classType to ensure correct icon and AI behavior
-        if (forcedClassType) {
-            unit.classType = forcedClassType;
-        }
+        const unit = new Unit('enemy', baseName, spawnX, spawnY);
+        unit.classType = enemyInfo.type;
         
         // Scale enemies based on level
         unit.maxHp += level.enemyBonus;
@@ -1078,42 +549,130 @@ resetBattleCounters();
             unit.attack += Math.floor(level.enemyBonus / 2);
         }
         
-        // Boss gets extra buffs (only for boss levels)
-        if (level.boss && i === 0) {
+        // Boss gets extra buffs
+        if (enemyInfo.isBoss) {
             unit.maxHp *= 1.5;
             unit.hp = unit.maxHp;
             unit.attack *= 1.5;
             unit.name = generateRandomName('enemy', baseName, true);
             unit.morale = 150;
             unit.isBoss = true;
-            unit.movement += 1;  // Boss gets +1 movement
-            unit.maxActions += 1; // Boss gets +1 action per turn
-            unit.remainingActions = unit.maxActions; // Set current actions
-        }
-        
-        // RANDOMIZE STARTING POSITION
-        let attempts = 0;
-        let validPosition = false;
-        
-        while (!validPosition && attempts < 30) {
-            unit.x = 8 + Math.floor(Math.random() * 8);  // Columns 8-15
-            unit.y = 3 + Math.floor(Math.random() * 10); // Rows 3-12
-            
-            validPosition = !getUnitAt(unit.x, unit.y) && 
-                           gameState.terrain[unit.y][unit.x] !== 'water' &&
-                           gameState.terrain[unit.y][unit.x] !== 'river';
-            attempts++;
+            unit.movement += 1;
+            unit.maxActions += 1;
+            unit.remainingActions = unit.maxActions;
         }
         
         gameState.units.push(unit);
     }
-}
+    
+    resetBattleCounters();    
+    return;
 }
 
- console.log("🚨 DEBUG: createUnits() ENDING");
-    console.log("Total units created:", gameState.units.length);
-    console.log("Units array:", gameState.units);
+async function moveUnit(unit, newX, newY) {
+    // Prevent moving into water OR river OR mountain-pass
+    if (gameState.terrain[newY][newX] === 'water' || 
+        gameState.terrain[newY][newX] === 'river' || 
+        gameState.terrain[newY][newX] === 'mountain-pass') {
+        logMessage("Cannot move there!", 'system');
+        return;
+    }
     
+    const movesLeft = unit.movement - unit.movesUsed;
+    
+    // First check if there's ANY path at all
+    if (!hasPathWithinRange(unit.x, unit.y, newX, newY, movesLeft)) {
+        logMessage("No path available within movement range!", 'system');
+        return;
+    }
+    
+    // Find the actual shortest path
+    const path = findShortestPath(unit.x, unit.y, newX, newY, movesLeft);
+    if (!path || path.length - 1 > movesLeft) {
+        logMessage("Can't move there! Path too long or blocked.", 'system');
+        return;
+    }
+    
+    // Move along the path
+    await moveAlongPath(unit, path);
+    
+    // Update the selected unit display
+    updateSelectedUnitStats();
+}
+   
+   async function moveAlongPath(unit, path) {
+    // Skip first tile (current position)
+    if (path.length <= 1) return;
+    
+    // Store starting position for the final log
+    const startX = unit.x;
+    const startY = unit.y;
+    
+    // Get destination (last tile in path)
+    const destination = path[path.length - 1];
+    
+    // Calculate total distance moved
+    const distanceMoved = path.length - 1;
+    
+    // Check if unit has enough movement and actions
+    if (distanceMoved > (unit.movement - unit.movesUsed)) {
+        logMessage("Not enough movement left!", 'system');
+        return;
+    }
+    
+    if (unit.remainingActions <= 0) {
+        logMessage("No actions left!", 'system');
+        return;
+    }
+    
+    // Move along the path for animation (but don't log each step)
+    for (let i = 1; i < path.length; i++) {
+        const step = path[i];
+        
+        // Check if this step is valid
+        if (gameState.terrain[step.y][step.x] === 'water' || gameState.terrain[step.y][step.x] === 'river') {
+            logMessage("Cannot move through water!", 'system');
+            return;
+        }
+        
+        // Check if tile is occupied (except for the destination - we check that separately)
+        const isDestination = (i === path.length - 1);
+        if (!isDestination && getUnitAt(step.x, step.y)) {
+            logMessage("Path is blocked!", 'system');
+            return;
+        }
+        
+        // Update unit position for this step
+        unit.x = step.x;
+        unit.y = step.y;
+        unit.movesUsed++;
+        
+        // Deduct AP per tile
+        unit.useAction();
+        
+        // Update the display after each step
+        updateSelectedUnitStats();
+        
+        // Visual update for animation
+        await renderAll([unit.id]);
+        await delay(50);
+    }
+    
+    // Now check destination separately
+    if (getUnitAt(destination.x, destination.y) && 
+        !(getUnitAt(destination.x, destination.y).id === unit.id)) {
+        logMessage("Destination is occupied!", 'system');
+        return;
+    }
+    
+    // Log only the destination movement (once at the end)
+    logMessage(`${unit.name} moves from (${startX}, ${startY}) to (${destination.x}, ${destination.y}).`, 
+               unit.type === 'player' ? 'player' : 'enemy');       
+    
+    // Final visual update
+    await renderAll([unit.id]);
+}
+
 function findShortestPath(startX, startY, targetX, targetY, maxMoves) {
     const queue = [{x: startX, y: startY, path: [], moves: 0}];
     const visited = new Set();
@@ -1152,7 +711,9 @@ function findShortestPath(startX, startY, targetX, targetY, maxMoves) {
             
             // Check if passable
             const isTarget = (newX === targetX && newY === targetY);
-            if (gameState.terrain[newY][newX] === 'water') {
+            if (gameState.terrain[newY][newX] === 'water' || 
+                gameState.terrain[newY][newX] === 'river' || 
+                gameState.terrain[newY][newX] === 'mountain-pass') {
                 continue;
             }
             
@@ -1175,6 +736,127 @@ function findShortestPath(startX, startY, targetX, targetY, maxMoves) {
     }
     
     return null;
+}
+   
+// Move unit toward target using full movement with obstacle avoidance
+async function moveTowardTarget(unit, targetX, targetY, aggressive = true, canMoveThroughUnits = false) {
+    const movesLeft = unit.movement - unit.movesUsed;
+    if (movesLeft <= 0 || unit.remainingActions <= 0) return;
+    
+    console.log(`${unit.name} moving toward (${targetX}, ${targetY}) with ${movesLeft} moves left`);
+    
+    if (unit.type === 'enemy') {
+        logMessage(`${unit.name} advances toward the enemy.`, 'enemy');
+    }
+    
+    let currentX = unit.x;
+    let currentY = unit.y;
+    let stepsMoved = 0;
+    
+    // Try to move step by step toward target
+    while (stepsMoved < movesLeft && unit.remainingActions > 0) {
+        // Calculate direction
+        let dx = 0, dy = 0;
+        if (currentX < targetX) dx = 1;
+        else if (currentX > targetX) dx = -1;
+        
+        if (currentY < targetY) dy = 1;
+        else if (currentY > targetY) dy = -1;
+        
+                // Calculate preferred direction toward target
+        let preferredDX = 0, preferredDY = 0;
+        if (currentX < targetX) preferredDX = 1;
+        else if (currentX > targetX) preferredDX = -1;
+
+        if (currentY < targetY) preferredDY = 1;
+        else if (currentY > targetY) preferredDY = -1;
+
+        // Create prioritized directions list
+        const directionPriority = [];
+        
+        // Add horizontal direction toward target (ALWAYS first)
+        if (preferredDX !== 0) {
+            directionPriority.push({dx: preferredDX, dy: 0});
+        }
+        
+        // Add vertical direction toward target (ALWAYS second)
+        if (preferredDY !== 0) {
+            directionPriority.push({dx: 0, dy: preferredDY});
+        }
+        
+        // Add remaining directions in RANDOM order (for unpredictability)
+        const otherDirections = [
+            {dx: 1, dy: 0},
+            {dx: -1, dy: 0},
+            {dx: 0, dy: 1},
+            {dx: 0, dy: -1}
+        ].filter(dir => {
+            // Remove directions we already added
+            return !directionPriority.some(d => d.dx === dir.dx && d.dy === dir.dy);
+        });
+        
+        // Shuffle the remaining directions randomly
+        for (let i = otherDirections.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [otherDirections[i], otherDirections[j]] = [otherDirections[j], otherDirections[i]];
+        }
+        
+        // Add shuffled other directions
+        directionPriority.push(...otherDirections);
+        
+        // Try directions in priority order
+        let moved = false;
+        for (const dir of directionPriority) {
+            const tryX = currentX + dir.dx;
+            const tryY = currentY + dir.dy;
+            
+            if (tryX >= 0 && tryX < GRID_SIZE && 
+                tryY >= 0 && tryY < GRID_SIZE &&
+                (canMoveThroughUnits || !getUnitAt(tryX, tryY)) && 
+                gameState.terrain[tryY][tryX] !== 'water' &&
+                gameState.terrain[tryY][tryX] !== 'river' &&
+                gameState.terrain[tryY][tryX] !== 'mountain-pass') { 
+                
+                currentX = tryX;
+                currentY = tryY;
+                moved = true;
+                break;
+            }
+        }
+        
+        if (!moved) {
+            console.log(`${unit.name} is stuck!`);
+            break;
+        }
+        
+        stepsMoved++;
+        
+        // Actually move the unit
+        unit.x = currentX;
+        unit.y = currentY;
+        unit.movesUsed++;
+        
+        // Update the display if this unit is selected
+        if (gameState.selectedUnit && gameState.selectedUnit.id === unit.id) {
+            updateSelectedUnitStats();
+        }
+        
+        // Deduct AP per step
+        unit.useAction();
+        
+        // Visual update
+        await renderAll([unit.id]);
+        await delay(50);
+        
+        // Check if we're now in attack range
+        if (unit.attack > 0) {
+            const distance = Math.abs(currentX - targetX) + Math.abs(currentY - targetY);
+            if (distance <= unit.range) {
+                console.log(`${unit.name} reached attack range!`);
+                break;
+            }
+        }
+    }
 }
 
 // Helper: Find nearest player to a position
@@ -1209,23 +891,23 @@ async function moveAwayFromTarget(unit, targetX, targetY) {
     
     // Calculate direction away from target
     let dx = 0, dy = 0;
-    if (unit.x < targetX) dx = -1; // Move left if target is to the right
-    else if (unit.x > targetX) dx = 1; // Move right if target is to the left
+    if (unit.x < targetX) dx = -1;
+    else if (unit.x > targetX) dx = 1;
     
-    if (unit.y < targetY) dy = -1; // Move up if target is below
-    else if (unit.y > targetY) dy = 1; // Move down if target is above
+    if (unit.y < targetY) dy = -1;
+    else if (unit.y > targetY) dy = 1;
     
     // Try to move in opposite direction
     const tryX = unit.x + dx;
     const tryY = unit.y + dy;
     
-if (tryX >= 0 && tryX < GRID_SIZE && 
-    tryY >= 0 && tryY < GRID_SIZE &&
-    (canMoveThroughUnits || !getUnitAt(tryX, tryY)) && 
-    gameState.terrain[tryY][tryX] !== 'water' &&
-    gameState.terrain[tryY][tryX] !== 'river' &&
-    gameState.terrain[tryY][tryX] !== 'mountain-pass') { 
-		
+    if (tryX >= 0 && tryX < GRID_SIZE && 
+        tryY >= 0 && tryY < GRID_SIZE &&
+        !getUnitAt(tryX, tryY) && 
+        gameState.terrain[tryY][tryX] !== 'water' &&
+        gameState.terrain[tryY][tryX] !== 'river' &&
+        gameState.terrain[tryY][tryX] !== 'mountain-pass') { 
+        
         await moveUnit(unit, tryX, tryY);
     } else {
         // Can't move in ideal direction, try perpendicular
@@ -1235,9 +917,9 @@ if (tryX >= 0 && tryX < GRID_SIZE &&
             const altY = unit.y + (unit.y < targetY ? -1 : 1);
             
             if (altY >= 0 && altY < GRID_SIZE &&
-    !getUnitAt(altX, altY) && 
-    gameState.terrain[altY][altX] !== 'water' &&
-    gameState.terrain[altY][altX] !== 'river') {
+                !getUnitAt(altX, altY) && 
+                gameState.terrain[altY][altX] !== 'water' &&
+                gameState.terrain[altY][altX] !== 'river') {
                 
                 await moveUnit(unit, altX, altY);
             }
@@ -1249,304 +931,20 @@ if (tryX >= 0 && tryX < GRID_SIZE &&
             if (altX >= 0 && altX < GRID_SIZE &&
                 !getUnitAt(altX, altY) && 
                 gameState.terrain[altY][altX] !== 'water' &&
-				gameState.terrain[altY][altX] !== 'river') {
-		
+                gameState.terrain[altY][altX] !== 'river') {
+        
                 await moveUnit(unit, altX, altY);
             }
         }
     }
 }
-
-async function moveAlongPath(unit, path) {
-    // Skip first tile (current position)
-    if (path.length <= 1) return;
-    
-    // Store starting position for the final log
-    const startX = unit.x;
-    const startY = unit.y;
-    
-    // Get destination (last tile in path)
-    const destination = path[path.length - 1];
-    
-    // Calculate total distance moved
-    const distanceMoved = path.length - 1;
-    
-    // Check if unit has enough movement and actions
-    if (distanceMoved > (unit.movement - unit.movesUsed)) {
-        logMessage("Not enough movement left!", 'system');
-        return;
-    }
-    
-    if (unit.remainingActions <= 0) {
-        logMessage("No actions left!", 'system');
-        return;
-    }
-    
-    // Move along the path for animation (but don't log each step)
-    for (let i = 1; i < path.length; i++) {
-        const step = path[i];
-        
-        // Check if this step is valid
-                if (gameState.terrain[step.y][step.x] === 'water' || gameState.terrain[step.y][step.x] === 'river') {
-            logMessage("Cannot move through water!", 'system');
-            return;
-        }
-        
-        // Check if tile is occupied (except for the destination - we check that separately)
-        const isDestination = (i === path.length - 1);
-        if (!isDestination && getUnitAt(step.x, step.y)) {
-            logMessage("Path is blocked!", 'system');
-            return;
-        }
-        
-        // Update unit position for this step
-        unit.x = step.x;
-        unit.y = step.y;
-        unit.movesUsed++;
-        
-        // ====== FIX: DEDUCT 1 AP PER TILE! ======
-        unit.useAction();
-        
-        // Update the display after each step
-        updateSelectedUnitStats();
-        
-        // Visual update for animation
-        await renderAll([unit.id]);
-        await delay(50); // Small pause for animation
-    }
-    
-    // Now check destination separately
-    if (getUnitAt(destination.x, destination.y) && 
-        !(getUnitAt(destination.x, destination.y).id === unit.id)) {
-        logMessage("Destination is occupied!", 'system');
-        // Move back to start? Or just leave at last valid position
-        return;
-    }
-    
-    // Log only the destination movement (once at the end)
-logMessage(`${unit.name} moves from (${startX}, ${startY}) to (${destination.x}, ${destination.y}).`, 
-               unit.type === 'player' ? 'player' : 'enemy');       
-    
-    // Final visual update
-    await renderAll([unit.id]);
-}
-
-// Move unit toward target using full movement with obstacle avoidance
-	async function moveTowardTarget(unit, targetX, targetY, aggressive = true, canMoveThroughUnits = false) {    const movesLeft = unit.movement - unit.movesUsed;
-    if (movesLeft <= 0 || unit.remainingActions <= 0) return;
-    
-    console.log(`${unit.name} moving toward (${targetX}, ${targetY}) with ${movesLeft} moves left`);
-    
-    if (unit.type === 'enemy') {
-        logMessage(`${unit.name} advances toward the enemy.`, 'enemy');
-    }
-    
-    // For berserkers, they're aggressive - try to get as close as possible
-    let currentX = unit.x;
-    let currentY = unit.y;
-    let stepsMoved = 0;
-    
-    // Try to move step by step toward target
-    while (stepsMoved < movesLeft && unit.remainingActions > 0) {
-        // Calculate direction
-        let dx = 0, dy = 0;
-        if (currentX < targetX) dx = 1;
-        else if (currentX > targetX) dx = -1;
-        
-        if (currentY < targetY) dy = 1;
-        else if (currentY > targetY) dy = -1;
-        
-        // Try primary direction first
-        let tryX = currentX;
-        let tryY = currentY;
-        
-        if (dx !== 0) {
-            tryX = currentX + dx;
-        } else if (dy !== 0) {
-            tryY = currentY + dy;
-        }
-        
-        // Check if primary move is valid
-        let moved = false;
-if (tryX >= 0 && tryX < GRID_SIZE && 
-    tryY >= 0 && tryY < GRID_SIZE &&
-    (canMoveThroughUnits || !getUnitAt(tryX, tryY)) && 
-    gameState.terrain[tryY][tryX] !== 'water' &&
-    gameState.terrain[tryY][tryX] !== 'river' &&
-    gameState.terrain[tryY][tryX] !== 'mountain-pass') { 
-            
-            // Valid move - take it
-            currentX = tryX;
-            currentY = tryY;
-            moved = true;
-        } else {
-            // Try alternative direction
-            if (dy !== 0) {
-                tryX = currentX;
-                tryY = currentY + dy;
-                
-  if (tryX >= 0 && tryX < GRID_SIZE && 
-    tryY >= 0 && tryY < GRID_SIZE &&
-    (canMoveThroughUnits || !getUnitAt(tryX, tryY)) && 
-    gameState.terrain[tryY][tryX] !== 'water' &&
-    gameState.terrain[tryY][tryX] !== 'river' &&
-    gameState.terrain[tryY][tryX] !== 'mountain-pass') { 
-                    
-                    currentX = tryX;
-                    currentY = tryY;
-                    moved = true;
-                }
-            }
-            
-            // Calculate preferred direction toward target
-let preferredDX = 0, preferredDY = 0;
-if (currentX < targetX) preferredDX = 1;
-else if (currentX > targetX) preferredDX = -1;
-
-if (currentY < targetY) preferredDY = 1;
-else if (currentY > targetY) preferredDY = -1;
-
-// Create direction priorities
-const directions = [];
-// 1. First try preferred X direction (if any)
-if (preferredDX !== 0) {
-    directions.push({dx: preferredDX, dy: 0});
-}
-// 2. Then try preferred Y direction (if any)
-if (preferredDY !== 0) {
-    directions.push({dx: 0, dy: preferredDY});
-}
-// 3. Try other directions (avoid reversing immediately)
-const allDirs = [
-    {dx: 1, dy: 0},   // right
-    {dx: -1, dy: 0},  // left
-    {dx: 0, dy: 1},   // down
-    {dx: 0, dy: -1}   // up
-];
-
-// Add remaining directions, avoiding the reverse of last move
-for (const dir of allDirs) {
-    if (!directions.some(d => d.dx === dir.dx && d.dy === dir.dy)) {
-        // Avoid reversing direction unless absolutely necessary
-        if (!(dir.dx === -unit.lastMoveDirection.dx && 
-              dir.dy === -unit.lastMoveDirection.dy)) {
-            directions.push(dir);
-        }
-    }
-}
-
-// Try directions in order
-for (const dir of directions) {
-    // ... existing movement code
-}
-
-// Remember this move direction
-// Remember this move direction (calculate from position change)
-if (currentX !== unit.x || currentY !== unit.y) {
-    unit.lastMoveDirection = { 
-        dx: currentX - unit.x, 
-        dy: currentY - unit.y 
-    };
-}            
-            // If still not moved, try other directions (berserkers are aggressive!)
-            if (!moved) {
-                const directions = [
-                    {dx: 1, dy: 0},   // right
-                    {dx: -1, dy: 0},  // left
-                    {dx: 0, dy: 1},   // down
-                    {dx: 0, dy: -1}   // up
-                ];
-                
-                // Shuffle directions for variety
-                for (const dir of directions.sort(() => Math.random() - 0.5)) {
-                    tryX = currentX + dir.dx;
-                    tryY = currentY + dir.dy;
-                    
-                    if (tryX >= 0 && tryX < GRID_SIZE && 
-    tryY >= 0 && tryY < GRID_SIZE &&
-    (canMoveThroughUnits || !getUnitAt(tryX, tryY)) && 
-    gameState.terrain[tryY][tryX] !== 'water' &&
-    gameState.terrain[tryY][tryX] !== 'river' &&
-    gameState.terrain[tryY][tryX] !== 'mountain-pass') { 
-                        
-                        currentX = tryX;
-                        currentY = tryY;
-                        moved = true;
-                        break;
-                    }
-                }
-            }
-        }
-        
-        if (!moved) {
-            // Can't move in any direction
-            console.log(`${unit.name} is stuck!`);
-            break;
-        }
-        
-        stepsMoved++;
-        
-        // Actually move the unit
-        unit.x = currentX;
-        unit.y = currentY;
-        unit.movesUsed++;
-        
-         // Update the display if this unit is selected
-        if (gameState.selectedUnit && gameState.selectedUnit.id === unit.id) {
-            updateSelectedUnitStats();
-        }
-        
-        // ====== DEDUCT AP PER STEP ======
-		unit.useAction();
-        
-        // Visual update
-        await renderAll([unit.id]);
-        await delay(50);
-        
-        // Check if we're now in attack range (for ALL attack units)
-if (unit.attack > 0) { // If unit can attack
-    const distance = Math.abs(currentX - targetX) + Math.abs(currentY - targetY);
-    if (distance <= unit.range) {
-        console.log(`${unit.name} reached attack range!`);
-        break; // Stop moving, we're in range
-    }
-}
-    }
-}
-        
-                
-        async function moveUnit(unit, newX, newY) {
-        // Prevent moving into water OR river
- if (gameState.terrain[newY][newX] === 'water' || gameState.terrain[newY][newX] === 'river' || gameState.terrain[newY][newX] === 'mountain-pass') {
-    logMessage("Cannot move into mountain pass!", 'system');
-    return;
-}
-    
-    const movesLeft = unit.movement - unit.movesUsed;
-    
-    // First check if there's ANY path at all
-    if (!hasPathWithinRange(unit.x, unit.y, newX, newY, movesLeft)) {
-        logMessage("No path available within movement range!", 'system');
-        return;
-    }
-    
-    // Find the actual shortest path
-    const path = findShortestPath(unit.x, unit.y, newX, newY, movesLeft);
-    if (!path || path.length - 1 > movesLeft) {
-        logMessage("Can't move there! Path too long or blocked.", 'system');
-        return;
-    }
-    
-    // Move along the path
-    await moveAlongPath(unit, path);
-    
-    // Update the selected unit display
-    updateSelectedUnitStats();
-}
-
+      
 // Make terrain functions available globally
 window.generateTerrain = generateTerrain;
 window.createUnits = createUnits;
 window.moveUnit = moveUnit;
 window.moveAlongPath = moveAlongPath;
+window.moveTowardTarget = moveTowardTarget;
 window.hasPathWithinRange = hasPathWithinRange;
+window.getNearestPlayer = getNearestPlayer;
+window.moveAwayFromTarget = moveAwayFromTarget;
