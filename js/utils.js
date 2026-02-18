@@ -85,7 +85,8 @@ const LEVELS = [
     { name: "Forest Outpost", difficulty: "Medium", enemyBonus: 2, extraEnemies: 1, boss: false, hasRiver: true },
     { name: "Mountain Pass", difficulty: "Medium", enemyBonus: 3, extraEnemies: -1, boss: false },
     { name: "Mountain Fortress", difficulty: "Hard", enemyBonus: 4, extraEnemies: 4, boss: true },
-	{ name: "Gremlin Swarm", difficulty: "easy", enemyBonus: 0, extraEnemies: 9, boss: false } // 6 base + 9 extra = 15 gremlins
+	{ name: "Gremlin Swarm", difficulty: "easy", enemyBonus: 0, extraEnemies: 9, boss: false }, // 6 base + 9 extra = 15 gremlins
+	{ name: "The Misty Lowlands", difficulty: "Medium", enemyBonus: 2, extraEnemies: 2, boss: false }
 ];
         
      // ========== ENEMY UNIT COMPOSITION BY LEVEL ==========
@@ -137,10 +138,16 @@ const ENEMY_COMPOSITION = {
         { type: 'berserker', min: 0, chance: 0, name: 'Troll Berserker' },
         { type: 'gremlin', min: 10, chance: 85, name: 'Gremlin' },
         { type: 'boss', min: 0, chance: 0, name: 'Boss', isBoss: true }
+    ],
+    7: [ // Level 7 - The Misty Lowlands
+        { type: 'knight', min: 1, chance: 20, name: 'Orc Knight' },
+        { type: 'archer', min: 1, chance: 20, name: 'Goblin Archer' },
+        { type: 'mage', min: 0, chance: 0, name: 'Goblin Mage' },
+        { type: 'berserker', min: 1, chance: 20, name: 'Troll Berserker' },
+        { type: 'gremlin', min: 2, chance: 40, name: 'Gremlin' },
+        { type: 'boss', min: 0, chance: 0, name: 'Boss', isBoss: true }
     ]
-};   
-            
-        
+};
         
         // ========== INJURIES & MORALE SYSTEM (Phase 2) ==========
         const INJURIES = {

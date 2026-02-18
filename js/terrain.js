@@ -219,6 +219,77 @@ if (gameState.currentLevel === 6) {
     return;
 }
 
+  // ====== LEVEL 7: THE MISTY LOWLANDS ======
+if (gameState.currentLevel === 7) {
+    console.log("Generating Level 7: The Misty Lowlands");
+    
+    GRID_SIZE = 16;
+    gameState.terrain = [];
+    
+    for (let y = 0; y < GRID_SIZE; y++) {
+        gameState.terrain[y] = [];
+        for (let x = 0; x < GRID_SIZE; x++) {
+            // Create a path through the valley
+            // Mountains cluster on left (where you came from)
+            // Water pools form in low areas
+            // Forest fills the middle ground
+            
+            const distanceFromLeft = x;
+            const distanceFromRight = GRID_SIZE - 1 - x;
+            
+            // Base probabilities
+            let mountainChance = 0.30;
+            let forestChance = 0.25;
+            let waterChance = 0.15;
+            let normalChance = 0.30;
+            
+            // Adjust based on position
+            if (x < 5) { // Left side - more mountains (where you came from)
+                mountainChance += 0.2;
+                forestChance -= 0.1;
+                normalChance -= 0.1;
+            } else if (x > 10) { // Right side - more forest (where you're going)
+                forestChance += 0.15;
+                mountainChance -= 0.1;
+                normalChance -= 0.05;
+            }
+            
+            // Middle area - water pools form in valleys between mountains
+            if (x >= 5 && x <= 10 && y >= 5 && y <= 10) {
+                if (Math.random() < 0.3) {
+                    waterChance += 0.2;
+                    normalChance -= 0.2;
+                }
+            }
+            
+            const rand = Math.random();
+            let cumulative = 0;
+            
+            cumulative += mountainChance;
+            if (rand < cumulative) {
+                gameState.terrain[y][x] = 'mountain';
+                continue;
+            }
+            
+            cumulative += forestChance;
+            if (rand < cumulative) {
+                gameState.terrain[y][x] = 'forest';
+                continue;
+            }
+            
+            cumulative += waterChance;
+            if (rand < cumulative) {
+                gameState.terrain[y][x] = 'water';
+                continue;
+            }
+            
+            gameState.terrain[y][x] = 'normal';
+        }
+    }
+    
+    console.log("Generated Level 7: Misty Lowlands terrain");
+    return;
+}
     
     // ====== LEVEL 5: BOSS LEVEL - ENEMY STRONGHOLD ======
     if (gameState.currentLevel === 5) {
