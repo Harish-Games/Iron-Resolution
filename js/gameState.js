@@ -594,6 +594,7 @@ window.openRecruitScreen = function() {
             } else if (currentLevel === 5) {
 				showLevel5To6Transition(); 
 			} else if (currentLevel === 6) {
+                console.log(`Calling showLevel6To7Transition for level ${currentLevel}`);
                 showLevel6To7Transition();
             } else if (currentLevel === 7) {
 				showLevel7To8Transition();

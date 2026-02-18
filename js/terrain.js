@@ -693,6 +693,15 @@ function createUnits() {
 }
 
 async function moveUnit(unit, newX, newY) {
+     // SIMPLE SWAMP CHECK
+    if (gameState.terrain[unit.y][unit.x] === 'swamp' && unit.classType !== 'gremlin') {
+        // If unit has more than 1 action, reduce to 1
+        if (unit.remainingActions > 1) {
+            unit.remainingActions = 1;
+            logMessage(`${unit.name} is slowed by the swamp!`, unit.type);
+        }
+    }
+    
     // Prevent moving into water OR river OR mountain-pass
     if (gameState.terrain[newY][newX] === 'water' || 
         gameState.terrain[newY][newX] === 'river' || 
@@ -863,7 +872,17 @@ function findShortestPath(startX, startY, targetX, targetY, maxMoves) {
    
 // Move unit toward target using full movement with obstacle avoidance
 async function moveTowardTarget(unit, targetX, targetY, aggressive = true, canMoveThroughUnits = false) {
+    // SIMPLE SWAMP CHECK FOR AI
+    if (gameState.terrain[unit.y][unit.x] === 'swamp' && unit.classType !== 'gremlin') {
+        // If unit has more than 1 action, reduce to 1
+        if (unit.remainingActions > 1) {
+            unit.remainingActions = 1;
+            logMessage(`${unit.name} is slowed by the swamp!`, unit.type);
+        }
+    }
+    
     const movesLeft = unit.movement - unit.movesUsed;
+    
     if (movesLeft <= 0 || unit.remainingActions <= 0) return;
     
     console.log(`${unit.name} moving toward (${targetX}, ${targetY}) with ${movesLeft} moves left`);

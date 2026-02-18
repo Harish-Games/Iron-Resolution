@@ -1135,9 +1135,13 @@ if (currentLevel === 1) {
 } else if (currentLevel === 4) {
     showLevel4To5Transition();
 } else if (currentLevel === 5) {
-    showLevel5To6Transition();
+        showLevel5To6Transition();
 } else if (currentLevel === 6) {
-    showGameCompleteScreen(); 
+    showLevel6To7Transition();    
+} else if (currentLevel === 7) {
+    showLevel7To8Transition();    
+} else if (currentLevel === 8) {
+    showGameCompleteScreen();   
 } else {
     // Fallback - shouldn't happen
     console.error(`❌ Unknown level ${currentLevel}, defaulting to startNextLevel()`);
