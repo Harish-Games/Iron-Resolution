@@ -462,6 +462,112 @@ function showLevel6To7Transition() {
     }
 }
 
+// ========== LEVEL 8 TO 9 TRANSITION ==========
+function showLevel8To9Transition() {
+    console.log("🎬 Creating Level 8 to Level 9 transition");
+    
+    const transitionHTML = `
+        <div id="transition89Overlay" class="intro-overlay" style="display: flex;">
+            <div class="intro-modal">
+                <div class="intro-title" style="margin-bottom: 25px;">
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                    THE FOG FIELDS
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                </div>
+                
+                <div class="intro-section" style="margin-bottom: 20px;">
+                    <h3 class="section-header" style="color: #4ecdc4; border-bottom: 2px solid #4ecdc4; padding-bottom: 8px;">
+                        YOU EMERGE FROM THE SWAMP
+                    </h3>
+                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6;">
+                        You emerge from the swamp expecting clear skies. Instead, the fog follows you.
+                    </div>
+                </div>
+                
+                <div class="intro-section" style="margin-bottom: 20px; background: rgba(30, 73, 118, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #a0a0a0;">
+                    <h3 class="section-header" style="color: #cccccc;">
+                        NOT MIST. NOT SMOKE.
+                    </h3>
+                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6; color: #e6f1ff;">
+                        Something older. The fog here has weight, has purpose. It rolls across the lowlands in thick waves, hiding everything beyond a few strides. Your veterans exchange uneasy glances. This isn't natural.
+                    </div>
+                </div>
+                
+                <div class="intro-section" style="margin-bottom: 20px; background: rgba(30, 73, 118, 0.4); padding: 15px; border-radius: 8px; border-left: 4px solid #64ffda;">
+                    <h3 class="section-header" style="color: #64ffda;">
+                        THROUGH BREAKS IN THE MIST
+                    </h3>
+                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6;">
+                        You glimpse fragments of terrain - a rocky outcrop here, a forest edge there, pools of stagnant water that echo the swamp you just left. But nothing stays visible for long.
+                    </div>
+                </div>
+                
+                <div class="controls-note" style="margin: 20px 0; padding: 12px; background: rgba(30, 73, 118, 0.3); border: 1px solid rgba(255, 193, 7, 0.3); color: #f1c40f;">
+                    <img src="images/fog.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+                    <strong>VISIBILITY:</strong> 4 tiles. Beyond that, only fog. The enemy hides somewhere in the mist. Move carefully.
+                </div>
+                
+                <button id="continueToLevel9Btn" class="intro-continue-btn" style="margin-top: 20px; min-width: 280px;">
+                    <img src="images/fog.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
+                    ENTER THE FOG
+                </button>
+                
+                <div class="intro-tip" style="margin-top: 15px; color: #8892b0; font-size: 0.9em;">
+                    Press Space or click to continue
+                </div>
+            </div>
+        </div>
+    `;
+    
+    const overlayDiv = document.createElement('div');
+    overlayDiv.innerHTML = transitionHTML;
+    document.body.appendChild(overlayDiv);
+    
+    const continueBtn = document.getElementById('continueToLevel9Btn');
+    const transitionOverlay = document.getElementById('transition89Overlay');
+    
+    continueBtn.onclick = () => {
+        if (transitionOverlay) {
+            transitionOverlay.style.display = 'none';
+        }
+        if (overlayDiv.parentNode) {
+            document.body.removeChild(overlayDiv);
+        }
+        gameState.currentLevel = 9;
+        startNextLevel();
+    };
+    
+    // Add space key and click handlers (same as other transitions)
+    document.addEventListener('keydown', function transitionKeyHandler(e) {
+        if ((e.code === 'Space' || e.key === ' ') && transitionOverlay && transitionOverlay.style.display === 'flex') {
+            e.preventDefault();
+            if (transitionOverlay) {
+                transitionOverlay.style.display = 'none';
+            }
+            if (overlayDiv.parentNode) {
+                document.body.removeChild(overlayDiv);
+            }
+            document.removeEventListener('keydown', transitionKeyHandler);
+            gameState.currentLevel = 9;
+            startNextLevel();
+        }
+    });
+    
+    if (transitionOverlay) {
+        transitionOverlay.addEventListener('click', function(e) {
+            if (e.target === transitionOverlay) {
+                transitionOverlay.style.display = 'none';
+                if (overlayDiv.parentNode) {
+                    document.body.removeChild(overlayDiv);
+                }
+                gameState.currentLevel = 9;
+                startNextLevel();
+            }
+        });
+    }
+}
+
+
 // ========== LEVEL 7 TO 8 TRANSITION ==========
 function showLevel7To8Transition() {
     console.log("🎬 Creating Level 7 to Level 8 transition");
@@ -1254,6 +1360,7 @@ window.showLevel4To5Transition = showLevel4To5Transition;
 window.showLevel5To6Transition = showLevel5To6Transition;
 window.showLevel6To7Transition = showLevel6To7Transition;
 window.showLevel7To8Transition = showLevel7To8Transition;
+window.showLevel8To9Transition = showLevel8To9Transition;
 window.showGameCompleteScreen = showGameCompleteScreen;
 window.completeLevel = completeLevel;
 window.startNextLevel = startNextLevel;

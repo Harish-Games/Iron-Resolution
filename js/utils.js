@@ -87,7 +87,8 @@ const LEVELS = [
     { name: "Mountain Fortress", difficulty: "Hard", enemyBonus: 4, extraEnemies: 4, boss: true },
 	{ name: "Gremlin Swarm", difficulty: "easy", enemyBonus: 0, extraEnemies: 9, boss: false }, // 6 base + 9 extra = 15 gremlins
 	{ name: "The Misty Lowlands", difficulty: "Medium", enemyBonus: 2, extraEnemies: 2, boss: false },
-    { name: "The Swamp of Sorrows", difficulty: "Hard", enemyBonus: 3, extraEnemies: 6, boss: false }
+	{ name: "The Swamp of Sorrows", difficulty: "Hard", enemyBonus: 3, extraEnemies: 6, boss: false },
+    { name: "The Fog of War", difficulty: "Nightmare", enemyBonus: 5, extraEnemies: 8, boss: false }
 ];
         
      // ========== ENEMY UNIT COMPOSITION BY LEVEL ==========

@@ -342,6 +342,55 @@ if (gameState.currentLevel === 8) {
     return;
 }
     
+    // ====== LEVEL 9: THE FOG FIELDS ======
+if (gameState.currentLevel === 9) {
+    console.log("Generating Level 9: The Fog Fields");
+    
+    GRID_SIZE = 16;
+    gameState.terrain = [];
+    
+    for (let y = 0; y < GRID_SIZE; y++) {
+        gameState.terrain[y] = [];
+        for (let x = 0; x < GRID_SIZE; x++) {
+            const rand = Math.random();
+            let cumulative = 0;
+            
+            // Swamp: 30%
+            cumulative += 0.30;
+            if (rand < cumulative) {
+                gameState.terrain[y][x] = 'swamp';
+                continue;
+            }
+            
+            // Forest: 20%
+            cumulative += 0.20;
+            if (rand < cumulative) {
+                gameState.terrain[y][x] = 'forest';
+                continue;
+            }
+            
+            // Mountain: 15%
+            cumulative += 0.15;
+            if (rand < cumulative) {
+                gameState.terrain[y][x] = 'mountain';
+                continue;
+            }
+            
+            // Water: 15%
+            cumulative += 0.15;
+            if (rand < cumulative) {
+                gameState.terrain[y][x] = 'water';
+                continue;
+            }
+            
+            // Normal: 20%
+            gameState.terrain[y][x] = 'normal';
+        }
+    }
+    
+    console.log("Generated Level 9: Fog Fields terrain");
+    return;
+}
     
     // ====== LEVEL 5: BOSS LEVEL - ENEMY STRONGHOLD ======
     if (gameState.currentLevel === 5) {
