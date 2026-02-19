@@ -1324,6 +1324,7 @@ function advanceToLevel3() {
     
     // Create units for new level (this uses persistentUnits)
     createUnits();
+    updateVision();
     
     // Reset UI
     turnCountEl.textContent = '1';
@@ -1332,6 +1333,8 @@ function advanceToLevel3() {
     
     // Clear battle log
     battleLogEl.innerHTML = '';
+    renderAll([]);
+    
     
      // Regular level messages for ALL levels
 const levelIndex = Math.min(gameState.currentLevel - 1, LEVELS.length - 1);

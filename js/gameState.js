@@ -1,4 +1,6 @@
 // Iron Resolution GAMESTATE.js
+
+    const VISION_RANGE = 3; // Tiles units can see for level 9
      
         // ========== GAME STATE ==========
         const gameState = {
@@ -16,6 +18,7 @@
     aiProcessing: false,
     isUpdating: false,
     aiActiveUnit: null,
+    visibleTiles: [], // Will store coordinates of visible tiles
     phase: 'select',
     highScores: JSON.parse(localStorage.getItem('ironResolutionHighScores')) || [],
     battleStats: {
@@ -254,10 +257,12 @@ gameState.units.forEach(unit => {
         logMessage(`--- ENEMY TURN ${gameState.turnCount} ---`, 'system');
         
         // Clear highlights
+        updateVision();
         renderAll([]);
         
         // Start AI turn after a short delay
         setTimeout(aiTurn, 1000);
+        updateVision();
     } else {
         // Enemy is ending turn - switch BACK to player
         console.log("👹 Enemy → Player - Resetting PLAYER units for their turn");
@@ -292,6 +297,7 @@ gameState.units.forEach(unit => {
         logMessage(`--- PLAYER TURN ${gameState.turnCount} ---`, 'system');
         
         // Clear highlights
+        updateVision();
         renderAll([]);
         
         // DO NOT call aiTurn - it's player's turn now

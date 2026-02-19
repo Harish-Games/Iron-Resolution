@@ -776,6 +776,8 @@ async function moveUnit(unit, newX, newY) {
     
     // Move along the path
     await moveAlongPath(unit, path);
+    updateVision();
+    await renderAll([unit.id]); 
     
     // Update the selected unit display
     updateSelectedUnitStats();

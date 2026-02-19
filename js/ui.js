@@ -17,20 +17,29 @@
     gameState.isUpdating = false;
 }
         
-        async function renderGrid() {
-            await delay(10);
-            
-            document.querySelectorAll('.tile').forEach(tile => {
-                const x = parseInt(tile.dataset.x);
-                const y = parseInt(tile.dataset.y);
-                const terrain = gameState.terrain[y] ? gameState.terrain[y][x] : 'normal';
-                
-                tile.className = 'tile';
-                if (terrain !== 'normal') {
-                    tile.classList.add(terrain);
-                }
-            });
-            
+       async function renderGrid() {
+    await delay(10);
+    
+    document.querySelectorAll('.tile').forEach(tile => {
+        const x = parseInt(tile.dataset.x);
+        const y = parseInt(tile.dataset.y);
+        const terrain = gameState.terrain[y] ? gameState.terrain[y][x] : 'normal';
+        
+        tile.className = 'tile';
+        if (terrain !== 'normal') {
+            tile.classList.add(terrain);
+        }
+        
+        if (gameState.currentLevel === 9) {
+            const coord = `${x},${y}`;
+            if (!gameState.visibleTiles.includes(coord)) {
+                tile.classList.add('fog');
+            } else {
+                tile.classList.remove('fog');
+            }
+        }
+    });
+                        
             if (gameState.selectedUnit) {
                 const unit = gameState.selectedUnit;
                 
@@ -90,6 +99,15 @@
     const placedUnitIds = new Set();
     
     for (const unit of gameState.units) {
+    
+    // Inside renderUnits, when about to create/update a unit
+if (unit.type === 'enemy' && gameState.currentLevel === 9) {
+    const coord = `${unit.x},${unit.y}`;
+    if (!gameState.visibleTiles.includes(coord)) {
+        continue; // Skip rendering this enemy
+    }
+}
+    
         await delay(5);
         const tile = getTile(unit.x, unit.y);
         if (!tile) continue;
@@ -799,6 +817,36 @@ let isCompletingLevel = false; // Add this at the top with your other gameState 
     updateEnemiesCounter();
 }
      
+     function updateVision() {
+    // Clear current visible tiles
+    gameState.visibleTiles = [];
+    
+    // Get all player units
+    const playerUnits = gameState.units.filter(u => u.type === 'player' && u.hp > 0);
+    
+    // For each player unit, add tiles within VISION_RANGE
+    playerUnits.forEach(unit => {
+        for (let dx = -VISION_RANGE; dx <= VISION_RANGE; dx++) {
+            for (let dy = -VISION_RANGE; dy <= VISION_RANGE; dy++) {
+                // Manhattan distance check
+                if (Math.abs(dx) + Math.abs(dy) <= VISION_RANGE) {
+                    const nx = unit.x + dx;
+                    const ny = unit.y + dy;
+                    
+                    // Check bounds
+                    if (nx >= 0 && nx < GRID_SIZE && ny >= 0 && ny < GRID_SIZE) {
+                        gameState.visibleTiles.push(`${nx},${ny}`);
+                    }
+                }
+            }
+        }
+    });
+    
+    // Remove duplicates (though there shouldn't be any with Set, but just in case)
+    gameState.visibleTiles = [...new Set(gameState.visibleTiles)];
+}
+     
+     
      // ====== MUSIC FADE OUT ======
 function fadeOutMusic(duration = 2000) {
     const menuMusic = document.getElementById('menuMusic');
@@ -1150,6 +1198,8 @@ if (currentLevel === 1) {
 } else if (currentLevel === 7) {
     showLevel7To8Transition();    
 } else if (currentLevel === 8) {
+    showLevel8To9Transition();
+} else if (currentLevel === 9) {
     showGameCompleteScreen();   
 } else {
     // Fallback - shouldn't happen
@@ -1176,3 +1226,4 @@ window.getTile = getTile;
 window.updateEnemiesCounter = updateEnemiesCounter;
 window.updateUI = updateUI;
 window.updatePhaseIndicator = updatePhaseIndicator;
+window.updateVision = updateVision;
