@@ -86,7 +86,8 @@
         <!-- Instructions Title -->
         <div class="instructions-title">
             <img src="ui/scroll.png" style="width: 28px; height: 28px;">
-            BATTLEFIELD MANUAL v0.70 (need updating)
+            BATTLEFIELD MANUAL v0.86
+            <img src="ui/scroll.png" style="width: 28px; height: 28px;">
         </div>
         
         <!-- Tab Navigation -->
@@ -120,10 +121,6 @@
                             <div class="manual-stat-label">Enemy Start</div>
                             <div class="manual-stat-value">Right side</div>
                         </div>
-                        <div class="manual-stat">
-                            <div class="manual-stat-label">Village</div>
-                            <div class="manual-stat-value">Center (protect)</div>
-                        </div>
                     </div>
                 </div>
                 
@@ -131,46 +128,64 @@
                     <h4>VICTORY CONDITIONS</h4>
                     <div class="condition-item">
                         <img src="ui/tick.png" class="condition-icon">
-                        <div class="condition-desc">
-                            <strong>PRIMARY:</strong> Eliminate all enemy units
-                        </div>
-                    </div>
-                    <div class="condition-item">
-                        <img src="ui/trophy.png" class="condition-icon">
-                        <div class="condition-desc">
-                            <strong>SECONDARY:</strong> Protect village structures
-                        </div>
+                        <div class="condition-desc"><strong>VICTORY:</strong> Eliminate all enemies</div>
                     </div>
                     <div class="condition-item">
                         <img src="ui/skull.png" class="condition-icon">
-                        <div class="condition-desc">
-                            <strong>DEFEAT:</strong> All player units lost
-                        </div>
+                        <div class="condition-desc"><strong>DEFEAT:</strong> All player units lost</div>
                     </div>
                 </div>
                 
                 <div class="manual-section">
                     <h4>TERRAIN EFFECTS</h4>
-                    <div class="terrain-grid">
+                    <div class="terrain-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        
                         <div class="terrain-item">
+                            <img src="images/grass.png" style="width: 40px; height: 40px;">
+                            <div class="terrain-name">Open Terrain</div>
+                            <div class="terrain-effects">No effects</div>
+                        </div>
+                        
+                        <div class="terrain-item">
+                            <img src="images/forest.png" style="width: 40px; height: 40px;">
                             <div class="terrain-name">Forest</div>
-                            <div class="terrain-effects">+30% defense<br>-1 movement</div>
-                            <div class="terrain-icon">🌲</div>
+                            <div class="terrain-effects">Defender: -25% accuracy, +15% dmg reduction<br>Attacker: -25% accuracy</div>
                         </div>
+                        
                         <div class="terrain-item">
+                            <img src="images/mountain.png" style="width: 40px; height: 40px;">
                             <div class="terrain-name">Mountain</div>
-                            <div class="terrain-effects">+20% accuracy<br>Impassable to some</div>
-                            <div class="terrain-icon">⛰️</div>
+                            <div class="terrain-effects">Defender: -15% accuracy, +10% dmg reduction<br>Attacker: +15% accuracy<br>-1 movement</div>
                         </div>
+                        
                         <div class="terrain-item">
+                            <img src="images/swamp.png" style="width: 40px; height: 40px;">
+                            <div class="terrain-name">Swamp (L8)</div>
+                            <div class="terrain-effects">Movement halved each turn<br>Gremlins immune</div>
+                        </div>
+                        
+                        <div class="terrain-item">
+                            <img src="images/mountain-pass.webp" style="width: 40px; height: 40px;">
+                            <div class="terrain-name">Stone Walls (L6)</div>
+                            <div class="terrain-effects">Impassable Maze</div>
+                        </div>
+                        
+                        <div class="terrain-item">
+                            <img src="images/village-player.png" style="width: 40px; height: 40px;">
+                            <div class="terrain-name">Your Village (L1)</div>
+                            <div class="terrain-effects">+15% dmg reduction, -20% enemy accuracy</div>
+                        </div>
+                        
+                        <div class="terrain-item">
+                            <img src="images/village-enemy.png" style="width: 40px; height: 40px;">
+                            <div class="terrain-name">Enemy Camp</div>
+                            <div class="terrain-effects">+10% dmg reduction, -15% enemy accuracy</div>
+                        </div>
+                        
+                        <div class="terrain-item">
+                            <img src="images/water.png" style="width: 40px; height: 40px;">
                             <div class="terrain-name">Water/River</div>
                             <div class="terrain-effects">Impassable</div>
-                            <div class="terrain-icon">💧</div>
-                        </div>
-                        <div class="terrain-item">
-                            <div class="terrain-name">Village</div>
-                            <div class="terrain-effects">+15% defense<br>For defenders only</div>
-                            <div class="terrain-icon">🏠</div>
                         </div>
                     </div>
                 </div>
@@ -179,30 +194,19 @@
                     <h4>TURN STRUCTURE</h4>
                     <div class="turn-step">
                         <div class="step-number">1</div>
-                        <div class="step-desc">
-                            <strong>PLAYER PHASE:</strong> Move & attack with all your units
-                        </div>
+                        <div class="step-desc"><strong>PLAYER PHASE:</strong> Move & attack with all units</div>
                     </div>
                     <div class="turn-step">
                         <div class="step-number">2</div>
-                        <div class="step-desc">
-                            <strong>ENEMY PHASE:</strong> AI controls enemy actions
-                        </div>
-                    </div>
-                    <div class="turn-step">
-                        <div class="step-number">3</div>
-                        <div class="step-desc">
-                            <strong>REPEAT</strong> until victory or defeat
-                        </div>
+                        <div class="step-desc"><strong>ENEMY PHASE:</strong> AI controls enemies</div>
                     </div>
                 </div>
             </div>
             
             <!-- ====== TAB 2: UNITS ====== -->
             <div class="tab-content" id="units">
-                <h3><img src="ui/team.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">UNIT STATISTICS</h3>
+                <h3><img src="ui/team.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">UNIT CLASSES</h3>
                 
-                <!-- KNIGHT -->
                 <div class="unit-card detailed">
                     <div class="unit-card-header">
                         <img src="ui/knight.png" class="unit-card-icon">
@@ -210,67 +214,16 @@
                             <div class="unit-name">KNIGHT</div>
                             <div class="unit-role">Frontline Defender</div>
                         </div>
-                        <div class="unit-allegiance">
-                            <span class="allegiance-player">Player</span> / 
-                            <span class="allegiance-enemy">Enemy</span>
-                        </div>
                     </div>
-                    
                     <div class="unit-stats-grid detailed">
-                        <div class="detailed-stat">
-                            <div class="stat-name">HP</div>
-                            <div class="stat-values">
-                                <span class="player-value">50</span>
-                                <span class="separator">/</span>
-                                <span class="enemy-value">45</span>
-                            </div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">DAMAGE</div>
-                            <div class="stat-values">
-                                <span class="player-value">12</span>
-                                <span class="separator">/</span>
-                                <span class="enemy-value">10</span>
-                            </div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">DEFENSE</div>
-                            <div class="stat-values">
-                                <span class="player-value">8</span>
-                                <span class="separator">/</span>
-                                <span class="enemy-value">6</span>
-                            </div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">MOVE</div>
-                            <div class="stat-value-single">3</div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">RANGE</div>
-                            <div class="stat-value-single">1</div>
-                        </div>
-                    </div>
-                    
-                    <div class="unit-abilities">
-                        <div class="ability">
-                            <div class="ability-icon">🛡️</div>
-                            <div class="ability-desc">
-                                <strong>Shield Wall:</strong> +3 defense when adjacent to ally
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="unit-notes">
-                        <div class="note strength">
-                            <strong>Strength:</strong> High survivability, anchors frontline
-                        </div>
-                        <div class="note weakness">
-                            <strong>Weakness:</strong> Low mobility, vulnerable to mages
-                        </div>
+                        <div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value-single">40</span></div>
+                        <div class="detailed-stat"><span class="stat-name">DMG</span><span class="stat-value-single">10</span></div>
+                        <div class="detailed-stat"><span class="stat-name">DEF</span><span class="stat-value-single">4-8</span></div>
+                        <div class="detailed-stat"><span class="stat-name">MOVE</span><span class="stat-value-single">2</span></div>
+                        <div class="detailed-stat"><span class="stat-name">RANGE</span><span class="stat-value-single">1</span></div>
                     </div>
                 </div>
                 
-                <!-- ARCHER -->
                 <div class="unit-card detailed">
                     <div class="unit-card-header">
                         <img src="ui/bow.png" class="unit-card-icon">
@@ -278,67 +231,16 @@
                             <div class="unit-name">ARCHER</div>
                             <div class="unit-role">Ranged Attacker</div>
                         </div>
-                        <div class="unit-allegiance">
-                            <span class="allegiance-player">Player</span> / 
-                            <span class="allegiance-enemy">Enemy</span>
-                        </div>
                     </div>
-                    
                     <div class="unit-stats-grid detailed">
-                        <div class="detailed-stat">
-                            <div class="stat-name">HP</div>
-                            <div class="stat-values">
-                                <span class="player-value">35</span>
-                                <span class="separator">/</span>
-                                <span class="enemy-value">30</span>
-                            </div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">DAMAGE</div>
-                            <div class="stat-values">
-                                <span class="player-value">10</span>
-                                <span class="separator">/</span>
-                                <span class="enemy-value">8</span>
-                            </div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">DEFENSE</div>
-                            <div class="stat-values">
-                                <span class="player-value">3</span>
-                                <span class="separator">/</span>
-                                <span class="enemy-value">2</span>
-                            </div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">MOVE</div>
-                            <div class="stat-value-single">4</div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">RANGE</div>
-                            <div class="stat-value-single">3</div>
-                        </div>
-                    </div>
-                    
-                    <div class="unit-abilities">
-                        <div class="ability">
-                            <div class="ability-icon">🎯</div>
-                            <div class="ability-desc">
-                                <strong>Pinpoint:</strong> Ignores 50% of cover bonus
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="unit-notes">
-                        <div class="note strength">
-                            <strong>Strength:</strong> Attacks from safety, ignores some cover
-                        </div>
-                        <div class="note weakness">
-                            <strong>Weakness:</strong> Fragile in melee combat
-                        </div>
+                        <div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value-single">25</span></div>
+                        <div class="detailed-stat"><span class="stat-name">DMG</span><span class="stat-value-single">8</span></div>
+                        <div class="detailed-stat"><span class="stat-name">DEF</span><span class="stat-value-single">2-3</span></div>
+                        <div class="detailed-stat"><span class="stat-name">MOVE</span><span class="stat-value-single">3</span></div>
+                        <div class="detailed-stat"><span class="stat-name">RANGE</span><span class="stat-value-single">5</span></div>
                     </div>
                 </div>
                 
-                <!-- MAGE -->
                 <div class="unit-card detailed">
                     <div class="unit-card-header">
                         <img src="ui/potion.png" class="unit-card-icon">
@@ -346,67 +248,16 @@
                             <div class="unit-name">MAGE</div>
                             <div class="unit-role">Support Healer</div>
                         </div>
-                        <div class="unit-allegiance">
-                            <span class="allegiance-player">Player</span> / 
-                            <span class="allegiance-enemy">Enemy</span>
-                        </div>
                     </div>
-                    
                     <div class="unit-stats-grid detailed">
-                        <div class="detailed-stat">
-                            <div class="stat-name">HP</div>
-                            <div class="stat-values">
-                                <span class="player-value">30</span>
-                                <span class="separator">/</span>
-                                <span class="enemy-value">25</span>
-                            </div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">DAMAGE</div>
-                            <div class="stat-values">
-                                <span class="player-value">8</span>
-                                <span class="separator">/</span>
-                                <span class="enemy-value">6</span>
-                            </div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">DEFENSE</div>
-                            <div class="stat-values">
-                                <span class="player-value">2</span>
-                                <span class="separator">/</span>
-                                <span class="enemy-value">1</span>
-                            </div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">MOVE</div>
-                            <div class="stat-value-single">3</div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">RANGE</div>
-                            <div class="stat-value-single">2 (heal)<br>1 (attack)</div>
-                        </div>
-                    </div>
-                    
-                    <div class="unit-abilities">
-                        <div class="ability">
-                            <div class="ability-icon">💚</div>
-                            <div class="ability-desc">
-                                <strong>Healing Wave:</strong> Heals 15 HP to adjacent allies
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="unit-notes">
-                        <div class="note strength">
-                            <strong>Strength:</strong> Essential for sustainability
-                        </div>
-                        <div class="note weakness">
-                            <strong>Weakness:</strong> Very low defense, priority target
-                        </div>
+                        <div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value-single">20</span></div>
+                        <div class="detailed-stat"><span class="stat-name">HEAL</span><span class="stat-value-single">10-20</span></div>
+                        <div class="detailed-stat"><span class="stat-name">DEF</span><span class="stat-value-single">1-2</span></div>
+                        <div class="detailed-stat"><span class="stat-name">MOVE</span><span class="stat-value-single">2</span></div>
+                        <div class="detailed-stat"><span class="stat-name">RANGE</span><span class="stat-value-single">3</span></div>
                     </div>
                 </div>
                 
-                <!-- BERSERKER -->
                 <div class="unit-card detailed">
                     <div class="unit-card-header">
                         <img src="ui/axe.png" class="unit-card-icon">
@@ -414,118 +265,48 @@
                             <div class="unit-name">BERSERKER</div>
                             <div class="unit-role">Damage Dealer</div>
                         </div>
-                        <div class="unit-allegiance">
-                            <span class="allegiance-player">Player</span> / 
-                            <span class="allegiance-enemy">Enemy</span>
-                        </div>
                     </div>
-                    
                     <div class="unit-stats-grid detailed">
-                        <div class="detailed-stat">
-                            <div class="stat-name">HP</div>
-                            <div class="stat-values">
-                                <span class="player-value">40</span>
-                                <span class="separator">/</span>
-                                <span class="enemy-value">35</span>
-                            </div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">DAMAGE</div>
-                            <div class="stat-values">
-                                <span class="player-value">18</span>
-                                <span class="separator">/</span>
-                                <span class="enemy-value">15</span>
-                            </div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">DEFENSE</div>
-                            <div class="stat-values">
-                                <span class="player-value">4</span>
-                                <span class="separator">/</span>
-                                <span class="enemy-value">3</span>
-                            </div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">MOVE</div>
-                            <div class="stat-value-single">4</div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">RANGE</div>
-                            <div class="stat-value-single">1</div>
-                        </div>
-                    </div>
-                    
-                    <div class="unit-abilities">
-                        <div class="ability">
-                            <div class="ability-icon">⚡</div>
-                            <div class="ability-desc">
-                                <strong>Frenzy:</strong> Can attack twice when below 50% HP
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="unit-notes">
-                        <div class="note strength">
-                            <strong>Strength:</strong> Highest damage output in game
-                        </div>
-                        <div class="note weakness">
-                            <strong>Weakness:</strong> Unstable morale, low defense
-                        </div>
+                        <div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value-single">25</span></div>
+                        <div class="detailed-stat"><span class="stat-name">DMG</span><span class="stat-value-single">12</span></div>
+                        <div class="detailed-stat"><span class="stat-name">DEF</span><span class="stat-value-single">2-4</span></div>
+                        <div class="detailed-stat"><span class="stat-name">MOVE</span><span class="stat-value-single">3</span></div>
+                        <div class="detailed-stat"><span class="stat-name">RANGE</span><span class="stat-value-single">1</span></div>
                     </div>
                 </div>
                 
-                <!-- BOSS -->
+                <div class="unit-card detailed">
+                    <div class="unit-card-header">
+                        <img src="ui/gremlin.png" class="unit-card-icon">
+                        <div class="unit-card-title">
+                            <div class="unit-name">GREMLIN</div>
+                            <div class="unit-role">Pesky Swarm Unit</div>
+                        </div>
+                    </div>
+                    <div class="unit-stats-grid detailed">
+                        <div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value-single">8-10</span></div>
+                        <div class="detailed-stat"><span class="stat-name">DMG</span><span class="stat-value-single">3-4</span></div>
+                        <div class="detailed-stat"><span class="stat-name">MOVE</span><span class="stat-value-single">4</span></div>
+                        <div class="detailed-stat"><span class="stat-name">RANGE</span><span class="stat-value-single">1</span></div>
+                    </div>
+                    <div class="unit-abilities">
+                        <div class="ability"><strong>Swamp Native:</strong> No movement penalty in swamp</div>
+                    </div>
+                </div>
+                
                 <div class="unit-card detailed boss">
                     <div class="unit-card-header">
                         <img src="ui/sword3.png" class="unit-card-icon">
                         <div class="unit-card-title">
                             <div class="unit-name">BOSS</div>
-                            <div class="unit-role">Leader Unit (Enemy Only)</div>
-                        </div>
-                        <div class="unit-allegiance">
-                            <span class="allegiance-enemy">Enemy Only</span>
+                            <div class="unit-role">Elite Enemy</div>
                         </div>
                     </div>
-                    
                     <div class="unit-stats-grid detailed">
-                        <div class="detailed-stat">
-                            <div class="stat-name">HP</div>
-                            <div class="stat-value-single boss-value">80</div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">DAMAGE</div>
-                            <div class="stat-value-single boss-value">20</div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">DEFENSE</div>
-                            <div class="stat-value-single boss-value">10</div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">MOVE</div>
-                            <div class="stat-value-single">3</div>
-                        </div>
-                        <div class="detailed-stat">
-                            <div class="stat-name">RANGE</div>
-                            <div class="stat-value-single">2</div>
-                        </div>
-                    </div>
-                    
-                    <div class="unit-abilities">
-                        <div class="ability">
-                            <div class="ability-icon">📯</div>
-                            <div class="ability-desc">
-                                <strong>Rally:</strong> Boosts nearby enemy morale
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="unit-notes">
-                        <div class="note strength">
-                            <strong>Strength:</strong> Tough to kill, buffs allies
-                        </div>
-                        <div class="note weakness">
-                            <strong>Weakness:</strong> Slow, attracts all attacks
-                        </div>
+                        <div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value-single boss-value">60-80</span></div>
+                        <div class="detailed-stat"><span class="stat-name">DMG</span><span class="stat-value-single boss-value">15-20</span></div>
+                        <div class="detailed-stat"><span class="stat-name">DEF</span><span class="stat-value-single boss-value">8-10</span></div>
+                        <div class="detailed-stat"><span class="stat-name">MOVE</span><span class="stat-value-single">3</span></div>
                     </div>
                 </div>
             </div>
@@ -535,484 +316,242 @@
                 <h3><img src="ui/sword2.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">COMBAT MECHANICS</h3>
                 
                 <div class="manual-section">
-                    <h4>DAMAGE FORMULA</h4>
+                    <h4>TERRAIN IMPACT EXAMPLE</h4>
                     <div class="formula-box">
-                        <div class="formula">Final Damage = (Attacker Damage × Crit Multiplier) - (Defender Defense × Cover Bonus)</div>
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                            <img src="ui/knight.png" style="width: 40px; height: 40px;">
+                            <span style="color: #64ffda; font-size: 1.5em;">→</span>
+                            <img src="ui/bow.png" style="width: 40px; height: 40px;">
+                        </div>
+                        <div class="formula">Knight (12 dmg) on MOUNTAIN attacks Archer (3 def) in FOREST</div>
                         <div class="formula-example">
-                            <strong>Example:</strong> Knight (12 damage) vs Archer in Forest (3 defense)<br>
-                            12 - (3 × 1.3) = 12 - 3.9 = <strong>8.1 damage</strong>
+                            Base damage: 12<br>
+                            Mountain attacker bonus: +15% accuracy<br>
+                            Forest defender bonus: -25% enemy accuracy, +15% damage reduction<br>
+                            Final damage: 12 - (3 × 0.5) = 10.5, then -15% = ~9 damage
                         </div>
                     </div>
                 </div>
                 
                 <div class="manual-section">
-                    <h4>CRITICAL HIT MODIFIERS</h4>
-                    <div class="modifier-grid">
-                        <div class="modifier-item">
-                            <div class="modifier-name">Flanking</div>
-                            <div class="modifier-value">+25% damage</div>
-                            <div class="modifier-desc">Attack from side or rear</div>
-                        </div>
-                        <div class="modifier-item">
-                            <div class="modifier-name">High Morale</div>
-                            <div class="modifier-value">+15% chance</div>
-                            <div class="modifier-desc">Confident units</div>
-                        </div>
-                        <div class="modifier-item">
-                            <div class="modifier-name">Height Advantage</div>
-                            <div class="modifier-value">+10% accuracy</div>
-                            <div class="modifier-desc">Attacking from high ground</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="manual-section">
-                    <h4>MORALE SYSTEM</h4>
+                    <h4>MORALE</h4>
                     <div class="morale-states">
                         <div class="morale-state">
                             <img src="ui/happy.png" class="morale-icon">
-                            <div class="morale-details">
-                                <div class="morale-name">Confident</div>
-                                <div class="morale-effects">+10% accuracy<br>Normal movement</div>
-                            </div>
+                            <div><strong>Confident</strong> (80-100%)</div>
                         </div>
                         <div class="morale-state">
                             <img src="ui/thinking.png" class="morale-icon">
-                            <div class="morale-details">
-                                <div class="morale-name">Shaken</div>
-                                <div class="morale-effects">-1 movement<br>-10% accuracy</div>
-                            </div>
+                            <div><strong>Shaken</strong> (30-79%)</div>
                         </div>
                         <div class="morale-state">
                             <img src="ui/sad.png" class="morale-icon">
-                            <div class="morale-details">
-                                <div class="morale-name">Broken</div>
-                                <div class="morale-effects">-2 movement<br>-25% accuracy</div>
-                            </div>
+                            <div><strong>Broken</strong> (1-29%)</div>
                         </div>
                         <div class="morale-state">
                             <img src="ui/running.png" class="morale-icon">
-                            <div class="morale-details">
-                                <div class="morale-name">Fleeing</div>
-                                <div class="morale-effects">Cannot attack<br>Moves randomly</div>
-                            </div>
+                            <div><strong>Fleeing</strong> (0%)</div>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="manual-section">
-                    <h4>INJURY SYSTEM</h4>
-                    <div class="injury-grid">
-                        <div class="injury-item">
-                            <img src="ui/i-head.png" class="injury-icon">
-                            <div class="injury-details">
-                                <div class="injury-name">Head Injury</div>
-                                <div class="injury-effect">-20% accuracy</div>
-                            </div>
-                        </div>
-                        <div class="injury-item">
-                            <img src="ui/i-arm.png" class="injury-icon">
-                            <div class="injury-details">
-                                <div class="injury-name">Arm Injury</div>
-                                <div class="injury-effect">-30% damage</div>
-                            </div>
-                        </div>
-                        <div class="injury-item">
-                            <img src="ui/i-leg.png" class="injury-icon">
-                            <div class="injury-details">
-                                <div class="injury-name">Leg Injury</div>
-                                <div class="injury-effect">-2 movement</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="injury-note">
-                        <img src="ui/wound.png" style="width: 16px; height: 16px; vertical-align: middle;">
-                        <strong>Note:</strong> Injuries persist between battles and require healing
                     </div>
                 </div>
             </div>
             
             <!-- ====== TAB 4: CONTROLS ====== -->
             <div class="tab-content" id="controls">
-                <h3><img src="ui/target.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">CONTROLS & INTERFACE</h3>
+                <h3><img src="ui/target.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">CONTROLS</h3>
+                
+                <div class="manual-section">
+                    <h4>MOUSE CONTROLS (PRIMARY)</h4>
+                    <div class="control-item">
+                        <div class="control-type">LEFT CLICK</div>
+                        <div class="control-desc">Select unit • Move to tile • Attack enemy • Heal ally</div>
+                    </div>
+                </div>
+                
+                <div class="manual-section">
+                    <h4>TOP BAR</h4>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                        <span class="shortcut">END TURN</span>
+                        <span class="shortcut">ATTACK</span>
+                        <span class="shortcut">HEAL</span>
+                        <span class="shortcut">CANCEL</span>
+                        <span class="shortcut">TURN #</span>
+                        <span class="shortcut">ENEMIES #</span>
+                        <span class="shortcut">LEVEL</span>
+                        <span class="shortcut">DIFFICULTY</span>
+                        <span class="shortcut">QUIT</span>
+                        <span class="shortcut">HELP</span>
+                    </div>
+                </div>
                 
                 <div class="manual-section">
                     <h4>KEYBOARD SHORTCUTS</h4>
                     <div class="hotkey-grid">
-                        <div class="hotkey-item">
-                            <div class="hotkey-key">A</div>
-                            <div class="hotkey-desc">Attack selected unit</div>
-                        </div>
-                        <div class="hotkey-item">
-                            <div class="hotkey-key">H</div>
-                            <div class="hotkey-desc">Heal selected unit</div>
-                        </div>
-                        <div class="hotkey-item">
-                            <div class="hotkey-key">E</div>
-                            <div class="hotkey-desc">End turn</div>
-                        </div>
-                        <div class="hotkey-item">
-                            <div class="hotkey-key">ESC</div>
-                            <div class="hotkey-desc">Cancel action</div>
-                        </div>
-                        <div class="hotkey-item">
-                            <div class="hotkey-key">SPACE</div>
-                            <div class="hotkey-desc">Deselect / Continue</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="manual-section">
-                    <h4>MOUSE CONTROLS</h4>
-                    <div class="control-item">
-                        <div class="control-type">LEFT CLICK</div>
-                        <div class="control-desc">
-                            • Select unit<br>
-                            • Move to highlighted tile<br>
-                            • Attack highlighted enemy
-                        </div>
-                    </div>
-                    <div class="control-item">
-                        <div class="control-type">RIGHT CLICK</div>
-                        <div class="control-desc">
-                            • Cancel current action<br>
-                            • Deselect unit<br>
-                            • Context menu (future)
-                        </div>
-                    </div>
-                    <div class="control-item">
-                        <div class="control-type">HOVER</div>
-                        <div class="control-desc">
-                            • Show movement/attack range<br>
-                            • Display terrain info<br>
-                            • Preview unit stats
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="manual-section">
-                    <h4>INTERFACE ELEMENTS</h4>
-                    <div class="ui-element">
-                        <div class="ui-title">
-                            <img src="ui/target.png" style="width: 16px; height: 16px;">
-                            Selected Unit Panel
-                        </div>
-                        <div class="ui-desc">Complete stats, abilities, and status of selected unit</div>
-                    </div>
-                    <div class="ui-element">
-                        <div class="ui-title">
-                            <img src="ui/team.png" style="width: 16px; height: 16px;">
-                            Unit Roster
-                        </div>
-                        <div class="ui-desc">Health, status, and selection for all units at a glance</div>
-                    </div>
-                    <div class="ui-element">
-                        <div class="ui-title">
-                            <img src="ui/scroll.png" style="width: 16px; height: 16px;">
-                            Battle Log
-                        </div>
-                        <div class="ui-desc">Color-coded action history (Player=Cyan, Enemy=Red)</div>
-                    </div>
-                    <div class="ui-element">
-                        <div class="ui-title">
-                            <img src="ui/sword1.png" style="width: 16px; height: 16px;">
-                            Action Buttons
-                        </div>
-                        <div class="ui-desc">Context-sensitive buttons for Attack, Heal, End Turn, Cancel</div>
-                    </div>
-                </div>
-                
-                <div class="manual-section">
-                    <h4>BUTTON FUNCTIONS</h4>
-                    <div class="button-grid">
-                        <div class="button-item">
-                            <img src="ui/sword1.png" class="button-icon">
-                            <div class="button-desc">
-                                <strong>ATTACK</strong><br>
-                                Initiate combat with selected target
-                            </div>
-                        </div>
-                        <div class="button-item">
-                            <img src="ui/heart.png" class="button-icon">
-                            <div class="button-desc">
-                                <strong>HEAL</strong><br>
-                                Restore HP to adjacent ally
-                            </div>
-                        </div>
-                        <div class="button-item">
-                            <img src="ui/end.png" class="button-icon">
-                            <div class="button-desc">
-                                <strong>END TURN</strong><br>
-                                Pass control to enemy phase
-                            </div>
-                        </div>
-                        <div class="button-item">
-                            <img src="ui/cancel.png" class="button-icon">
-                            <div class="button-desc">
-                                <strong>CANCEL</strong><br>
-                                Abort current action
-                            </div>
-                        </div>
+                        <div class="hotkey-item"><span class="hotkey-key">A</span><span class="hotkey-desc">Attack</span></div>
+                        <div class="hotkey-item"><span class="hotkey-key">H</span><span class="hotkey-desc">Heal</span></div>
+                        <div class="hotkey-item"><span class="hotkey-key">E</span><span class="hotkey-desc">End Turn</span></div>
+                        <div class="hotkey-item"><span class="hotkey-key">ESC</span><span class="hotkey-desc">Cancel</span></div>
+                        <div class="hotkey-item"><span class="hotkey-key">SPACE</span><span class="hotkey-desc">Continue</span></div>
                     </div>
                 </div>
             </div>
             
             <!-- ====== TAB 5: STRATEGY ====== -->
             <div class="tab-content" id="strategy">
-                <h3><img src="ui/thinking.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">STRATEGY & TACTICS</h3>
+                <h3><img src="ui/thinking.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">LEVEL STRATEGIES</h3>
                 
-                <div class="manual-section">
-                    <h4>PHASED APPROACH</h4>
+                <div class="manual-section" style="max-height: 400px; overflow-y: auto;">
                     
                     <div class="phase">
-                        <div class="phase-title">EARLY GAME (Turns 1-3)</div>
+                        <div class="phase-title">Level 1: Training Grounds</div>
                         <ul class="phase-tips">
-                            <li>Form defensive line with knights</li>
-                            <li>Position archers on high ground</li>
+                            <li>Learn basic movement and attack</li>
+                            <li>Use forest for cover</li>
                             <li>Keep mage behind frontline</li>
-                            <li>Use forests for cover advantage</li>
                         </ul>
                     </div>
                     
                     <div class="phase">
-                        <div class="phase-title">MID GAME (Turns 4-8)</div>
+                        <div class="phase-title">Level 2: Darkwood Approach</div>
                         <ul class="phase-tips">
-                            <li>Flank isolated enemies</li>
-                            <li>Focus fire on high-threat targets</li>
-                            <li>Use berserkers to break formations</li>
-                            <li>Maintain unit cohesion for morale</li>
+                            <li>Dense forest limits vision</li>
+                            <li>Archers excel here</li>
+                            <li>Watch for ambushes</li>
                         </ul>
                     </div>
                     
                     <div class="phase">
-                        <div class="phase-title">LATE GAME (Turns 9+)</div>
+                        <div class="phase-title">Level 3: Forest Outpost</div>
                         <ul class="phase-tips">
-                            <li>Eliminate enemy leaders first</li>
-                            <li>Protect injured units at all costs</li>
-                            <li>Use terrain chokepoints</li>
-                            <li>Don't overextend - consolidate gains</li>
+                            <li>River crossing at two points</li>
+                            <li>Enemy archers cover bridges</li>
+                            <li>Split force or concentrate</li>
                         </ul>
                     </div>
-                </div>
-                
-                <div class="manual-section">
-                    <h4>UNIT SYNERGIES</h4>
-                    <div class="synergy-grid">
-                        <div class="synergy-item">
-                            <div class="synergy-combo">
-                                <img src="ui/knight.png" class="synergy-icon">
-                                <span class="synergy-plus">+</span>
-                                <img src="ui/potion.png" class="synergy-icon">
-                            </div>
-                            <div class="synergy-desc">
-                                <strong>Unbreakable Wall</strong><br>
-                                Knights tank while mages heal
-                            </div>
-                        </div>
-                        <div class="synergy-item">
-                            <div class="synergy-combo">
-                                <img src="ui/bow.png" class="synergy-icon">
-                                <span class="synergy-plus">+</span>
-                                <div class="synergy-icon">⛰️</div>
-                            </div>
-                            <div class="synergy-desc">
-                                <strong>Map Control</strong><br>
-                                Archers on heights dominate area
-                            </div>
-                        </div>
-                        <div class="synergy-item">
-                            <div class="synergy-combo">
-                                <img src="ui/axe.png" class="synergy-icon">
-                                <span class="synergy-plus">+</span>
-                                <img src="ui/heart.png" class="synergy-icon">
-                            </div>
-                            <div class="synergy-desc">
-                                <strong>Surgical Strikes</strong><br>
-                                Berserkers deal damage, mages keep them alive
-                            </div>
-                        </div>
-                        <div class="synergy-item">
-                            <div class="synergy-combo">
-                                <img src="ui/knight.png" class="synergy-icon small">
-                                <img src="ui/bow.png" class="synergy-icon small">
-                                <img src="ui/potion.png" class="synergy-icon small">
-                                <img src="ui/axe.png" class="synergy-icon small">
-                            </div>
-                            <div class="synergy-desc">
-                                <strong>Balanced Approach</strong><br>
-                                Mixed formations handle any threat
-                            </div>
-                        </div>
+                    
+                    <div class="phase">
+                        <div class="phase-title">Level 4: Mountain Pass</div>
+                        <ul class="phase-tips">
+                            <li>Narrow path - funnel enemies</li>
+                            <li>Mountains give accuracy bonus</li>
+                            <li>Take high ground</li>
+                        </ul>
                     </div>
-                </div>
-                
-                <div class="manual-section">
-                    <h4>COMMON MISTAKES</h4>
-                    <div class="mistakes-list">
-                        <div class="mistake-item">
-                            <div class="mistake-title">Leaving Mages Exposed</div>
-                            <div class="mistake-desc">Mages are priority targets - keep them protected</div>
-                        </div>
-                        <div class="mistake-item">
-                            <div class="mistake-title">Attacking Across Rivers</div>
-                            <div class="mistake-desc">Wasted movement - find bridges or go around</div>
-                        </div>
-                        <div class="mistake-item">
-                            <div class="mistake-title">Ignoring Morale Warnings</div>
-                            <div class="mistake-desc">Fleeing units are combat ineffective</div>
-                        </div>
-                        <div class="mistake-item">
-                            <div class="mistake-title">Splitting Forces Too Thin</div>
-                            <div class="mistake-desc">Concentrated force defeats divided enemies</div>
-                        </div>
+                    
+                    <div class="phase">
+                        <div class="phase-title">Level 5: Mountain Fortress</div>
+                        <ul class="phase-tips">
+                            <li>First boss encounter</li>
+                            <li>Clear weaker units before focusing on the boss</li>
+                            <li>Use mountain peaks for archers</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="phase">
+                        <div class="phase-title">Level 6: Gremlin Swarm</div>
+                        <ul class="phase-tips">
+                            <li>Lots of pesky gremlins</li>
+                            <li>Gremlins are weak but fast and soo anoying</li>
+                            <li>Area control is key</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="phase">
+                        <div class="phase-title">Level 7: Misty Lowlands</div>
+                        <ul class="phase-tips">
+                            <li>Mixed terrain transition</li>
+                            <li>Mountains behind, forest ahead</li>
+                            <li>Scout carefully</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="phase">
+                        <div class="phase-title">Level 8: Swamp of Sorrows</div>
+                        <ul class="phase-tips">
+                            <li>Movement HALVED each turn</li>
+                            <li>Gremlins move normally</li>
+                            <li>Plan moves 2 turns ahead</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="phase">
+                        <div class="phase-title">Level 9: Fog of War</div>
+                        <ul class="phase-tips">
+                            <li>Vision only 3 tiles</li>
+                            <li>Archers outrange vision (5 tiles)</li>
+                            <li>Enemies appear from fog</li>
+                            <li>Move cautiously as a group</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="phase">
+                        <div class="phase-title">Level 10: The Final Stand</div>
+                        <ul class="phase-tips">
+                            <li>4-tile bridge crossing under fire</li>
+                            <li>At least three bosses in large village</li>
+                            <li>Focus one boss at a time</li>
+                            <li>Use stone bridge for cover</li>
+                        </ul>
                     </div>
                 </div>
             </div>
             
             <!-- ====== TAB 6: PROGRESSION ====== -->
             <div class="tab-content" id="progression">
-                <h3><img src="ui/levelup.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">PROGRESSION & ADVANCEMENT</h3>
+                <h3><img src="ui/levelup.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">CAMPAIGN & SCORES</h3>
                 
                 <div class="manual-section">
-                    <h4>LEVELING SYSTEM</h4>
-                    <div class="xp-grid">
-                        <div class="xp-source">
-                            <div class="xp-amount">+1 XP</div>
-                            <div class="xp-desc">Per successful hit</div>
-                        </div>
-                        <div class="xp-source">
-                            <div class="xp-amount">+3 XP</div>
-                            <div class="xp-desc">Per enemy kill</div>
-                        </div>
-                        <div class="xp-source">
-                            <div class="xp-amount">+2 XP</div>
-                            <div class="xp-desc">Per 10 HP healed</div>
-                        </div>
-                    </div>
-                    
-                    <div class="level-info">
-                        <div class="level-detail">
-                            <strong>Level Up Bonus:</strong> +10% to primary stats
-                        </div>
-                        <div class="level-detail">
-                            <strong>Max Level:</strong> 5 per unit
-                        </div>
-                        <div class="level-detail">
-                            <strong>XP Required:</strong> 10 × Current Level
-                        </div>
+                    <h4>LEVELS & ENEMIES</h4>
+                    <div class="difficulty-table" style="max-height: 250px; overflow-y: auto;">
+                        <div class="difficulty-row"><span class="difficulty-level">L1</span><span class="difficulty-desc">Training Grounds - 0 extra</span></div>
+                        <div class="difficulty-row"><span class="difficulty-level">L2</span><span class="difficulty-desc">Darkwood Approach -2 extra</span></div>
+                        <div class="difficulty-row"><span class="difficulty-level">L3</span><span class="difficulty-desc">Forest Outpost +1 extra</span></div>
+                        <div class="difficulty-row"><span class="difficulty-level">L4</span><span class="difficulty-desc">Mountain Pass -1 extra</span></div>
+                        <div class="difficulty-row"><span class="difficulty-level">L5</span><span class="difficulty-desc">Mountain Fortress +4 extra + BOSS</span></div>
+                        <div class="difficulty-row"><span class="difficulty-level">L6</span><span class="difficulty-desc">Gremlin Swarm +9 extra</span></div>
+                        <div class="difficulty-row"><span class="difficulty-level">L7</span><span class="difficulty-desc">Misty Lowlands +2 extra</span></div>
+                        <div class="difficulty-row"><span class="difficulty-level">L8</span><span class="difficulty-desc">Swamp of Sorrows +6 extra</span></div>
+                        <div class="difficulty-row"><span class="difficulty-level">L9</span><span class="difficulty-desc">Fog of War +8 extra</span></div>
+                        <div class="difficulty-row"><span class="difficulty-level">L10</span><span class="difficulty-desc">The Final Stand +12 extra + 3 BOSS</span></div>
                     </div>
                 </div>
                 
                 <div class="manual-section">
-                    <h4>VETERAN BONUSES</h4>
-                    <div class="veteran-bonuses">
-                        <div class="veteran-level">
-                            <div class="veteran-title">LEVEL 3</div>
-                            <div class="veteran-desc">Unlock secondary ability</div>
-                        </div>
-                        <div class="veteran-level">
-                            <div class="veteran-title">LEVEL 5</div>
-                            <div class="veteran-desc">+1 to all stats permanently</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="manual-section">
-                    <h4>BETWEEN BATTLES</h4>
-                    <div class="camp-actions">
-                        <div class="camp-action">
-                            <img src="ui/shop.png" class="camp-icon">
-                            <div class="camp-details">
-                                <div class="camp-title">Recruit Units</div>
-                                <div class="camp-desc">Hire new soldiers with gold</div>
-                            </div>
-                        </div>
-                        <div class="camp-action">
-                            <img src="ui/heart.png" class="camp-icon">
-                            <div class="camp-details">
-                                <div class="camp-title">Heal Injuries</div>
-                                <div class="camp-desc">Remove penalties from wounded units</div>
-                            </div>
-                        </div>
-                        <div class="camp-action">
-                            <img src="ui/sword1.png" class="camp-icon">
-                            <div class="camp-details">
-                                <div class="camp-title">Sell Equipment</div>
-                                <div class="camp-desc">Convert unused items to gold</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="economy-info">
-                        <div class="economy-item">
-                            <strong>Starting Gold:</strong> 100
-                        </div>
-                        <div class="economy-item">
-                            <strong>Victory Bonus:</strong> +50 per battle
-                        </div>
-                        <div class="economy-item">
-                            <strong>Recruit Cost:</strong> 80-120 per unit
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="manual-section">
-                    <h4>ACHIEVEMENTS & REWARDS</h4>
-                    <div class="achievement-grid">
-                        <div class="achievement">
-                            <img src="ui/trophy.png" class="achievement-icon">
-                            <div class="achievement-details">
-                                <div class="achievement-name">Perfect Victory</div>
-                                <div class="achievement-desc">No unit losses in battle</div>
-                            </div>
-                        </div>
-                        <div class="achievement">
-                            <img src="ui/sword1.png" class="achievement-icon">
-                            <div class="achievement-details">
-                                <div class="achievement-name">Speed Run</div>
-                                <div class="achievement-desc">Win in under 10 turns</div>
-                            </div>
-                        </div>
-                        <div class="achievement">
-                            <img src="ui/shield.png" class="achievement-icon">
-                            <div class="achievement-details">
-                                <div class="achievement-name">Survivalist</div>
-                                <div class="achievement-desc">Win with 3 or fewer units</div>
-                            </div>
-                        </div>
-                        <div class="achievement">
-                            <img src="ui/celebrate.png" class="achievement-icon">
-                            <div class="achievement-details">
-                                <div class="achievement-name">Medic</div>
-                                <div class="achievement-desc">Heal 100+ HP in single battle</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="manual-section">
-                    <h4>DIFFICULTY SCALING</h4>
+                    <h4>DIFFICULTY MULTIPLIERS</h4>
                     <div class="difficulty-table">
-                        <div class="difficulty-row">
-                            <div class="difficulty-level">Level 1</div>
-                            <div class="difficulty-desc">Basic enemies, 6 units</div>
+                        <div class="difficulty-row"><span class="difficulty-level">Easy</span><span class="difficulty-desc">30% less enemies</span></div>
+                        <div class="difficulty-row"><span class="difficulty-level">Normal</span><span class="difficulty-desc">Normal numner of enemies</span></div>
+                        <div class="difficulty-row"><span class="difficulty-level">Hard</span><span class="difficulty-desc">30% more enemies</span></div>
+                        <div class="difficulty-row"><span class="difficulty-level">Super Hard</span><span class="difficulty-desc">60% more enemies</span></div>
+                    </div>
+                </div>
+                
+                <div class="manual-section">
+                    <h4>XP GAINS</h4>
+                    <div class="xp-grid">
+                        <div class="xp-source"><span class="xp-amount">15-30</span><span class="xp-desc">Per hit</span></div>
+                        <div class="xp-source"><span class="xp-amount">40-80</span><span class="xp-desc">Per kill</span></div>
+                        <div class="xp-source"><span class="xp-amount">12-20</span><span class="xp-desc">Per heal</span></div>
+                    </div>
+                </div>
+                
+                <div class="manual-section">
+                    <h4>HALL OF FAME</h4>
+                    <div class="economy-info">
+                        <div class="economy-item">• Top 25 scores saved in browser</div>
+                        <div class="economy-item">• Ranked by TOTAL XP earned</div>
+                        <div class="economy-item">• Score saved on: Victory, Defeat, or Quit</div>
+                        <div class="economy-item">• Enter name when campaign ends</div>
+                        <div class="economy-item" style="display: flex; gap: 10px; margin-top: 8px;">
+                            <img src="ui/trophy1.png" style="width: 20px; height: 20px;"> Top 3 get trophies
                         </div>
-                        <div class="difficulty-row">
-                            <div class="difficulty-level">Level 2</div>
-                            <div class="difficulty-desc">+2 enemies, better equipment</div>
-                        </div>
-                        <div class="difficulty-row">
-                            <div class="difficulty-level">Level 3</div>
-                            <div class="difficulty-desc">+1 boss, veteran enemies</div>
-                        </div>
-                        <div class="difficulty-row">
-                            <div class="difficulty-level">Level 4</div>
-                            <div class="difficulty-desc">All enemies leveled up</div>
-                        </div>
-                        <div class="difficulty-row">
-                            <div class="difficulty-level">Level 5</div>
-                            <div class="difficulty-desc">Maximum challenge</div>
-                        </div>
+                    </div>
+                </div>
+                
+                <div class="manual-section">
+                    <h4>STATS TRACKED</h4>
+                    <div class="economy-info">
+                        <div class="economy-item">Name • XP • Level Reached • Kills • Survivors • Difficulty • Date</div>
                     </div>
                 </div>
             </div>
@@ -1025,7 +564,6 @@
         </button>
     </div>
 </div>
-
     
 <!-- WELCOME INTRO SPLASH - MISSION BRIEFING ONLY -->
 <div id="introOverlay" class="intro-overlay">
