@@ -2,24 +2,22 @@
 
 // ========== INITIALIZATION ==========
 function init() {
-        gameState.currentLevel = 1;  // ← LEVEL TO START GAME FOR TESTING
+        gameState.currentLevel = 4;  // ← LEVEL TO START GAME FOR TESTING
     generateTerrain();
     createGrid();
     createUnits();
     renderAll([]);
     setupEventListeners();
     
+    // Set displays
+	document.getElementById('levelNameDisplay').textContent = 	
+    `${gameState.currentLevel}: ${LEVELS[gameState.currentLevel - 1].name}`;
+    document.getElementById('difficultyDisplay').textContent = gameState.difficulty.toUpperCase();
+    
     console.log("Units count:", gameState.units.length);
-console.log("Player units:", gameState.units.filter(u => u.type === 'player').length);
-console.log("Enemy units:", gameState.units.filter(u => u.type === 'enemy').length);
-    
-    // Initialize level display
-    if (document.getElementById('levelDisplay')) {
-        const level = LEVELS[0];
-        document.getElementById('levelDisplay').textContent = 
-            `Level 1: ${level.name} (${level.difficulty})`;
-    }
-    
+    console.log("Player units:", gameState.units.filter(u => u.type === 'player').length);
+    console.log("Enemy units:", gameState.units.filter(u => u.type === 'enemy').length);
+      
     logMessage("Welcome to Iron Resolution - Level System Active!", 'system');
     logMessage(`Starting Level 1: ${LEVELS[0].name}`, 'system');
     logMessage("Defeat all enemies to advance to the next level!", 'system');

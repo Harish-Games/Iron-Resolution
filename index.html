@@ -1141,45 +1141,63 @@
     <div class="game-container">
         <div class="left-panel">
 			
-<div class="stats-bar">
-    <!-- Left side: Action buttons -->
-    <div class="action-buttons">
-        <button id="endTurn" class="primary">
-            <img src="ui/end.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
-            END TURN (E)
-        </button>
+<div class="stats-bar" style="flex-direction: column; align-items: stretch; height: auto; padding: 8px 12px 0px 12px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <div class="action-buttons">
+            <button id="endTurn" class="primary">
+                <img src="ui/end.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+                END TURN (E)
+            </button>
 
-        <button id="attackBtn" disabled>
-            <img src="ui/sword1.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
-            ATTACK (A)
-        </button>
+            <button id="attackBtn" disabled>
+                <img src="ui/sword1.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+                ATTACK (A)
+            </button>
 
-        <button id="healBtn" class="heal-btn" disabled>
-            <img src="ui/heart.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
-            HEAL (H)
-        </button>
+            <button id="healBtn" class="heal-btn" disabled>
+                <img src="ui/heart.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+                HEAL (H)
+            </button>
 
-        <button id="cancelBtn" class="cancel-btn" disabled>
-            <img src="ui/cancel.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
-            CANCEL (ESC)
-        </button>
+            <button id="cancelBtn" class="cancel-btn" disabled>
+                <img src="ui/cancel.png" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+                CANCEL (ESC)
+            </button>
+        </div>
+        
+        <div style="display: flex; gap: 20px; align-items: center;">
+            <div class="stats-group">
+                <div class="stat-item">
+                    <span class="stat-label">TURN</span>
+                    <span class="stat-value" id="turnCount">1</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">ENEMIES</span>
+                    <span class="stat-value" id="enemiesLeft">8</span>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button id="quitGameBtn" class="header-btn">QUIT</button>
+                <button id="helpBtn" class="header-btn">?</button>
+            </div>
+        </div>
     </div>
     
-    <!-- Right side: Compact stats + new buttons -->
-    <div class="stats-group">
-        <div class="stat-item">
-            <span class="stat-label">TURN</span>
-            <span class="stat-value" id="turnCount">1</span>
+    <!-- Bottom row: Level and Difficulty -->
+<div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 2px; padding-top: 0; border-top: 1px solid #1e4976;">        <div class="stats-group" style="gap: 30px;">
+            <div class="stat-item">
+                <span class="stat-label">LEVEL</span>
+                <span style="color: #64ffda; font-weight: bold;" id="levelNameDisplay"></span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">DIFFICULTY</span>
+                <span class="stat-value" id="difficultyDisplay" style="text-transform: uppercase;">NORMAL</span>
+            </div>
         </div>
-        <div class="stat-item">
-            <span class="stat-label">ENEMIES</span>
-            <span class="stat-value" id="enemiesLeft">8</span>
-        </div>
-        <button id="quitGameBtn" class="header-btn">QUIT</button>
-        <button id="helpBtn" class="header-btn">?</button>
+        <!-- No buttons here - they're on top row -->
     </div>
 </div>
-            
+   
             <div class="grid-container">
             <div id="rangeIndicator" class="range-indicator" style="display: none;">Range: 0</div>
 			<div id="soundToggle" class="sound-toggle">

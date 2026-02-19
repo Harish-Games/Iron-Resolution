@@ -1179,12 +1179,15 @@ function advanceToLevel3() {
 }
    
     function startNextLevel() {
-	 console.log(`[DEBUG-TRACE] === ENTER startNextLevel() === Level: ${gameState.currentLevel}`);
     
      if (gameState.currentLevel < gameState.maxLevel) {
         gameState.currentLevel++;
         console.log(`📈 Auto-incrementing to Level ${gameState.currentLevel}`);
     }
+
+// Update level display
+    document.getElementById('levelNameDisplay').textContent = 
+    `${gameState.currentLevel}: ${LEVELS[gameState.currentLevel - 1].name}`;
     
     console.log("Current difficulty multiplier in startNextLevel:", gameState.difficultyMultiplier);
         
