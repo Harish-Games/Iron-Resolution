@@ -88,7 +88,8 @@ const LEVELS = [
 	{ name: "Gremlin Swarm", difficulty: "easy", enemyBonus: 0, extraEnemies: 9, boss: false }, // 6 base + 9 extra = 15 gremlins
 	{ name: "The Misty Lowlands", difficulty: "Medium", enemyBonus: 2, extraEnemies: 2, boss: false },
 	{ name: "The Swamp of Sorrows", difficulty: "Hard", enemyBonus: 3, extraEnemies: 6, boss: false },
-    { name: "The Fog of War", difficulty: "Nightmare", enemyBonus: 5, extraEnemies: 8, boss: false }
+    { name: "The Fog of War", difficulty: "Nightmare", enemyBonus: 5, extraEnemies: 8, boss: false },
+    { name: "The Final Stand", difficulty: "Nightmare", enemyBonus: 6, extraEnemies: 12, boss: true }
 ];
         
      // ========== ENEMY UNIT COMPOSITION BY LEVEL ==========
@@ -156,6 +157,23 @@ const ENEMY_COMPOSITION = {
 		{ type: 'knight', min: 1, chance: 10, name: 'Orc Knight' },
 		{ type: 'berserker', min: 1, chance: 10, name: 'Troll Berserker' },
 		{ type: 'boss', min: 0, chance: 0, name: 'Boss', isBoss: true }
+	],
+	9: [ // Level 9 - The Fog Fields
+		{ type: 'gremlin', min: 3, chance: 25, name: 'Gremlin' },
+		{ type: 'archer', min: 2, chance: 20, name: 'Goblin Archer' },
+		{ type: 'mage', min: 1, chance: 20, name: 'Goblin Mage' },
+		{ type: 'knight', min: 2, chance: 20, name: 'Orc Knight' },
+		{ type: 'berserker', min: 1, chance: 15, name: 'Troll Berserker' },
+		{ type: 'boss', min: 0, chance: 0, name: 'Boss', isBoss: true }
+	],
+	// Add to ENEMY_COMPOSITION
+	10: [ // Level 10 - The Final Stand
+		{ type: 'gremlin', min: 1, chance: 15, name: 'Gremlin' },
+		{ type: 'archer', min: 2, chance: 15, name: 'Goblin Archer' },
+		{ type: 'mage', min: 2, chance: 15, name: 'Goblin Mage' },
+		{ type: 'knight', min: 3, chance: 25, name: 'Orc Knight' },
+		{ type: 'berserker', min: 2, chance: 25, name: 'Troll Berserker' },
+		{ type: 'boss', min: 3, chance: 5, name: 'Boss', isBoss: true }
 	]
 };
         

@@ -391,6 +391,70 @@ if (gameState.currentLevel === 9) {
     console.log("Generated Level 9: Fog Fields terrain");
     return;
 }
+
+// ====== LEVEL 10: THE FINAL STAND ======
+if (gameState.currentLevel === 10) {
+    console.log("Generating Level 10: The Final Stand");
+    
+    GRID_SIZE = 16;
+    gameState.terrain = [];
+    
+    for (let y = 0; y < GRID_SIZE; y++) {
+        gameState.terrain[y] = [];
+        for (let x = 0; x < GRID_SIZE; x++) {
+            // Left side (player start) - normal/forest mix
+            if (x < 4) {
+                    const rand = Math.random();
+    if (rand < 0.3) {
+        gameState.terrain[y][x] = 'forest';
+    } else {
+        gameState.terrain[y][x] = 'normal'; 
+    }
+            }
+            // River - 4 columns wide (columns 4-7)
+            else if (x >= 4 && x <= 7) {
+                // Bridge at rows 6-9 (4 tiles deep) across ALL 4 columns
+                if (y >= 6 && y <= 9) {
+                    gameState.terrain[y][x] = 'mountain';  // ← Stone bridge using mountain.png
+                } else {
+                    // Alternate river and water for visual interest
+                    if (x === 4 || x === 7) {
+                        gameState.terrain[y][x] = 'river';
+                    } else {
+                        gameState.terrain[y][x] = 'water';
+                    }
+                }
+            }
+           // Right side (enemy territory) - single large village
+else {
+    // BUFFER ZONE next to river (column 8) - no villages
+    if (x === 8) {
+        gameState.terrain[y][x] = 'normal';
+    }
+    // VILLAGE ZONE (rows 2-13) - dense village
+    else if (y >= 2 && y <= 13) {
+        if (Math.random() < 0.7) {
+            gameState.terrain[y][x] = 'village-enemy';
+        } else {
+            gameState.terrain[y][x] = 'forest';
+        }
+    }
+    // EDGES (rows 0-1, 14-15) - no villages
+    else {
+        if (Math.random() < 0.1) {
+            gameState.terrain[y][x] = 'forest';
+        } else {
+            gameState.terrain[y][x] = 'normal';
+        }
+    }
+}
+                }
+        }
+    
+    
+    console.log("Generated Level 10: The Final Stand terrain");
+    return;
+}
     
     // ====== LEVEL 5: BOSS LEVEL - ENEMY STRONGHOLD ======
     if (gameState.currentLevel === 5) {
@@ -606,7 +670,7 @@ function createUnits() {
             while (!validPosition && attempts < 50) {
                 spawnX = Math.floor(Math.random() * 8);
                 spawnY = 3 + Math.floor(Math.random() * 10);
-                
+             
                 validPosition = !getUnitAt(spawnX, spawnY) && 
                                gameState.terrain[spawnY][spawnX] !== 'water' &&
                                gameState.terrain[spawnY][spawnX] !== 'river' &&

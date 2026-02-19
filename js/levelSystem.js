@@ -677,6 +677,119 @@ function showLevel7To8Transition() {
     }
 }
 
+// ========== LEVEL 9 TO 10 TRANSITION ==========
+function showLevel9To10Transition() {
+    console.log("🎬 Creating Level 9 to Level 10 transition");
+    
+    const transitionHTML = `
+        <div id="transition910Overlay" class="intro-overlay" style="display: flex;">
+            <div class="intro-modal">
+                <div class="intro-title" style="margin-bottom: 25px;">
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                    THE FINAL STAND
+                    <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+                </div>
+                
+                <div class="intro-section" style="margin-bottom: 20px;">
+                    <h3 class="section-header" style="color: #4ecdc4; border-bottom: 2px solid #4ecdc4; padding-bottom: 8px;">
+                        THE FOG VANISHES
+                    </h3>
+                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6;">
+                        The fog vanishes. The final battle awaits!
+                    </div>
+                </div>
+                
+                <div class="intro-section" style="margin-bottom: 20px; background: rgba(30, 73, 118, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff6b6b;">
+                    <h3 class="section-header" style="color: #ff9e6b;">
+                        BEFORE YOU LIES THE END
+                    </h3>
+                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6; color: #e6f1ff;">
+                        A river so wide it could swallow armies. A bridge so long it takes four turns to cross. Twin fortresses of black stone, their walls lined with archers, their gates guarded by knights, their keeps burning with dark fire.
+                    </div>
+                </div>
+                
+                <div class="intro-section" style="margin-bottom: 20px; background: rgba(30, 73, 118, 0.4); padding: 15px; border-radius: 8px; border-left: 4px solid #64ffda;">
+                    <h3 class="section-header" style="color: #64ffda;">
+                        THREE FIGURES WATCH
+                    </h3>
+                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6;">
+                        <strong>The Warlord.</strong> Iron and rage. She waits in the central keep, surrounded by her finest.<br><br>
+                        <strong>The Sorcerer.</strong> Shadow and flame. His tower crackles with power, lightning dancing between the battlements.<br><br>
+                        <strong>The Beastmaster.</strong> Flesh and fang. His courtyard echoes with the snarls of things that should not exist.
+                    </div>
+                </div>
+                
+                <div class="intro-section" style="margin-bottom: 20px; padding: 12px; background: rgba(0, 0, 0, 0.3); border-left: 4px solid #f1c40f;">
+                    <div class="section-content" style="font-size: 1.1em; line-height: 1.6; font-style: italic; color: #f1c40f;">
+                        They know why you're here. They've been waiting.<br><br>
+                        This is the end of the journey. Make your village proud.
+                    </div>
+                </div>
+                
+                <div class="controls-note" style="margin: 20px 0; padding: 12px; background: rgba(30, 73, 118, 0.3); border: 1px solid rgba(255, 193, 7, 0.3); color: #f1c40f;">
+                    <img src="ui/sword3.png" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;">
+                    <strong>THE FINAL BATTLE:</strong> Cross the bridge. Breach the fortresses. Defeat all three leaders.
+                </div>
+                
+                <button id="continueToLevel10Btn" class="intro-continue-btn" style="margin-top: 20px; min-width: 280px;">
+                    <img src="ui/sword3.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 10px;">
+                    BEGIN THE FINAL BATTLE
+                </button>
+                
+                <div class="intro-tip" style="margin-top: 15px; color: #8892b0; font-size: 0.9em;">
+                    Press Space or click to continue
+                </div>
+            </div>
+        </div>
+    `;
+    
+    const overlayDiv = document.createElement('div');
+    overlayDiv.innerHTML = transitionHTML;
+    document.body.appendChild(overlayDiv);
+    
+    const continueBtn = document.getElementById('continueToLevel10Btn');
+    const transitionOverlay = document.getElementById('transition910Overlay');
+    
+    continueBtn.onclick = () => {
+        if (transitionOverlay) {
+            transitionOverlay.style.display = 'none';
+        }
+        if (overlayDiv.parentNode) {
+            document.body.removeChild(overlayDiv);
+        }
+        gameState.currentLevel = 10;
+        startNextLevel();
+    };
+    
+    document.addEventListener('keydown', function transitionKeyHandler(e) {
+        if ((e.code === 'Space' || e.key === ' ') && transitionOverlay && transitionOverlay.style.display === 'flex') {
+            e.preventDefault();
+            if (transitionOverlay) {
+                transitionOverlay.style.display = 'none';
+            }
+            if (overlayDiv.parentNode) {
+                document.body.removeChild(overlayDiv);
+            }
+            document.removeEventListener('keydown', transitionKeyHandler);
+            gameState.currentLevel = 10;
+            startNextLevel();
+        }
+    });
+    
+    if (transitionOverlay) {
+        transitionOverlay.addEventListener('click', function(e) {
+            if (e.target === transitionOverlay) {
+                transitionOverlay.style.display = 'none';
+                if (overlayDiv.parentNode) {
+                    document.body.removeChild(overlayDiv);
+                }
+                gameState.currentLevel = 10;
+                startNextLevel();
+            }
+        });
+    }
+}
+
 
 function showGameCompleteScreen() {
     console.log("🏆 Showing game complete screen");
@@ -1364,6 +1477,7 @@ window.showLevel5To6Transition = showLevel5To6Transition;
 window.showLevel6To7Transition = showLevel6To7Transition;
 window.showLevel7To8Transition = showLevel7To8Transition;
 window.showLevel8To9Transition = showLevel8To9Transition;
+window.showLevel9To10Transition = showLevel9To10Transition;
 window.showGameCompleteScreen = showGameCompleteScreen;
 window.completeLevel = completeLevel;
 window.startNextLevel = startNextLevel;

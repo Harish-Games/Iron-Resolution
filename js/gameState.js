@@ -32,7 +32,7 @@
     },
     // ====== ADD THESE LINES FOR LEVEL SYSTEM ======
     currentLevel: 1,
-    maxLevel: 9,
+    maxLevel: 10,
     completedLevels: 0,
     persistentUnits: [], // Units that carry over between levels
     playerUpgrades: {

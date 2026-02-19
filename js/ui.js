@@ -1200,7 +1200,9 @@ if (currentLevel === 1) {
 } else if (currentLevel === 8) {
     showLevel8To9Transition();
 } else if (currentLevel === 9) {
-    showGameCompleteScreen();   
+    showLevel9To10Transition();
+} else if (currentLevel === 10) {
+    showGameCompleteScreen();  // ← Level 10 is final
 } else {
     // Fallback - shouldn't happen
     console.error(`❌ Unknown level ${currentLevel}, defaulting to startNextLevel()`);
