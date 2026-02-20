@@ -83,7 +83,7 @@ const LEVELS = [
     { name: "Training Grounds", difficulty: "Easy", enemyBonus: 0, extraEnemies: 0, boss: false },
     { name: "Darkwood Approach", difficulty: "Medium", enemyBonus: 0, extraEnemies: -2, boss: false },
     { name: "Forest Outpost", difficulty: "Medium", enemyBonus: 2, extraEnemies: 1, boss: false, hasRiver: true },
-    { name: "Mountain Pass", difficulty: "Medium", enemyBonus: 3, extraEnemies: -1, boss: false },
+    { name: "Mountain Pass", difficulty: "Medium", enemyBonus: 3, extraEnemies: 0, boss: false },
     { name: "Mountain Fortress", difficulty: "Hard", enemyBonus: 4, extraEnemies: 4, boss: true },
 	{ name: "Gremlin Swarm", difficulty: "easy", enemyBonus: 0, extraEnemies: 9, boss: false }, // 6 base + 9 extra = 15 gremlins
 	{ name: "The Misty Lowlands", difficulty: "Medium", enemyBonus: 2, extraEnemies: 2, boss: false },
@@ -113,7 +113,7 @@ const ENEMY_COMPOSITION = {
     3: [ // Level 3 - Forest Outpost
         { type: 'knight', min: 1, chance: 30, name: 'Orc Knight' },
         { type: 'archer', min: 1, chance: 35, name: 'Goblin Archer' },
-        { type: 'mage', min: 0, chance: 15, name: 'Goblin Mage' },
+        { type: 'mage', min: 1, chance: 15, name: 'Goblin Mage' },
         { type: 'berserker', min: 1, chance: 20, name: 'Troll Berserker' },
         { type: 'gremlin', min: 0, chance: 0, name: 'Gremlin' },
         { type: 'boss', min: 0, chance: 0, name: 'Boss', isBoss: true }
@@ -121,7 +121,7 @@ const ENEMY_COMPOSITION = {
     4: [ // Level 4 - Mountain Pass
         { type: 'knight', min: 1, chance: 35, name: 'Orc Knight' },
         { type: 'archer', min: 1, chance: 30, name: 'Goblin Archer' },
-        { type: 'mage', min: 0, chance: 15, name: 'Goblin Mage' },
+        { type: 'mage', min: 1, chance: 15, name: 'Goblin Mage' },
         { type: 'berserker', min: 1, chance: 20, name: 'Troll Berserker' },
         { type: 'gremlin', min: 0, chance: 0, name: 'Gremlin' },
         { type: 'boss', min: 0, chance: 0, name: 'Boss', isBoss: true }

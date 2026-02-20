@@ -2123,7 +2123,7 @@
     backdrop-filter: blur(10px);
     z-index: 2; /* Above everything */
     width: 100%;
-    max-width: 1000px;
+    max-width: 1100px;
     justify-content: center;
     flex-wrap: wrap;
     box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
