@@ -74,7 +74,6 @@ continueBtn.onclick = () => {
     if (overlayDiv.parentNode) {
         document.body.removeChild(overlayDiv);
     }
-    gameState.currentLevel = 4;  // ← SET THE LEVEL
     startNextLevel();  // ← NOW startNextLevel() will show stats
 };
     
@@ -92,8 +91,7 @@ continueBtn.onclick = () => {
             document.removeEventListener('keydown', transitionKeyHandler);
             
             // Set level to 4 and start it
-            gameState.currentLevel = 4;
-            console.log(`🚀 Setting level to 4 and starting...`);
+                        console.log(`🚀 Setting level to 4 and starting...`);
             startNextLevel();
         }
     });
@@ -109,8 +107,7 @@ continueBtn.onclick = () => {
                 }
                 
                 // Set level to 4 and start it
-                gameState.currentLevel = 4;
-                console.log(`🚀 Setting level to 4 and starting...`);
+                            console.log(`🚀 Setting level to 4 and starting...`);
                 startNextLevel();
             }
         });
@@ -200,7 +197,6 @@ function showLevel4To5Transition() {
         if (overlayDiv.parentNode) {
             document.body.removeChild(overlayDiv);
         }
-gameState.currentLevel = 5;
 startNextLevel();
     };
     
@@ -317,8 +313,7 @@ function showLevel5To6Transition() {
         if (overlayDiv.parentNode) {
             document.body.removeChild(overlayDiv);
         }
-        gameState.currentLevel = 6;
-        startNextLevel();
+              startNextLevel();
     };
     
     // Space key
@@ -333,7 +328,6 @@ function showLevel5To6Transition() {
                 document.body.removeChild(overlayDiv);
             }
             document.removeEventListener('keydown', transitionKeyHandler);
-            gameState.currentLevel = 6;
             startNextLevel();
         }
     });
@@ -347,7 +341,6 @@ function showLevel5To6Transition() {
                 if (overlayDiv.parentNode) {
                     document.body.removeChild(overlayDiv);
                 }
-                gameState.currentLevel = 6;
                 startNextLevel();
             }
         });
@@ -429,7 +422,7 @@ function showLevel6To7Transition() {
         if (overlayDiv.parentNode) {
             document.body.removeChild(overlayDiv);
         }
-        gameState.currentLevel = 7;
+        
         startNextLevel();
     };
     
@@ -443,7 +436,6 @@ function showLevel6To7Transition() {
                 document.body.removeChild(overlayDiv);
             }
             document.removeEventListener('keydown', transitionKeyHandler);
-            gameState.currentLevel = 7;
             startNextLevel();
         }
     });
@@ -455,7 +447,6 @@ function showLevel6To7Transition() {
                 if (overlayDiv.parentNode) {
                     document.body.removeChild(overlayDiv);
                 }
-                gameState.currentLevel = 7;
                 startNextLevel();
             }
         });
@@ -533,7 +524,6 @@ function showLevel8To9Transition() {
         if (overlayDiv.parentNode) {
             document.body.removeChild(overlayDiv);
         }
-        gameState.currentLevel = 9;
         startNextLevel();
     };
     
@@ -548,7 +538,6 @@ function showLevel8To9Transition() {
                 document.body.removeChild(overlayDiv);
             }
             document.removeEventListener('keydown', transitionKeyHandler);
-            gameState.currentLevel = 9;
             startNextLevel();
         }
     });
@@ -560,7 +549,6 @@ function showLevel8To9Transition() {
                 if (overlayDiv.parentNode) {
                     document.body.removeChild(overlayDiv);
                 }
-                gameState.currentLevel = 9;
                 startNextLevel();
             }
         });
@@ -644,7 +632,6 @@ function showLevel7To8Transition() {
         if (overlayDiv.parentNode) {
             document.body.removeChild(overlayDiv);
         }
-        gameState.currentLevel = 8;
         startNextLevel();
     };
     
@@ -658,7 +645,6 @@ function showLevel7To8Transition() {
                 document.body.removeChild(overlayDiv);
             }
             document.removeEventListener('keydown', transitionKeyHandler);
-            gameState.currentLevel = 8;
             startNextLevel();
         }
     });
@@ -670,7 +656,6 @@ function showLevel7To8Transition() {
                 if (overlayDiv.parentNode) {
                     document.body.removeChild(overlayDiv);
                 }
-                gameState.currentLevel = 8;
                 startNextLevel();
             }
         });
@@ -757,7 +742,6 @@ function showLevel9To10Transition() {
         if (overlayDiv.parentNode) {
             document.body.removeChild(overlayDiv);
         }
-        gameState.currentLevel = 10;
         startNextLevel();
     };
     
@@ -771,7 +755,6 @@ function showLevel9To10Transition() {
                 document.body.removeChild(overlayDiv);
             }
             document.removeEventListener('keydown', transitionKeyHandler);
-            gameState.currentLevel = 10;
             startNextLevel();
         }
     });
@@ -783,7 +766,6 @@ function showLevel9To10Transition() {
                 if (overlayDiv.parentNode) {
                     document.body.removeChild(overlayDiv);
                 }
-                gameState.currentLevel = 10;
                 startNextLevel();
             }
         });

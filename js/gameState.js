@@ -614,9 +614,11 @@ window.openRecruitScreen = function() {
         
         document.getElementById('recruitOverlay').style.display = 'none';
         
-        // Handle ALL level transitions consistently
-        setTimeout(() => {
-            console.log(`🔄 Processing post-recruit transition for level ${currentLevel}`);
+            // Handle ALL level transitions consistently
+    setTimeout(() => {
+        console.log(`🔄 Processing post-recruit transition for level ${currentLevel}`);
+        console.log(`🔍 PREVIOUS LEVEL SHOULD BE:`, gameState.completedLevels);
+        console.log(`🔍 STACK TRACE:`, new Error().stack);
             
             // Map each level to its specific transition
             if (currentLevel === 1) {
@@ -636,6 +638,8 @@ window.openRecruitScreen = function() {
 			} else if (currentLevel === 8) {
 				showLevel8To9Transition();
 			} else if (currentLevel === 9) {
+				showLevel9To10Transition();
+			} else if (currentLevel === 10) {	
 				showGameCompleteScreen(); 
 			} else {
                 // Fallback - shouldn't happen

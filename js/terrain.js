@@ -476,8 +476,6 @@ else {
                         gameState.terrain[y][x] = 'forest';
                     } else if (rand < 0.35) {
                         gameState.terrain[y][x] = 'mountain';
-                    } else if (rand < 0.38) {
-                        gameState.terrain[y][x] = 'swamp';
                     } else {
                         gameState.terrain[y][x] = 'normal';
                     }
