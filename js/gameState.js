@@ -361,6 +361,14 @@ function healInjuriesBetweenBattles() {
                 totalHealed++;
                 unitLog.healed.push(injury.name);
                 logMessage(`${unit.name}'s ${injury.name} healed between battles!`, 'heal');
+                
+                // Reset action counters for the next level
+				unit.remainingActions = unit.maxActions;
+				unit.movesUsed = 0;
+				unit.attacksUsed = 0;
+				unit.acted = false;
+			
+                
             } else {
                 remainingInjuries.push(injury);
                 unitLog.persisted.push(injury.name);

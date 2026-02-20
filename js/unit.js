@@ -279,91 +279,83 @@
             }
             
             performFlee() {
-                if (!this.fleeing) return false;
-                
-                this.fleeTurns++;
-                
-                // CHANCE TO RALLY EVERY TURN
+    if (!this.fleeing) return false;
+    
+    this.fleeTurns++;
+    
+    // CHANCE TO RALLY EVERY TURN
     const rallyChance = 0.15 + (this.fleeTurns * 0.05); // 15% + 5% per turn fleeing
     if (Math.random() < rallyChance) {
         this.fleeing = false;
         this.morale = 30 + Math.floor(Math.random() * 21); // Rally to 30-50 morale
-        this.movesUsed = 0; // RESET MOVEMENT
+        this.movesUsed = 0;
+        this.attacksUsed = 0;
+        this.remainingActions = this.maxActions;
         logMessage(`${this.name} rallies and rejoins the fight!`, 'system');
         return false;
     }
-               
-                // Find closest enemy
-                const enemies = gameState.units.filter(u => u.type !== this.type && !u.fleeing);
-                let closestEnemy = null;
-                let minDistance = Infinity;
-                
-                for (const enemy of enemies) {
-                    const distance = Math.abs(this.x - enemy.x) + Math.abs(this.y - enemy.y);
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        closestEnemy = enemy;
-                    }
-                }
-                
-                // Move away from closest enemy
-                if (closestEnemy) {
-                    const dx = this.x - closestEnemy.x;
-                    const dy = this.y - closestEnemy.y;
-                    
-                    let moveX = this.x;
-                    let moveY = this.y;
-                    
-                    if (Math.abs(dx) > Math.abs(dy)) {
-                        moveX += dx > 0 ? 1 : -1;
-                    } else {
-                        moveY += dy > 0 ? 1 : -1;
-                    }
-                    
-                    // Bound checking
-                    moveX = Math.max(0, Math.min(GRID_SIZE - 1, moveX));
-                    moveY = Math.max(0, Math.min(GRID_SIZE - 1, moveY));
-                    
-                    // Move if tile is empty and not water
-                    if (!getUnitAt(moveX, moveY) && gameState.terrain[moveY][moveX] !== 'water') {
-                        this.x = moveX;
-                        this.y = moveY;
-                        logMessage(`${this.name} flees in terror!`, 'system');
-                        
-                        // Update display if this unit is selected
-        if (gameState.selectedUnit && gameState.selectedUnit.id === this.id) {
-            updateSelectedUnitStats();
-            
-                    }
-                }
-                
-              // After 3 turns of fleeing, remove from battle
-// After 3 turns of fleeing, remove from battle
-if (this.fleeTurns >= 3) {
-    // Store the unit's type before removal
-    const wasEnemy = this.type === 'enemy';
     
-    // Remove the unit
-    gameState.units = gameState.units.filter(u => u.id !== this.id);
-    logMessage(`${this.name} has fled the battlefield!`, 'system');
+    // Find closest enemy
+    const enemies = gameState.units.filter(u => u.type !== this.type && !u.fleeing);
+    let closestEnemy = null;
+    let minDistance = Infinity;
     
-    // CHECK VICTORY CONDITION IMMEDIATELY
-    if (wasEnemy) {
-        const remainingEnemies = gameState.units.filter(u => u.type === 'enemy' && !u.fleeing);
-        if (remainingEnemies.length === 0) {
-            logMessage("All enemies defeated! Victory!", 'system');
-            // Small delay to let the flee message show first
-            setTimeout(() => {
-                completeLevel();
-            }, 500);
+    for (const enemy of enemies) {
+        const distance = Math.abs(this.x - enemy.x) + Math.abs(this.y - enemy.y);
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestEnemy = enemy;
         }
     }
     
-    return true;
-}
-               }
-                return false;
+    // Move away from closest enemy
+    if (closestEnemy) {
+        const dx = this.x - closestEnemy.x;
+        const dy = this.y - closestEnemy.y;
+        
+        let moveX = this.x;
+        let moveY = this.y;
+        
+        if (Math.abs(dx) > Math.abs(dy)) {
+            moveX += dx > 0 ? 1 : -1;
+        } else {
+            moveY += dy > 0 ? 1 : -1;
+        }
+        
+        // Bound checking
+        moveX = Math.max(0, Math.min(GRID_SIZE - 1, moveX));
+        moveY = Math.max(0, Math.min(GRID_SIZE - 1, moveY));
+        
+        // Move if tile is empty and not water
+        if (!getUnitAt(moveX, moveY) && gameState.terrain[moveY][moveX] !== 'water') {
+            this.x = moveX;
+            this.y = moveY;
+            logMessage(`${this.name} flees in terror!`, 'system');
+        }
+    }
+    
+    // After 3 turns of fleeing, remove from battle
+    if (this.fleeTurns >= 3) {
+        const wasEnemy = this.type === 'enemy';
+        
+        gameState.units = gameState.units.filter(u => u.id !== this.id);
+        logMessage(`${this.name} has fled the battlefield!`, 'system');
+        
+        if (wasEnemy) {
+            const remainingEnemies = gameState.units.filter(u => u.type === 'enemy' && !u.fleeing);
+            if (remainingEnemies.length === 0) {
+                logMessage("All enemies defeated! Victory!", 'system');
+                setTimeout(() => {
+                    completeLevel();
+                }, 500);
             }
+        }
+        return true;
+    }
+    
+    return false;
+}
+    
             useAction(cost = 1) {
                 this.remainingActions = Math.max(0, this.remainingActions - cost);
             }
