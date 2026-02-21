@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 
-    <title>Iron Resolution v0.87</title>
+    <title>Iron Resolution v0.88</title>
        
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link rel="stylesheet" href="css/styles.css">
@@ -12,7 +12,7 @@
 
 	<h1>
 		<img src="ui/sword.png" alt="⚔" class="title-icon">
-		IRON RESOLUTION v0.87
+		IRON RESOLUTION v0.88
 		<img src="ui/sword.png" alt="⚔" class="title-icon">
 	</h1>
 	
@@ -86,7 +86,7 @@
         <!-- Instructions Title -->
         <div class="instructions-title">
             <img src="ui/scroll.png" style="width: 28px; height: 28px;">
-            BATTLEFIELD MANUAL v0.87
+            BATTLEFIELD MANUAL v0.9
             <img src="ui/scroll.png" style="width: 28px; height: 28px;">
         </div>
         
@@ -683,6 +683,59 @@
         <button id="continueBtn" class="continue-btn primary">CONTINUE</button>
 </div>
 </div>
+
+<!-- END OF GAME CINEMATIC -->
+<div id="endGameOverlay" class="intro-overlay" style="display: none;">
+    <div class="intro-modal" style="max-width: 700px;">
+        <div class="intro-title" style="margin-bottom: 25px;">
+            <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+            VICTORY
+            <img src="ui/sword.png" alt="⚔" class="title-icon" style="width: 34px; height: 34px;">
+        </div>
+        
+        <div class="intro-section" style="margin-bottom: 20px; text-align: left;">
+            <div class="section-content" style="font-size: 1.1em; line-height: 1.6; color: #e6f1ff;">
+                <p>The great hall falls silent. The warlord, the sorcerer, and the beastmaster lie broken at your feet, their dark armor cracked and smoking. For a long moment, no one moves. Then, from outside, you hear it—a sound you barely remember.</p>
+                
+                <p style="color: #ffd700; font-size: 1.2em; margin: 20px 0; text-align: center;">Cheers, laughter, applause, and singing!</p>
+                
+                <p>Your villagers have gathered at the fortress gates, torchlight flickering against the stone. They chant your names. They sing of your deeds. The same farmers and merchants you left behind weeks ago, the ones who watched you march into the mist with nothing but steel and hope.</p>
+                
+                <p>You've crossed rivers and mountains where the air itself tried to kill you. You've waded through swamps that swallowed men whole. You've fought in fog so thick you couldn't see your own hands, let alone the enemy.</p>
+                
+                <p>Together, you march back to the village. Scarred. Fewer in number than when you left, but victorious.</p>
+                
+                <p>The enemy is broken. The dark forces that plagued these lands for a generation have been scattered. Your city will rebuild. Your dead will be remembered. Your names will be sung in mead halls for a hundred winters.</p>
+                
+                <p>You set down your weapons. For the first time in what feels like forever, you breathe easy.</p>
+                
+                <p style="color: #64ffda; font-size: 1.3em; text-align: center; margin: 25px 0 10px 0;">The Ironlands are free.</p>
+                
+                <p style="color: #ffd700; font-size: 1.5em; text-align: center; margin: 10px 0;">Campaign Complete...</p>
+                
+                <p style="color: #ff6b6b; font-size: 1.2em; text-align: center; font-style: italic;">...or is it?</p>
+                
+                <p style="color: #8892b0; font-size: 0.9em; text-align: center;">(More levels coming soon...)</p>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
+            <button id="continueToStatsBtn" class="intro-continue-btn" style="padding: 12px 35px;">
+                <img src="ui/tick.png" style="width: 16px; height: 16px;">
+                CONTINUE TO STATS
+            </button>
+        </div>
+        
+        <div class="intro-tip" style="margin-top: 15px; color: #8892b0; font-size: 0.9em;">
+            Press Space or click to continue
+        </div>
+    </div>
+</div>
+
+    <!-- RECRUIT SCREEN - HIRE NEW BROTHER -->
+    <div id="recruitOverlay" class="recruit-overlay">
+        ... existing recruit screen code ...
+    </div>
 
 
     <!-- RECRUIT SCREEN - HIRE NEW BROTHER -->

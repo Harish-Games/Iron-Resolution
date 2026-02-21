@@ -772,55 +772,119 @@ function showLevel9To10Transition() {
     }
 }
 
-
 function showGameCompleteScreen() {
-    console.log("🏆 Showing game complete screen");
+    console.log("🏆 Showing game complete cinematic");
     
-    const finalStats = `
-        <div style="text-align: center; padding: 30px;">
-            <div style="font-size: 3em; color: #ffd700; margin-bottom: 20px; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);">
-                🏆 VICTORY! 🏆
+    // Hide victory overlay if it's showing
+    document.getElementById('victoryOverlay').style.display = 'none';
+    
+    // Show the cinematic
+    document.getElementById('endGameOverlay').style.display = 'flex';
+    
+    // Set up continue button
+    document.getElementById('continueToStatsBtn').onclick = () => {
+        document.getElementById('endGameOverlay').style.display = 'none';
+        showCampaignStats();
+    };
+    
+    // Space bar handler
+    document.addEventListener('keydown', function endGameKeyHandler(e) {
+        if ((e.code === 'Space' || e.key === ' ') && 
+            document.getElementById('endGameOverlay').style.display === 'flex') {
+            e.preventDefault();
+            document.getElementById('endGameOverlay').style.display = 'none';
+            document.removeEventListener('keydown', endGameKeyHandler);
+            showCampaignStats();
+        }
+    });
+}
+
+function showCampaignStats() {
+    console.log("📊 showCampaignStats started");
+    
+    // Calculate final stats
+    const playerUnits = gameState.units.filter(u => u.type === 'player' && u.hp > 0);
+    console.log("Player units:", playerUnits.length);
+    
+    const totalXP = gameState.totalXP;
+    const totalKills = gameState.battleStats.playerKills || 0;
+    const survivors = playerUnits.length;
+    const levelsCompleted = gameState.completedLevels;
+    
+    console.log("Stats:", {totalXP, totalKills, survivors, levelsCompleted});
+    
+    // Build stats HTML
+    let finalStats = `
+        <div style="text-align: center; padding: 20px;">
+            <div style="font-size: 2em; color: #64ffda; margin-bottom: 20px;">CAMPAIGN STATS</div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; margin: 20px 0;">
+                <div style="color: #8892b0;">Total XP Earned:</div>
+                <div style="color: #64ffda; font-weight: bold;">${totalXP}</div>
+                
+                <div style="color: #8892b0;">Levels Completed:</div>
+                <div style="color: #64ffda; font-weight: bold;">${levelsCompleted}/10</div>
+                
+                <div style="color: #8892b0;">Enemies Killed:</div>
+                <div style="color: #64ffda; font-weight: bold;">${totalKills}</div>
+                
+                <div style="color: #8892b0;">Surviving Units:</div>
+                <div style="color: ${survivors >= 4 ? '#2ecc71' : '#ff6b6b'}; font-weight: bold;">${survivors}/6</div>
+                
+                <div style="color: #8892b0;">Final Gold:</div>
+                <div style="color: #f1c40f; font-weight: bold;">${gameState.gold}</div>
             </div>
-            <div style="font-size: 1.5em; color: #64ffda; margin-bottom: 30px;">
-                The Ironlands are secure!
-            </div>
-            <div style="background: rgba(17, 34, 64, 0.8); padding: 20px; border-radius: 10px; border: 2px solid #64ffda; margin-bottom: 30px;">
-                <div style="font-size: 1.2em; color: #e6f1ff; margin-bottom: 10px;">
-                    <strong>Final Campaign Statistics</strong>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left; font-size: 1.1em;">
-                    <div style="color: #8892b0;">Levels Completed:</div>
-                    <div style="color: #64ffda; font-weight: bold;">${gameState.completedLevels}</div>
-                    
-                    <div style="color: #8892b0;">Total XP Earned:</div>
-                    <div style="color: #64ffda; font-weight: bold;">${gameState.totalXP}</div>
-                    
-                    <div style="color: #8892b0;">Final Gold:</div>
-                    <div style="color: #f1c40f; font-weight: bold;">${gameState.gold}</div>
-                    
-                    <div style="color: #8892b0;">Total Missions:</div>
-                    <div style="color: #64ffda; font-weight: bold;">5</div>
-                </div>
-            </div>
-        </div>
     `;
     
-    // Use the existing victory overlay
+    // Add surviving heroes list
+    if (playerUnits.length > 0) {
+        finalStats += `<div style="margin-top: 20px;"><strong style="color: #64ffda;">Surviving Heroes</strong></div>`;
+        playerUnits.forEach(unit => {
+            finalStats += `
+                <div style="display: flex; justify-content: space-between; margin: 5px 0; padding: 5px; background: rgba(30, 73, 118, 0.3); border-radius: 4px;">
+                    <span style="color: #e6f1ff;">${unit.name} (Lvl ${unit.level})</span>
+                    <span style="color: #2ecc71;">${unit.hp}/${unit.maxHp} HP</span>
+                </div>
+            `;
+        });
+    }
+    
+    finalStats += `</div>`;
+    
+    console.log("Updating victory overlay elements");
+    
+    // Use victory overlay for stats
     document.getElementById('victoryLevelName').textContent = "CAMPAIGN COMPLETE";
     document.getElementById('victoryLevelDifficulty').textContent = "Final Victory";
     document.getElementById('victoryRewards').innerHTML = "";
     document.getElementById('victoryStats').innerHTML = finalStats;
     
-    // Update continue button to restart
+    console.log("Setting up continue button");
+    
+    // Update continue button to go to name entry
     document.getElementById('continueBtn').onclick = () => {
+        console.log("Continue button clicked - going to name entry");
         document.getElementById('victoryOverlay').style.display = 'none';
-        restartGame();
+        
+        // Show name entry with campaign stats
+        showNameEntry(
+            gameState.totalXP,
+            gameState.currentLevel,
+            gameState.battleStats.playerKills || 0,
+            playerUnits.length,
+            gameState.difficulty
+        );
     };
     
-    // Show the victory overlay
-    document.getElementById('victoryOverlay').style.display = 'flex';
-}
+    console.log("Showing victory overlay");
     
+    // Show stats
+    document.getElementById('victoryOverlay').style.display = 'flex';
+    
+    console.log("showCampaignStats completed");
+}
+
+   
     function showLevel1To2Transition() {
    
     // Create transition overlay
@@ -1299,24 +1363,23 @@ function advanceToLevel3() {
     gameState.gold += finalGoldReward;
     
     // ====== SET UP CONTINUE BUTTON ======
-    const continueBtn = document.getElementById('continueBtn');
-    
-    if (gameState.currentLevel >= gameState.maxLevel) {
-        // Final victory
-        continueBtn.onclick = () => {
-            document.getElementById('victoryOverlay').style.display = 'none';
-            // Simple final victory alert
-            alert("🎉 GAME COMPLETE! 🎉\nYou have defeated all enemies!\n\nFinal Stats:\n- Levels Completed: " + gameState.completedLevels + "\n- Total XP: " + gameState.totalXP + "\n- Gold: " + gameState.gold);
-            restartGame();
-        };
-    } else {
-        // For ALL non-final levels (1, 2, 3, 4)
-        continueBtn.onclick = () => {
-            console.log(`➡️ Continue button clicked for Level ${gameState.currentLevel}`);
-            document.getElementById('victoryOverlay').style.display = 'none';
-            openRecruitScreen();
-        };
-    }
+const continueBtn = document.getElementById('continueBtn');
+
+if (gameState.currentLevel >= gameState.maxLevel) {
+    // Final victory - show cinematic instead of recruit screen
+    continueBtn.onclick = () => {
+        document.getElementById('victoryOverlay').style.display = 'none';
+        // Show the end game cinematic
+        showGameCompleteScreen();
+    };
+} else {
+    // For non-final levels
+    continueBtn.onclick = () => {
+        console.log(`➡️ Continue button clicked for Level ${gameState.currentLevel}`);
+        document.getElementById('victoryOverlay').style.display = 'none';
+        openRecruitScreen();
+		};
+	}
 }
    
      function advanceToLevel2() {
@@ -1461,5 +1524,6 @@ window.showLevel7To8Transition = showLevel7To8Transition;
 window.showLevel8To9Transition = showLevel8To9Transition;
 window.showLevel9To10Transition = showLevel9To10Transition;
 window.showGameCompleteScreen = showGameCompleteScreen;
+window.showCampaignStats = showCampaignStats; 
 window.completeLevel = completeLevel;
 window.startNextLevel = startNextLevel;
