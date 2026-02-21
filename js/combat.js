@@ -139,7 +139,8 @@ if (attacker.type === 'player') {
     }
     
     attacker.addXp(hitXp);
-    
+    gameState.totalXP += hitXp;
+     
     if (gameState.selectedUnit && gameState.selectedUnit.id === attacker.id) {
         updateSelectedUnitStats();
     }
@@ -215,6 +216,7 @@ if (attacker.type === 'player') {
     }
     
     attacker.addXp(killXp);
+    gameState.totalXP += killXp; 
     
     if (gameState.selectedUnit && gameState.selectedUnit.id === attacker.id) {
         updateSelectedUnitStats();
@@ -229,6 +231,12 @@ if (attacker.type === 'player') {
                 // Update morale for allies
                 const allies = gameState.units.filter(u => u.type === defender.type && u.id !== defender.id);
                 allies.forEach(ally => ally.updateMorale(0, true));
+                
+                if (defender.type === 'player') {
+    gameState.totalXP += defender.xp;
+    console.log(`Added ${defender.xp} XP from fallen ${defender.name}, total now: ${gameState.totalXP}`);
+}
+                
                 gameState.units = gameState.units.filter(u => u.id !== defender.id);
             }
             cleanupUnits();
@@ -284,6 +292,7 @@ if (healAmount > 0) {
     if (healer.type === 'player' && healAmount > 0) {  // Only give XP if actual healing occurred
         const healXp = 12 + Math.floor(healAmount * 0.8);
         healer.addXp(healXp);
+        gameState.totalXP += healXp;
         logMessage(`${healer.name} gains ${healXp} XP for healing!`, 'system');
     }
 

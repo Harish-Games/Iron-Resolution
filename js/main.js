@@ -322,7 +322,7 @@ function returnToMainMenu() {
     const playerUnits = gameState.units.filter(u => u.type === 'player');
     const survivors = playerUnits.length;
     const kills = gameState.battleStats.playerKills || 0;
-    const xp = playerUnits.reduce((sum, u) => sum + u.xp, 0);
+    const xp = gameState.totalXP;
     
     // Hide quit modal
     document.getElementById('quitModal').style.display = 'none';
@@ -335,6 +335,7 @@ function returnToMainMenu() {
         document.querySelector('.game-container').style.display = 'none';
         document.getElementById('mainMenuOverlay').style.display = 'flex';
         initializeGameState();
+        console.log("After reset - totalXP:", gameState.totalXP);
     }, 1000);
 }
 

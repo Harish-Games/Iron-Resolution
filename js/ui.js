@@ -930,7 +930,7 @@ checkVictory();
             
             const playerUnits = gameState.units.filter(u => u.type === 'player');
             const enemyUnits = gameState.units.filter(u => u.type === 'enemy');
-            const totalXP = playerUnits.reduce((sum, unit) => sum + unit.xp, 0);
+			const totalXP = gameState.totalXP || 0;
             const averageLevel = playerUnits.length > 0 ? 
                 (playerUnits.reduce((sum, unit) => sum + unit.level, 0) / playerUnits.length).toFixed(1) : 0;
             
@@ -1043,8 +1043,8 @@ checkVictory();
         const playerUnits = gameState.units.filter(u => u.type === 'player');
         const survivors = playerUnits.length;
         const kills = gameState.battleStats.playerKills || 0;
-        const xp = playerUnits.reduce((sum, u) => sum + u.xp, 0);
-        
+		const xp = gameState.totalXP;        
+		
         showNameEntry(xp, gameState.currentLevel, kills, survivors, gameState.difficulty);
     }
 } 
