@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 
-    <title>Iron Resolution v0.867</title>
+    <title>Iron Resolution v0.87</title>
        
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link rel="stylesheet" href="css/styles.css">
@@ -12,7 +12,7 @@
 
 	<h1>
 		<img src="ui/sword.png" alt="⚔" class="title-icon">
-		IRON RESOLUTION v0.867
+		IRON RESOLUTION v0.87
 		<img src="ui/sword.png" alt="⚔" class="title-icon">
 	</h1>
 	
@@ -86,7 +86,7 @@
         <!-- Instructions Title -->
         <div class="instructions-title">
             <img src="ui/scroll.png" style="width: 28px; height: 28px;">
-            BATTLEFIELD MANUAL v0.862
+            BATTLEFIELD MANUAL v0.87
             <img src="ui/scroll.png" style="width: 28px; height: 28px;">
         </div>
         
@@ -103,105 +103,120 @@
         <!-- Tab Content Container -->
         <div class="tab-content-container">
             <!-- ====== TAB 1: BASICS ====== -->
-            <div class="tab-content active" id="basics">
-                <h3><img src="ui/sword.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">BATTLEFIELD BASICS</h3>
-                
-                <div class="manual-section">
-                    <h4>THE BATTLEFIELD</h4>
-                    <div class="stat-grid">
-                        <div class="manual-stat">
-                            <div class="manual-stat-label">Grid Size</div>
-                            <div class="manual-stat-value">16 × 16 tiles</div>
-                        </div>
-                        <div class="manual-stat">
-                            <div class="manual-stat-label">Player Start</div>
-                            <div class="manual-stat-value">Left side</div>
-                        </div>
-                        <div class="manual-stat">
-                            <div class="manual-stat-label">Enemy Start</div>
-                            <div class="manual-stat-value">Right side</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="manual-section">
-                    <h4>VICTORY CONDITIONS</h4>
-                    <div class="condition-item">
-                        <img src="ui/tick.png" class="condition-icon">
-                        <div class="condition-desc"><strong>VICTORY:</strong> Eliminate all enemies</div>
-                    </div>
-                    <div class="condition-item">
-                        <img src="ui/skull.png" class="condition-icon">
-                        <div class="condition-desc"><strong>DEFEAT:</strong> All player units lost</div>
-                    </div>
-                </div>
-                
-                <div class="manual-section">
-                    <h4>TERRAIN EFFECTS</h4>
-                    <div class="terrain-grid" style="grid-template-columns: repeat(3, 1fr);">
-                        
-                        <div class="terrain-item">
-                            <img src="images/grass.png" style="width: 40px; height: 40px;">
-                            <div class="terrain-name">Open Terrain</div>
-                            <div class="terrain-effects">No effects</div>
-                        </div>
-                        
-                        <div class="terrain-item">
-                            <img src="images/forest.png" style="width: 40px; height: 40px;">
-                            <div class="terrain-name">Forest</div>
-                            <div class="terrain-effects">Defender: -25% accuracy, +15% dmg reduction<br>Attacker: -25% accuracy</div>
-                        </div>
-                        
-                        <div class="terrain-item">
-                            <img src="images/mountain.png" style="width: 40px; height: 40px;">
-                            <div class="terrain-name">Mountain</div>
-                            <div class="terrain-effects">Defender: -15% accuracy, +10% dmg reduction<br>Attacker: +15% accuracy<br>-1 movement</div>
-                        </div>
-                        
-                        <div class="terrain-item">
-                            <img src="images/swamp.png" style="width: 40px; height: 40px;">
-                            <div class="terrain-name">Swamp (L8)</div>
-                            <div class="terrain-effects">Movement halved each turn<br>Gremlins immune</div>
-                        </div>
-                        
-                        <div class="terrain-item">
-                            <img src="images/mountain-pass.webp" style="width: 40px; height: 40px;">
-                            <div class="terrain-name">Stone Walls (L6)</div>
-                            <div class="terrain-effects">Impassable Maze</div>
-                        </div>
-                        
-                        <div class="terrain-item">
-                            <img src="images/village-player.png" style="width: 40px; height: 40px;">
-                            <div class="terrain-name">Your Village (L1)</div>
-                            <div class="terrain-effects">+15% dmg reduction, -20% enemy accuracy</div>
-                        </div>
-                        
-                        <div class="terrain-item">
-                            <img src="images/village-enemy.png" style="width: 40px; height: 40px;">
-                            <div class="terrain-name">Enemy Camp</div>
-                            <div class="terrain-effects">+10% dmg reduction, -15% enemy accuracy</div>
-                        </div>
-                        
-                        <div class="terrain-item">
-                            <img src="images/water.png" style="width: 40px; height: 40px;">
-                            <div class="terrain-name">Water/River</div>
-                            <div class="terrain-effects">Impassable</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="manual-section">
-                    <h4>TURN STRUCTURE</h4>
-                    <div class="turn-step">
-                        <div class="step-number">1</div>
-                        <div class="step-desc"><strong>PLAYER PHASE:</strong> Move & attack with all units</div>
-                    </div>
-                    <div class="turn-step">
-                        <div class="step-number">2</div>
-                        <div class="step-desc"><strong>ENEMY PHASE:</strong> AI controls enemies</div>
-                    </div>
-                </div>
+<div class="tab-content active" id="basics">
+    <h3><img src="ui/sword.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">Welcome, Adventurer to Iron Resolution</h3>
+    
+    <div class="manual-section">
+        <div class="section-content" style="font-size: 1.1em; line-height: 1.6; color: #e6f1ff; padding: 15px; background: rgba(30, 73, 118, 0.2); border-radius: 8px; margin-bottom: 20px;">
+            <p style="margin-bottom: 15px;">Your task is to take a ragtag group including a knight, archer, berserker and mage. Your quest is to defend your city and defeat the evil enemy.</p>
+            
+            <p style="margin-bottom: 10px;"><strong style="color: #64ffda;">⚔ Hitting and killing enemies gives you XP.</strong><br>
+            <span style="color: #a8b2d1;">Get enough XP and your unit will level up. Leveling up grants more health, defense, and attack (or healing if you're a mage).</span></p>
+            
+            <p style="margin-bottom: 10px;"><strong style="color: #64ffda;">🛡️ As the campaign progresses, you'll gain more troops.</strong><br>
+            <span style="color: #a8b2d1;">Your recruits will vary every time you play, making each game unique.</span></p>
+            
+            <p style="margin-bottom: 0;"><strong style="color: #ff6b6b;">💀 But beware! If one of your troops dies, they are gone forever.</strong><br>
+            <span style="color: #a8b2d1;">Plan well and good luck!</span></p>
+        </div>
+    </div>
+    
+    <div class="manual-section">
+        <h4>THE BATTLEFIELD</h4>
+        <div class="stat-grid">
+            <div class="manual-stat">
+                <div class="manual-stat-label">Grid Size</div>
+                <div class="manual-stat-value">16 × 16 tiles</div>
             </div>
+            <div class="manual-stat">
+                <div class="manual-stat-label">Player Start</div>
+                <div class="manual-stat-value">Left side</div>
+            </div>
+            <div class="manual-stat">
+                <div class="manual-stat-label">Enemy Start</div>
+                <div class="manual-stat-value">Right side</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="manual-section">
+        <h4>VICTORY CONDITIONS</h4>
+        <div class="condition-item">
+            <img src="ui/tick.png" class="condition-icon">
+            <div class="condition-desc"><strong>VICTORY:</strong> Eliminate all enemies</div>
+        </div>
+        <div class="condition-item">
+            <img src="ui/skull.png" class="condition-icon">
+            <div class="condition-desc"><strong>DEFEAT:</strong> All player units lost</div>
+        </div>
+    </div>
+    
+    <div class="manual-section">
+        <h4>TERRAIN EFFECTS</h4>
+        <div class="terrain-grid" style="grid-template-columns: repeat(3, 1fr);">
+            
+            <div class="terrain-item">
+                <img src="images/grass.png" style="width: 40px; height: 40px;">
+                <div class="terrain-name">Open Terrain</div>
+                <div class="terrain-effects">No effects</div>
+            </div>
+            
+            <div class="terrain-item">
+                <img src="images/forest.png" style="width: 40px; height: 40px;">
+                <div class="terrain-name">Forest</div>
+                <div class="terrain-effects">Defender: -25% accuracy, +15% dmg reduction<br>Attacker: -25% accuracy</div>
+            </div>
+            
+            <div class="terrain-item">
+                <img src="images/mountain.png" style="width: 40px; height: 40px;">
+                <div class="terrain-name">Mountain</div>
+                <div class="terrain-effects">Defender: -15% accuracy, +10% dmg reduction<br>Attacker: +15% accuracy<br>-1 movement</div>
+            </div>
+            
+            <div class="terrain-item">
+                <img src="images/swamp.png" style="width: 40px; height: 40px;">
+                <div class="terrain-name">Swamp (L8)</div>
+                <div class="terrain-effects">Movement halved each turn<br>Gremlins immune</div>
+            </div>
+            
+            <div class="terrain-item">
+                <img src="images/mountain-pass.webp" style="width: 40px; height: 40px;">
+                <div class="terrain-name">Stone Walls (L6)</div>
+                <div class="terrain-effects">Impassable Maze</div>
+            </div>
+            
+            <div class="terrain-item">
+                <img src="images/village-player.png" style="width: 40px; height: 40px;">
+                <div class="terrain-name">Your Village (L1)</div>
+                <div class="terrain-effects">+15% dmg reduction, -20% enemy accuracy</div>
+            </div>
+            
+            <div class="terrain-item">
+                <img src="images/village-enemy.png" style="width: 40px; height: 40px;">
+                <div class="terrain-name">Enemy Camp</div>
+                <div class="terrain-effects">+10% dmg reduction, -15% enemy accuracy</div>
+            </div>
+            
+            <div class="terrain-item">
+                <img src="images/water.png" style="width: 40px; height: 40px;">
+                <div class="terrain-name">Water/River</div>
+                <div class="terrain-effects">Impassable</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="manual-section">
+        <h4>TURN STRUCTURE</h4>
+        <div class="turn-step">
+            <div class="step-number">1</div>
+            <div class="step-desc"><strong>PLAYER PHASE:</strong> Move & attack with all units</div>
+        </div>
+        <div class="turn-step">
+            <div class="step-number">2</div>
+            <div class="step-desc"><strong>ENEMY PHASE:</strong> AI controls enemies</div>
+        </div>
+    </div>
+</div>
             
             <!-- ====== TAB 2: UNITS ====== -->
             <div class="tab-content" id="units">
@@ -277,7 +292,7 @@
                 
                 <div class="unit-card detailed">
                     <div class="unit-card-header">
-                        <img src="ui/gremlin.png" class="unit-card-icon">
+                        <img src="ui/sword2.png" class="unit-card-icon">
                         <div class="unit-card-title">
                             <div class="unit-name">GREMLIN</div>
                             <div class="unit-role">Pesky Swarm Unit</div>
