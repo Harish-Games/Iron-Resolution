@@ -561,7 +561,20 @@ function getCumulativeXpForLevel(level) {
     };
     return xpTable[level] || 0;
 }
-  
+
+function updateLevelDisplay() {
+    const levelDisplay = document.getElementById('levelNameDisplay');
+    if (levelDisplay && gameState && gameState.currentLevel) {
+        const levelIndex = gameState.currentLevel - 1;
+        // Safety check in case levelIndex is out of bounds
+        if (LEVELS[levelIndex]) {
+            levelDisplay.textContent = `${gameState.currentLevel}: ${LEVELS[levelIndex].name}`;
+        } else {
+            levelDisplay.textContent = `${gameState.currentLevel}: Unknown Level`;
+        }
+    }
+}
+
 // Make sure these are available globally
 window.ENEMY_COMPOSITION = ENEMY_COMPOSITION;
 window.LEVELS = LEVELS;

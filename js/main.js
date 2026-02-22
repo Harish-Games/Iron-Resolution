@@ -11,6 +11,7 @@ function init() {
     
     
     gameState.currentLevel = 1;  // ← LEVEL TO START GAME FOR TESTING
+    updateLevelDisplay();
     generateTerrain();
     createGrid();
     createUnits();

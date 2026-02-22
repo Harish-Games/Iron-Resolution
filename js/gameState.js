@@ -804,7 +804,7 @@ function showHallOfFame() {
                     <td style="padding: 8px; text-align: right;">${score.xp}</td>
                     <td style="padding: 8px; text-align: center;">${score.level}</td>
                     <td style="padding: 8px; text-align: right;">${score.kills}</td>
-                    <td style="padding: 8px; text-align: center; color: ${survivorsClass};">${score.survivors}/6</td>
+                    <td style="padding: 8px; text-align: center; color: ${survivorsClass};">${score.survivors}</td>
                     <td style="padding: 8px; text-align: left;">${score.difficulty}</td>
                     <td style="padding: 8px; text-align: left;">${score.date}</td>
                 </tr>

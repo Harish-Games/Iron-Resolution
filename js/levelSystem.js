@@ -1122,6 +1122,7 @@ function advanceToLevel3() {
     
     // Increment level
     gameState.currentLevel = 3;
+    updateLevelDisplay();
     
     // Reset game state for new level
     gameState.units = [];
@@ -1387,6 +1388,7 @@ if (gameState.currentLevel >= gameState.maxLevel) {
     
     // Increment level
     gameState.currentLevel = 2;
+    updateLevelDisplay(); 
     
     // Reset game state for new level
     gameState.units = [];
@@ -1448,6 +1450,8 @@ if (gameState.currentLevel >= gameState.maxLevel) {
         gameState.currentLevel++;
         console.log(`📈 Auto-incrementing to Level ${gameState.currentLevel}`);
     }
+
+updateLevelDisplay();
 
 // Update level display
     document.getElementById('levelNameDisplay').textContent = 
