@@ -358,21 +358,20 @@ function healInjuriesBetweenBattles() {
             console.log(`  • ${injury.name}: rolled ${roll}% (needed ≤${baseHealChance}%) - ${healed ? 'HEALED ✓' : 'persists'}`);
             
             if (healed) {
-                totalHealed++;
-                unitLog.healed.push(injury.name);
-                logMessage(`${unit.name}'s ${injury.name} healed between battles!`, 'heal');
-                
-                // Reset action counters for the next level
-				unit.remainingActions = unit.maxActions;
-				unit.movesUsed = 0;
-				unit.attacksUsed = 0;
-				unit.acted = false;
-			
-                
-            } else {
-                remainingInjuries.push(injury);
-                unitLog.persisted.push(injury.name);
-            }
+    totalHealed++;
+    unitLog.healed.push(injury.name);
+    logMessage(`${unit.name}'s ${injury.name} healed between battles!`, 'heal');
+    
+    // REVERSE THE INJURY EFFECTS
+    if (injury.effect.hp) unit.hp -= injury.effect.hp;
+    if (injury.effect.attack) unit.attack -= injury.effect.attack;
+    if (injury.effect.movement) unit.movement -= injury.effect.movement;
+    if (injury.effect.accuracy) unit.accuracy -= injury.effect.accuracy;
+    
+} else {
+    remainingInjuries.push(injury);
+    unitLog.persisted.push(injury.name);
+}
         });
         
         // Update unit with remaining injuries

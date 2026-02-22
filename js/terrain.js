@@ -645,16 +645,40 @@ function createUnits() {
         });
         
         // Position player units
-        for (let i = 0; i < gameState.units.length; i++) {
-            const unit = gameState.units[i];
-            unit.x = 2 + (i % 3);
-            unit.y = 5 + Math.floor(i / 3) * 3;
-            unit.remainingActions = unit.maxActions;
-            unit.movesUsed = 0;
-            unit.attacksUsed = 0;
-            unit.acted = false;
-            unit.fleeing = false;
+for (let i = 0; i < gameState.units.length; i++) {
+    const unit = gameState.units[i];
+    
+    // Find a valid position
+    let placed = false;
+    let attempts = 0;
+    
+    while (!placed && attempts < 20) {
+        unit.x = 2 + (i % 3);
+        unit.y = 5 + Math.floor(i / 3) * 3;
+        
+        // Check if this position is valid
+        if (gameState.terrain[unit.y] && 
+            gameState.terrain[unit.y][unit.x] !== 'water' &&
+            gameState.terrain[unit.y][unit.x] !== 'river' &&
+            gameState.terrain[unit.y][unit.x] !== 'mountain-pass') {
+            placed = true;
+        } else {
+            // Try a slightly different position
+            unit.x = 2 + (i % 3) + (attempts % 3) - 1;
+            unit.y = 5 + Math.floor(i / 3) * 3 + Math.floor(attempts / 3) - 1;
+            // Keep within bounds
+            unit.x = Math.max(0, Math.min(GRID_SIZE-1, unit.x));
+            unit.y = Math.max(0, Math.min(GRID_SIZE-1, unit.y));
         }
+        attempts++;
+    }
+    
+    unit.remainingActions = unit.maxActions;
+    unit.movesUsed = 0;
+    unit.attacksUsed = 0;
+    unit.acted = false;
+    unit.fleeing = false;
+}
     } else {
         // Create new player units for first level
         for (let i = 0; i < UNITS_PER_TEAM; i++) {
