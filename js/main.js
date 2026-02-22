@@ -217,49 +217,40 @@ attackBtn.addEventListener('click', () => {
                 
                // B. Clicked on DIFFERENT unit
 if (clickedUnit && clickedUnit.id !== selected.id) {
-    // Prevent attacking with enemy units
+    // If we have an enemy selected, just select the new unit
     if (selected.type === 'enemy') {
-        logMessage("Cannot control enemy units.", 'system');
+        selectUnit(clickedUnit);
         return;
     }
     
-    // Enemy unit
+    // If clicked on an enemy unit
     if (clickedUnit.type !== selected.type) {
         // Check attack range
         const distance = Math.abs(x - selected.x) + Math.abs(y - selected.y);
         if (distance <= selected.range && selected.canAttack) {
             performAttack(selected, clickedUnit);
         } else {
-            logMessage("Out of range!", 'system');
+            // If out of range, just select the enemy to view stats
+            selectUnit(clickedUnit);
         }
         return;
     }
                     
-                    // Ally unit (same team) - MAGES CAN HEAL WITHOUT PHASE
-else {
-    // Prevent healing with enemy mages
-    if (selected.type === 'enemy') {
-        logMessage("Cannot control enemy units.", 'system');
+    // Ally unit (same team)
+    else {
+        // Check if selected unit is a mage and can heal
+        if (selected.classType === 'mage' && selected.canHeal) {
+            const distance = Math.abs(x - selected.x) + Math.abs(y - selected.y);
+            if (distance <= selected.range) {
+                performHeal(selected, clickedUnit);
+                return;
+            }
+        }
+        // Not a mage, can't heal, or out of range: switch selection
+        selectUnit(clickedUnit);
         return;
     }
-    
-    // Check if selected unit is a mage and can heal
-    if (selected.classType === 'mage' && selected.canHeal) {
-                            const distance = Math.abs(x - selected.x) + Math.abs(y - selected.y);
-                            if (distance <= selected.range) {
-                                performHeal(selected, clickedUnit);
-                            } else {
-                                logMessage("Too far to heal!", 'system');
-                            }
-                            return;
-                        }
-                        // Not a mage or can't heal: switch selection
-                        else {
-                            selectUnit(clickedUnit);
-                            return;
-                        }
-                    }
-                }
+}
                 
                 // C. Clicked EMPTY tile - MOVE
 if (!clickedUnit) {
