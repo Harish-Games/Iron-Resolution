@@ -2115,18 +2115,14 @@
 /* Button Container */
 .menu-buttons {
     display: flex;
-    gap: 20px;
-    padding: 25px 40px;
-    background: rgba(17, 34, 64, 0.9);
-    border-radius: 12px;
-    border: 2px solid rgba(100, 255, 218, 0.4);
-    backdrop-filter: blur(10px);
-    z-index: 2; /* Above everything */
+    flex-direction: column;  
+    gap: 15px;
+    padding: 20px;
+    z-index: 2;
     width: 100%;
-    max-width: 1100px;
+    max-width: 350px;
     justify-content: center;
-    flex-wrap: wrap;
-    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+    align-items: stretch;
 }
 
 /* Menu Buttons */
@@ -2161,6 +2157,8 @@
 .menu-btn.cancel-btn {
     background: linear-gradient(145deg, #7f1d1d, #ef4444);
     border-color: #ef4444;
+    width: 100%;
+    min-width: 150px;
 }
 
 /* Two Player placeholder styling */

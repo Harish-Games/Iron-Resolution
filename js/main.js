@@ -1,8 +1,16 @@
 // Iron Resolution MAIN.JS
 
+let gameInitialized = false;
+
 // ========== INITIALIZATION ==========
 function init() {
-        gameState.currentLevel = 1;  // ← LEVEL TO START GAME FOR TESTING
+        if (window.tutorialActive === true) {
+        console.log("Tutorial mode active - completely skipping init");
+        return;
+    }
+    
+    
+    gameState.currentLevel = 1;  // ← LEVEL TO START GAME FOR TESTING
     generateTerrain();
     createGrid();
     createUnits();
@@ -26,6 +34,7 @@ function init() {
     updateEnemiesCounter();
     updateUnitRoster();
 }
+
 
 function createGrid() {
     gridEl.innerHTML = '';
@@ -333,9 +342,10 @@ function returnToMainMenu() {
       
         // main.js - AT THE BOTTOM OF THE FILE
 window.addEventListener('DOMContentLoaded', function() {
-    // Initialize the game
-    init();
-    showIntroSplash();
+    // Don't auto-start the game
+    // Just make sure the menu is visible
+    console.log("Page loaded - waiting for user to choose");
+    document.getElementById('mainMenuOverlay').style.display = 'flex';
 });
         
 // Make main functions available globally

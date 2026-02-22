@@ -44,9 +44,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Tutorial button
+document.getElementById('tutorialBtn').addEventListener('click', () => {
+    if (window.soundSystem) {
+        window.soundSystem.playMenuClick();
+    }
+    startTutorial();
+});
+    
+    
     // One Player Game
 onePlayerBtn.addEventListener('click', function() {
     console.log("🎮 One Player Game button clicked!");
+    
+    if (!gameInitialized) {
+        init();
+        renderAll([]);
+        gameInitialized = true;
+    }
+    showIntroSplash();
     
     // Start music
     const menuMusic = document.getElementById('menuMusic');
@@ -57,12 +73,13 @@ onePlayerBtn.addEventListener('click', function() {
     
     if (window.soundSystem) {
         window.soundSystem.playMenuConfirm();
-    }
-    
-    // Show difficulty overlay instead of intro directly
+    }  
+     
+    // Show difficulty overlay
     mainMenu.style.display = 'none';
     document.getElementById('difficultyOverlay').style.display = 'flex';
 });
+
 
 // Hall of Fame button
 document.getElementById('hallOfFameBtn').addEventListener('click', () => {
