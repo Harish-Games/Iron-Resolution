@@ -732,7 +732,6 @@ window.nameEntryActive = true;
         modal.remove();
         window.nameEntryActive = false;
         showHallOfFame();
-        enableGame();
     };
     
     // Set up skip button
