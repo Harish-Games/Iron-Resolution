@@ -1381,23 +1381,7 @@
         0%, 100% { opacity: 0.5; }
         50% { opacity: 1; }
     }
-    
-    .sound-toggle {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: rgba(17, 34, 64, 0.9);
-        padding: 8px 15px;
-        border-radius: 6px;
-        font-size: 0.9em;
-        color: #64ffda;
-        border: 1px solid #64ffda;
-        z-index: 100;
-        backdrop-filter: blur(5px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        cursor: pointer;
-    }
-    
+      
     .equipment-icon {
         display: inline-block;
         margin: 0 2px;

@@ -882,22 +882,38 @@ function showIntroSplash() {
 function hideIntroSplash() {
     document.getElementById('introOverlay').style.display = 'none';
     
-    // Simple fade out
-    const menuMusic = document.getElementById('menuMusic');
-    if (menuMusic) {
-        let volume = menuMusic.volume;
-        const fadeOut = setInterval(() => {
-            volume = Math.max(0, volume - 0.05);
-            menuMusic.volume = volume;
-            
-            if (volume <= 0) {
-                clearInterval(fadeOut);
+        const menuMusic = document.getElementById('menuMusic');
+    if (menuMusic && !menuMusic.paused) {
+        const fadeOutDuration = 2000; // 2 seconds
+        const startVolume = menuMusic.volume;
+        const steps = 20;
+        const stepTime = fadeOutDuration / steps;
+        const volumeStep = startVolume / steps;
+        let currentStep = 0;
+        
+        const fadeInterval = setInterval(() => {
+            currentStep++;
+            if (currentStep >= steps) {
                 menuMusic.pause();
                 menuMusic.currentTime = 0;
-                menuMusic.volume = 0.3; // Reset for next time
+                menuMusic.volume = startVolume; // Reset for next time
+                clearInterval(fadeInterval);
+                
+                // Start game music with fade in after menu music stops
+                if (window.soundSystem) {
+                    soundSystem.startMusic(true); // true = fade in
+                }
+            } else {
+                menuMusic.volume = Math.max(0, startVolume - (volumeStep * currentStep));
             }
-        }, 100);
+        }, stepTime);
+    } else {
+        // If no menu music is playing, just start game music
+        if (window.soundSystem) {
+            soundSystem.startMusic(true);
+        }
     }
+    
     
     enableGame();
 }

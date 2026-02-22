@@ -827,8 +827,17 @@ function showHallOfFame() {
     
     document.getElementById('closeHallBtn').onclick = () => {
         hallModal.style.display = 'none';
+        
+        // Start menu music when returning to main menu
+    const menuMusic = document.getElementById('menuMusic');
+    if (menuMusic) {
+        menuMusic.volume = 0.3;
+        menuMusic.play().catch(e => console.log("Menu music error:", e));
     };
 }
+
+    };
+
 
 // Make functions globally available
 window.healInjuriesBetweenBattles = healInjuriesBetweenBattles;

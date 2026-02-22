@@ -328,6 +328,15 @@ function returnToMainMenu() {
     // Hide quit modal
     document.getElementById('quitModal').style.display = 'none';
     
+    soundSystem.stopMusic(); 
+    
+        // Start menu music
+    const menuMusic = document.getElementById('menuMusic');
+    if (menuMusic) {
+        menuMusic.volume = 0.3;
+        menuMusic.play().catch(e => console.log("Menu music error:", e));
+    }
+    
     // Show name entry
     showNameEntry(xp, gameState.currentLevel, kills, survivors, gameState.difficulty);
     

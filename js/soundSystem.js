@@ -5,18 +5,92 @@
             constructor() {
                 this.audioContext = null;
                 this.initialized = false;
+                this.musicEnabled = true;
+				this.gameMusic = null;
             }
-            
+				
+        
             init() {
                 if (this.initialized) return;
                 
                 try {
                     this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    this.gameMusic = document.getElementById('gameMusic');
                     this.initialized = true;
                 } catch (e) {
                     console.log("Could not initialize audio context:", e);
                 }
             }
+            
+             toggleMusic() {
+    if (!this.gameMusic) {
+        this.gameMusic = document.getElementById('gameMusic');
+    }
+    
+    this.musicEnabled = !this.musicEnabled;
+    
+    if (this.musicEnabled) {
+        this.gameMusic.volume = 0.3;
+        this.gameMusic.play().catch(e => console.log("Music play error:", e));
+        document.getElementById('musicToggle').innerHTML = 
+            '<img src="ui/music.webp" style="width: 16px; height: 16px; vertical-align: middle;"> Music: ON';
+    } else {
+        this.gameMusic.pause();
+        document.getElementById('musicToggle').innerHTML = 
+            '<img src="ui/music.webp" style="width: 16px; height: 16px; vertical-align: middle;"> Music: OFF';
+    }
+}
+
+toggle() {
+    gameState.soundEnabled = !gameState.soundEnabled;
+    document.getElementById('soundToggle').textContent = 
+        gameState.soundEnabled ? 'Sound: ON' : 'Sound: OFF';
+    
+    if (gameState.soundEnabled && !this.initialized) {
+        this.init();
+    }
+}
+
+    // Add this new method
+    startMusic(fadeIn = false) {
+    if (!this.musicEnabled) return;
+    if (!this.gameMusic) {
+        this.gameMusic = document.getElementById('gameMusic');
+    }
+    
+    if (fadeIn) {
+        this.gameMusic.volume = 0;
+        this.gameMusic.play().catch(e => console.log("Music play error:", e));
+        
+        // Fade in over 2 seconds
+        const fadeInDuration = 2000;
+        const steps = 20;
+        const stepTime = fadeInDuration / steps;
+        const volumeStep = 0.3 / steps; // Target volume 0.3
+        let currentStep = 0;
+        
+        const fadeInterval = setInterval(() => {
+            currentStep++;
+            if (currentStep >= steps) {
+                this.gameMusic.volume = 0.3;
+                clearInterval(fadeInterval);
+            } else {
+                this.gameMusic.volume = volumeStep * currentStep;
+            }
+        }, stepTime);
+    } else {
+        this.gameMusic.volume = 0.3;
+        this.gameMusic.play().catch(e => console.log("Music play error:", e));
+    }
+}
+    
+    // Add this new method
+    stopMusic() {
+        if (this.gameMusic) {
+            this.gameMusic.pause();
+            this.gameMusic.currentTime = 0;
+        }
+    }
             
             playBeep(frequency, duration, type = 'sine', volume = 0.3) {
                 if (!gameState.soundEnabled || !this.initialized) return;
@@ -83,15 +157,19 @@
             console.log("Level up sound failed:", e);
         }
     }
-            toggle() {
-                gameState.soundEnabled = !gameState.soundEnabled;
-                document.getElementById('soundToggle').textContent = 
-                    gameState.soundEnabled ? '🔊 Sound: ON' : '🔇 Sound: OFF';
-                
-                if (gameState.soundEnabled && !this.initialized) {
-                    this.init();
-                }
-            }
+           toggle() {
+    gameState.soundEnabled = !gameState.soundEnabled;
+    
+    // Update the sound toggle button with the new HTML structure
+    document.getElementById('soundToggle').innerHTML = 
+        gameState.soundEnabled ? 
+        '<img src="ui/sound.png" style="width: 16px; height: 16px; vertical-align: middle;"> Sound: ON' : 
+        '<img src="ui/sound.png" style="width: 16px; height: 16px; vertical-align: middle;"> Sound: OFF';
+    
+    if (gameState.soundEnabled && !this.initialized) {
+        this.init();
+    }
+}
 
 playEnemyDeath() {
     if (!gameState.soundEnabled || !this.initialized) return;

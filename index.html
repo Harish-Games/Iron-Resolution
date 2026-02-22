@@ -801,6 +801,11 @@
     
     <!-- Bottom row: Level and Difficulty -->
 <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 2px; padding-top: 0; border-top: 1px solid #1e4976;">        <div class="stats-group" style="gap: 30px;">
+            <div class="stats-group" style="gap: 30px;">
+    <div class="stat-item">
+        <span class="stat-label">TURN</span>
+        <span class="stat-value" id="turnPhase">Player</span>
+    </div>
             <div class="stat-item">
                 <span class="stat-label">LEVEL</span>
                 <span style="color: #64ffda; font-weight: bold;" id="levelNameDisplay"></span>
@@ -816,9 +821,17 @@
    
             <div class="grid-container">
             <div id="rangeIndicator" class="range-indicator" style="display: none;">Range: 0</div>
-			<div id="soundToggle" class="sound-toggle">
-			<img src="ui/sound.png" style="width: 16px; height: 16px; vertical-align: middle;"> Sound: ON
-		</div>
+     
+     <!-- Sound and Music Toggle -->       
+		<div style="position: absolute; top: 15px; right: 15px;">
+    <div id="soundToggle" style="display: block; margin-bottom: 5px; padding: 8px 15px; background: rgba(17, 34, 64, 0.9); border: 1px solid #64ffda; border-radius: 6px; color: #64ffda; backdrop-filter: blur(5px);">
+        <img src="ui/sound.png" style="width: 16px; height: 16px; vertical-align: middle;"> Sound: ON
+    </div>
+    <div id="musicToggle" style="display: block; padding: 8px 15px; background: rgba(17, 34, 64, 0.9); border: 1px solid #64ffda; border-radius: 6px; color: #64ffda; backdrop-filter: blur(5px);">
+        <img src="ui/music.webp" style="width: 16px; height: 16px; vertical-align: middle;"> Music: ON
+    </div>
+</div>
+
             <div id="grid" class="grid"></div>
         </div>
     </div>
@@ -857,7 +870,12 @@
 
 <!-- Background Music -->
 <audio id="menuMusic" loop preload="auto">
-    <source src="audio/Iron_Resolution.webm" type="audio/webm">
+    <source src="audio/IR_Menu_Music.webm" type="audio/webm">
+    Your browser does not support the audio element.
+</audio>
+
+<audio id="gameMusic" loop preload="auto">
+    <source src="audio/IR_Game_Music.webm" type="audio/webm">
     Your browser does not support the audio element.
 </audio>
 
@@ -888,6 +906,9 @@
         </div>
     </div>
 </div>
+
+
+
         
 <!-- Script includes (IN ORDER) -->
 <script src="js/utils.js"></script>

@@ -52,7 +52,23 @@ document.getElementById('tutorialBtn').addEventListener('click', () => {
     startTutorial();
 });
     
-    
+    // Music toggle
+const musicToggle = document.getElementById('musicToggle');
+if (musicToggle) {
+    musicToggle.addEventListener('click', () => {
+        if (window.soundSystem) {
+            window.soundSystem.toggleMusic();
+        }
+    });
+}
+
+// Sound toggle
+document.getElementById('soundToggle').addEventListener('click', () => {
+    if (window.soundSystem) {
+        window.soundSystem.toggle();
+    }
+});
+
     // One Player Game
 onePlayerBtn.addEventListener('click', function() {
     console.log("🎮 One Player Game button clicked!");
@@ -63,13 +79,6 @@ onePlayerBtn.addEventListener('click', function() {
         gameInitialized = true;
     }
     showIntroSplash();
-    
-    // Start music
-    const menuMusic = document.getElementById('menuMusic');
-    if (menuMusic && gameState.soundEnabled) {
-        menuMusic.volume = 0.3;
-        menuMusic.play().catch(e => console.log("Music error:", e));
-    }
     
     if (window.soundSystem) {
         window.soundSystem.playMenuConfirm();
