@@ -115,7 +115,8 @@ confirmBtn.addEventListener('click', function() {
     gameState.difficultyMultiplier = selectedMultiplier;
     
     // Set difficulty name
-    if (selectedMultiplier === 0.7) gameState.difficulty = 'easy';
+    if (selectedMultiplier === 0.4) gameState.difficulty = 'supereasy';
+	else if (selectedMultiplier === 0.7) gameState.difficulty = 'easy';
     else if (selectedMultiplier === 1.0) gameState.difficulty = 'normal';
     else if (selectedMultiplier === 1.3) gameState.difficulty = 'hard';
     else if (selectedMultiplier === 1.6) gameState.difficulty = 'superhard';
